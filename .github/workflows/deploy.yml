@@ -37,9 +37,10 @@ jobs:
 #        run: Start-Process powershell -Verb RunAs -ArgumentList 'Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Stop'
           
       - name: Delete the existing files from the website folder  
-        run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem -Path $publishPath -Exclude 'web.config', $appsettings -Recurse | Remove-Item -Recurse -Force"
-          Start-Sleep -Seconds 10
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem -Path $publishPath -Exclude 'web.config', $appsettings -Recurse | Remove-Item -Recurse -Force"
+        
+      - name: wait 10
+        run: Start-Sleep -Seconds 10
           
       - name: Publish the app 
         run: |
