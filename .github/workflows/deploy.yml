@@ -19,7 +19,6 @@ jobs:
 
       - name: Deploy
         run: |
-          powershell -Command "Start-Process powershell -Verb RunAs -ArgumentList '-Command Stop-Website -Name $iisSiteName'"
           $ErrorActionPreference = 'Stop'
           $websiteName = 'ServiceManagerApi'
           $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi'
@@ -27,7 +26,7 @@ jobs:
           $iisAppPoolName = 'SmWebApiPool'
           
           # Stop the website
-          Stop-WebSite -Name $iisSiteName
+          Start-Process powershell -Verb RunAs -ArgumentList "Stop-WebSite -Name $iisSiteName" -Wait
           
           # Remove the existing app from IIS
           Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Ignore
