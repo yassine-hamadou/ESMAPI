@@ -12,9 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build
-        run: |
-          dotnet restore
+#      - name: Build
+#        run: |
+#          dotnet restore
 #          dotnet build --configuration Release
 
       - name: Deploy
@@ -41,7 +41,9 @@ jobs:
         
       - name: Publish the app 
         run: | 
-          dotnet publish -c Release -o "C:\inetpub\wwwroot\ServiceManagerApi"
+          dotnet publish -o "C:\inetpub\wwwroot\ServiceManagerApi"
+          
+          Start-Process powershell -Verb RunAs -ArgumentList "Restart-WebAppPool -Name $iisSiteName"
           Start-Sleep -Seconds 10
       
       - name: Start the website
