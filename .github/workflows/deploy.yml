@@ -39,7 +39,7 @@ jobs:
           Start-Sleep -Seconds 10
           
       - name: Copy the files to the website folder
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Copy-Item -Path bin\Debug\net6.0\publish\* -Destination C:\inetpub\wwwroot\equip-service\ -Recurse -Force -Exclude web.config"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Copy-Item -Path bin\Release\net6.0\* -Destination C:\inetpub\wwwroot\equip-service\ -Recurse -Force -Exclude web.config"
       
       - name: Start the website
         run: Start-Process powershell -Verb RunAs -ArgumentList "Start-WebAppPool -Name SmWebApiPool" 
