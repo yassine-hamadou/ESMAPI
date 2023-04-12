@@ -20,19 +20,19 @@ jobs:
       - name: Deploy
         run: |
           $ErrorActionPreference = 'Stop'
-          $iisSiteName = 'SmWebApi'
+          $iisSiteName = 'SmWebApiPool'
           $websiteName = 'SmWebApi'
           $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi' 
           $iisAppPoolName = 'SmWebApiPool'
           
       - name: Stop the website
         run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "Stop-WebSite -Name $iisSiteName"
+          Start-Process powershell -Verb RunAs -ArgumentList "Stop-WebAppPool -Name $iisSiteName"
           Start-Sleep -Seconds 10
         
           
-      - name: Remove the existing app from IIS
-        run: Start-Process powershell -Verb RunAs -ArgumentList 'Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Stop'
+#      - name: Remove the existing app from IIS
+#        run: Start-Process powershell -Verb RunAs -ArgumentList 'Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Stop'
           
       - name: Delete the existing files from the website folder  
         run: Get-ChildItem "C:\inetpub\wwwroot\ServiceManagerApi" -Exclude 'web.config', 'appsettings.json' -Recurse | Remove-Item -Recurse -Force
@@ -42,4 +42,4 @@ jobs:
         run: dotnet publish -c Release -o "C:\inetpub\wwwroot\ServiceManagerApi" 
       
       - name: Start the website
-        run: Start-WebSite -Name "ServiceManagerApi"
+        run: Start-WebAppPool -Name $iisSiteName
