@@ -21,8 +21,7 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $iisSiteName = 'SmWebApiPool'
-          $websiteName = 'SmWebApi'
-          $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi' 
+          $websiteName = 'SmWebApi' 
           $iisAppPoolName = 'SmWebApiPool'
           $webconfig = 'web.config'
           $appsettings = 'appsettings.json'
@@ -43,7 +42,7 @@ jobs:
         
       - name: Publish the app 
         run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish -o $publishPath"
+          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish -o C:\inetpub\wwwroot\ServiceManagerApi"
           Start-Sleep -Seconds 10
       
       - name: Start the website
