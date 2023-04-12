@@ -40,9 +40,8 @@ jobs:
         run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem -Path $publishPath -Exclude $webconfig, $appsettings -Recurse | Remove-Item -Recurse -Force"
         
       - name: Publish the app 
-        run: | 
-          dotnet publish -o "C:\inetpub\wwwroot\ServiceManagerApi"
-          
+        run: |
+          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish -o $publishPath"
           Start-Process powershell -Verb RunAs -ArgumentList "Restart-WebAppPool -Name $iisSiteName"
           Start-Sleep -Seconds 10
       
