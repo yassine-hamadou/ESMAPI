@@ -30,7 +30,7 @@ jobs:
       - name: Delete the existing files from the website folder  
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem $publishPath -Exclude $webconfig, $appsettings -Recurse | Remove-Item -Recurse -Force"
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item -Path $publishPath -Recurse -Force -ErrorAction Stop -Exclude $webconfig, $appsettings"
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -Exclude web.config appsettings.json"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -Exclude web.config"
         
       - name: Publish the app 
         run: |
@@ -38,7 +38,7 @@ jobs:
           Start-Sleep -Seconds 10
           
       - name: Copy the files to the website folder
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Copy-Item -Path bin\Debug\net6.0\publish\* -Destination C:\inetpub\wwwroot\ServiceManagerApi -Recurse -Force -Exclude web.config, appsettings.json"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Copy-Item -Path bin\Debug\net6.0\publish\* -Destination C:\inetpub\wwwroot\ServiceManagerApi\ -Recurse -Force -Exclude web.config"
       
       - name: Start the website
         run: Start-Process powershell -Verb RunAs -ArgumentList "Start-WebAppPool -Name SmWebApiPool" 
