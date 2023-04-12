@@ -39,7 +39,9 @@ jobs:
         
       - name: Publish the app
 #        run: dotnet publish -c Release -o $publishPath 
-        run: dotnet publish -c Release -o "C:\inetpub\wwwroot\ServiceManagerApi" 
+        run: | 
+          dotnet publish -c Release -o "C:\inetpub\wwwroot\ServiceManagerApi"
+          Start-Sleep -Seconds 10
       
       - name: Start the website
-        run: Start-WebAppPool -Name $iisSiteName
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Start-WebAppPool -Name $iisSiteName" 
