@@ -31,8 +31,9 @@ jobs:
       - name: Remove the existing app from IIS
         run: Start-Process powershell -Verb RunAs -ArgumentList 'Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Ignore'
           
-      - name: Delete the existing files from the website folder
-        run: Remove-Item -Recurse -Force C:\inetpub\wwwroot\$websiteName\* -Exclude 'web.config appsettings.json'
+      - name: Delete the existing files from the website folder 
+        run: get-childitem 'C:\inetpub\wwwroot\$websiteName\' -Exclude web.config appsettings.json -recurse | remove-item -recurse -force
+        
           
       - name: Publish the app
 #        run: dotnet publish -c Release -o $publishPath
