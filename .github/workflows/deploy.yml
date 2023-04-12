@@ -28,7 +28,7 @@ jobs:
           
       - name: Stop the website
         run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "Stop-WebAppPool -Name $iisSiteName"
+          Start-Process powershell -Verb RunAs -ArgumentList "Stop-WebAppPool -Name SmWebApiPool"
           Start-Sleep -Seconds 10
         
           
@@ -38,7 +38,7 @@ jobs:
       - name: Delete the existing files from the website folder  
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem $publishPath -Exclude $webconfig, $appsettings -Recurse | Remove-Item -Recurse -Force"
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item -Path $publishPath -Recurse -Force -ErrorAction Stop -Exclude $webconfig, $appsettings"
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi -Recurse -Force -ErrorAction Stop -Exclude $webconfig, $appsettings"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi -Recurse -Force -ErrorAction Stop -Exclude web.config, appsettings.json"
         
       - name: Publish the app 
         run: |
@@ -46,4 +46,4 @@ jobs:
           Start-Sleep -Seconds 10
       
       - name: Start the website
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Start-WebAppPool -Name $iisSiteName" 
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Start-WebAppPool -Name SmWebApiPool" 
