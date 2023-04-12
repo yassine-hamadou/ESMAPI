@@ -10,21 +10,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        
 
 #      - name: Build
 #        run: |
 #          dotnet restore
-#          dotnet build --configuration Release
-
-      - name: Deploy
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $iisSiteName = 'SmWebApiPool'
-          $websiteName = 'SmWebApi' 
-          $iisAppPoolName = 'SmWebApiPool'
-          $webconfig = 'web.config'
-          $appsettings = 'appsettings.json'
+#          dotnet build --configuration Release 
           
       - name: Stop the website
         run: |
@@ -38,12 +30,15 @@ jobs:
       - name: Delete the existing files from the website folder  
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem $publishPath -Exclude $webconfig, $appsettings -Recurse | Remove-Item -Recurse -Force"
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item -Path $publishPath -Recurse -Force -ErrorAction Stop -Exclude $webconfig, $appsettings"
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -ErrorAction Stop -Exclude web.config appsettings.json"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -Exclude web.config appsettings.json"
         
       - name: Publish the app 
         run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish -o C:\inetpub\wwwroot\ServiceManagerApi\"
+          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish"
           Start-Sleep -Seconds 10
+          
+      - name: Copy the files to the website folder
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Copy-Item -Path bin\Debug\net6.0\publish\* -Destination C:\inetpub\wwwroot\ServiceManagerApi -Recurse -Force -Exclude web.config, appsettings.json"
       
       - name: Start the website
         run: Start-Process powershell -Verb RunAs -ArgumentList "Start-WebAppPool -Name SmWebApiPool" 
