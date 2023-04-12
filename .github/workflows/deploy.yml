@@ -15,7 +15,7 @@ jobs:
       - name: Build
         run: |
           dotnet restore
-          dotnet build --configuration Release
+#          dotnet build --configuration Release
 
       - name: Deploy
         run: |
@@ -35,18 +35,8 @@ jobs:
         run: Get-ChildItem "C:\inetpub\wwwroot\ServiceManagerApi" -Exclude 'web.config', 'appsettings.json' -Recurse | Remove-Item -Recurse -Force
       
       - name: Publish the app
-#        run: dotnet publish -c Release -o $publishPath
-        run: |  
-          # Create a new app pool if it doesn't exist
-          if (-not (Test-WebAppPool -Name $iisAppPoolName -ErrorAction SilentlyContinue)) {
-            New-WebAppPool -Name $iisAppPoolName
-          }
+#        run: dotnet publish -c Release -o $publishPath 
+        run: dotnet publish -c Release -o $publishPath --no-restore --no-build
           
-          # Create a new website
-          New-WebSite -Name $websiteName -Port 80 -PhysicalPath "C:\inetpub\wwwroot\$websiteName" -ApplicationPool $iisAppPoolName
-          
-          # Add the new app to IIS
-          New-WebApplication -Name $websiteName -Site $iisSiteName -PhysicalPath $publishPath -ApplicationPool $iisAppPoolName -ErrorAction Stop
-          
-          # Start the website
-          Start-WebSite -Name $iisSiteName
+      - name: Start the website
+        run: Start-WebSite -Name $iisSiteName
