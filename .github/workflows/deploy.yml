@@ -31,7 +31,8 @@ jobs:
       - name: Delete the existing files from the website folder  
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem $publishPath -Exclude $webconfig, $appsettings -Recurse | Remove-Item -Recurse -Force"
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item -Path $publishPath -Recurse -Force -ErrorAction Stop -Exclude $webconfig, $appsettings"
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -Exclude web.config"
+#        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -Exclude web.config"
+        run: get-childitem 'C:\inetpub\wwwroot\ServiceManagerApi\' -Exclude *.config -recurse | remove-item -recurse -force
         
 #      - name: Publish the app 
 #        run: |
