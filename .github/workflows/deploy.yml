@@ -1,0 +1,47 @@
+﻿name: Deploy to IIS
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+
+      - name: Deploy
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $websiteName = 'ServiceManagerApi'
+          $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi'
+          $iisSiteName = 'SmWebApi'
+          $iisAppPoolName = 'SmWebApiPool'
+          
+          # Stop the website
+          Stop-WebSite -Name $iisSiteName
+          
+          # Remove the existing app from IIS
+          Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Ignore
+          Remove-Item -Recurse -Force C:\inetpub\wwwroot\$websiteName\* -Exclude 'web.config' 'appsettings.json'
+          
+          # Create a new app pool if it doesn't exist
+          if (-not (Test-WebAppPool -Name $iisAppPoolName -ErrorAction SilentlyContinue)) {
+            New-WebAppPool -Name $iisAppPoolName
+          }
+          
+          # Create a new website
+          New-WebSite -Name $websiteName -Port 80 -PhysicalPath "C:\inetpub\wwwroot\$websiteName" -ApplicationPool $iisAppPoolName
+          
+          # Add the new app to IIS
+          New-WebApplication -Name $websiteName -Site $iisSiteName -PhysicalPath $publishPath -ApplicationPool $iisAppPoolName -ErrorAction Stop
+          
+          # Start the website
+          Start-WebSite -Name $iisSiteName
