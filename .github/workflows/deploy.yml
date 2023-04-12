@@ -22,17 +22,17 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $websiteName = 'ServiceManagerApi'
           $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi'
-          $iisSiteName = 'SmWebApi'
+          $iisSiteName = 'SmWebApid'
           $iisAppPoolName = 'SmWebApiPool'
           
       - name: Stop the website
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Stop-WebSite -Name $iisSiteName" -Wait
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Stop-WebSite -Name $iisSiteName"
           
       - name: Remove the existing app from IIS
         run: Start-Process powershell -Verb RunAs -ArgumentList 'Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Stop'
           
       - name: Delete the existing files from the website folder  
-        run: Get-ChildItem -Verb RunAs "C:\inetpub\wwwroot\ServiceManagerApi\" -Exclude web.config, appsettings.json -Recurse | Remove-Item -Recurse -Force 
+        run: Start-Process powershell -Verb RunAs -ArgumentList 'Get-ChildItem "C:\inetpub\wwwroot\ServiceManagerApi\" -Exclude web.config, appsettings.json -Recurse | Remove-Item -Recurse -Force' 
           
       - name: Publish the app
 #        run: dotnet publish -c Release -o $publishPath
