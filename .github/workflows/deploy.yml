@@ -14,8 +14,7 @@ jobs:
         
 
       - name: Build
-        run: |
-          cd ESMAPI
+        run: | 
           dotnet restore
           dotnet build --configuration Release
       
