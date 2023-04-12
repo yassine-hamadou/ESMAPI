@@ -20,7 +20,8 @@ jobs:
       - name: Deploy
         run: |
           $ErrorActionPreference = 'Stop'
-          $websiteName = 'ServiceManagerApi'
+          $iisSiteName = 'SmWebApi'
+          $websiteName = 'SmWebApi'
           $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi' 
           $iisAppPoolName = 'SmWebApiPool'
           
