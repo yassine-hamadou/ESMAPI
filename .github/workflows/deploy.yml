@@ -22,7 +22,7 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $websiteName = 'ServiceManagerApi'
           $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi'
-          $iisSiteName = 'SmWebApid'
+          $iisSiteName = 'SmWebApi'
           $iisAppPoolName = 'SmWebApiPool'
           
       - name: Stop the website
@@ -36,7 +36,7 @@ jobs:
       
       - name: Publish the app
 #        run: dotnet publish -c Release -o $publishPath 
-        run: dotnet publish -c Release -o $publishPath --no-restore
-          
+        run: dotnet publish -c Release -o "C:\inetpub\wwwroot\ServiceManagerApi" 
+      
       - name: Start the website
-        run: Start-WebSite -Name $iisSiteName
+        run: Start-WebSite -Name $iisSiteName 
