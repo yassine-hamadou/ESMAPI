@@ -30,7 +30,6 @@ jobs:
           
           # Remove the existing app from IIS
           Start-Process powershell -Verb RunAs -ArgumentList 'Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Ignore'
-#          Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Ignore
           Remove-Item -Recurse -Force C:\inetpub\wwwroot\$websiteName\* -Exclude 'web.config' 'appsettings.json'
           
           # Create a new app pool if it doesn't exist
