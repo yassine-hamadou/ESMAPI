@@ -24,6 +24,8 @@ jobs:
           $websiteName = 'SmWebApi'
           $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi' 
           $iisAppPoolName = 'SmWebApiPool'
+          $webconfig = 'web.config'
+          $appsettings = 'appsettings.json'
           
       - name: Stop the website
         run: |
@@ -35,7 +37,7 @@ jobs:
 #        run: Start-Process powershell -Verb RunAs -ArgumentList 'Remove-WebApplication -Name $websiteName -Site $iisSiteName -ErrorAction Stop'
           
       - name: Delete the existing files from the website folder  
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem "C:\inetpub\wwwroot\ServiceManagerApi" -Exclude 'web.config', 'appsettings.json' -Recurse | Remove-Item -Recurse -Force"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem -Path $publishPath -Exclude $webconfig, $appsettings -Recurse | Remove-Item -Recurse -Force"
         
       - name: Publish the app 
         run: | 
