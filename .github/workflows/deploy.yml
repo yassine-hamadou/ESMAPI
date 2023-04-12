@@ -36,7 +36,7 @@ jobs:
       
       - name: Publish the app
 #        run: dotnet publish -c Release -o $publishPath 
-        run: dotnet publish -c Release -o $publishPath --no-restore --no-build
+        run: dotnet publish -c Release -o $publishPath --no-restore
           
       - name: Start the website
         run: Start-WebSite -Name $iisSiteName
