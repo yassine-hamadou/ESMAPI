@@ -19,6 +19,7 @@ jobs:
 
       - name: Deploy
         run: |
+          powershell -Command "Start-Process powershell -Verb RunAs -ArgumentList '-Command Stop-Website -Name $iisSiteName'"
           $ErrorActionPreference = 'Stop'
           $websiteName = 'ServiceManagerApi'
           $publishPath = 'C:\inetpub\wwwroot\ServiceManagerApi'
