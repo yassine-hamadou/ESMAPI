@@ -33,10 +33,10 @@ jobs:
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item -Path $publishPath -Recurse -Force -ErrorAction Stop -Exclude $webconfig, $appsettings"
         run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -Exclude web.config"
         
-      - name: Publish the app 
-        run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish"
-          Start-Sleep -Seconds 10
+#      - name: Publish the app 
+#        run: |
+#          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish"
+#          Start-Sleep -Seconds 10
           
       - name: Copy the files to the website folder
         run: Start-Process powershell -Verb RunAs -ArgumentList "Copy-Item -Path bin\Release\net6.0\* -Destination C:\inetpub\wwwroot\equip-service\ -Recurse -Force -Exclude web.config"
