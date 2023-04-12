@@ -42,7 +42,6 @@ jobs:
       - name: Publish the app 
         run: |
           Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish -o $publishPath"
-          Start-Process powershell -Verb RunAs -ArgumentList "Restart-WebAppPool -Name $iisSiteName"
           Start-Sleep -Seconds 10
       
       - name: Start the website
