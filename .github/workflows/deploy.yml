@@ -38,11 +38,11 @@ jobs:
       - name: Delete the existing files from the website folder  
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Get-ChildItem $publishPath -Exclude $webconfig, $appsettings -Recurse | Remove-Item -Recurse -Force"
 #        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item -Path $publishPath -Recurse -Force -ErrorAction Stop -Exclude $webconfig, $appsettings"
-        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi -Recurse -Force -ErrorAction Stop"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "Remove-Item C:\inetpub\wwwroot\ServiceManagerApi\* -Recurse -Force -ErrorAction Stop -Exclude web.config appsettings.json"
         
       - name: Publish the app 
         run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish -o C:\inetpub\wwwroot\ServiceManagerApi"
+          Start-Process powershell -Verb RunAs -ArgumentList "dotnet publish -o C:\inetpub\wwwroot\ServiceManagerApi\"
           Start-Sleep -Seconds 10
       
       - name: Start the website
