@@ -48,7 +48,7 @@ namespace ServiceManagerApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(GroupsPostDto groupsPostDto)
         {
-
+            
             Group group = _mapper.Map<Group>(groupsPostDto);
 
             _context.Groups.Add(group);

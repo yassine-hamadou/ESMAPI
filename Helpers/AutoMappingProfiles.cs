@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.Compartments;
+using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
 using ServiceManagerApi.Dtos.HoursEntries;
 using ServiceManagerApi.Dtos.Items;
@@ -27,7 +28,7 @@ namespace ServiceManagerApi.Helpers
             CreateMap<RefillTypePostDto, RefillType>();
             CreateMap<ItemsPostDto, Item>();          
             CreateMap<ItemValuePostDto, ItemValue>();          
-            CreateMap<GroupsPostDto, Group>();          
+            CreateMap<GroupsPostDto, Group>();              
             CreateMap<SectionPostDto, Section>();          
             CreateMap<ServicePostDto, Service>();     
             CreateMap<LubeBrandPostDto, LubeBrand>();
@@ -41,6 +42,8 @@ namespace ServiceManagerApi.Helpers
             CreateMap<ProductionActivityPostDto, ProductionActivity>();
             CreateMap<ProductionMineAreaPostDto, ProductionMineArea>();
             CreateMap<ProductionShiftPostDto, ProductionShift>();
+            CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
+            CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
         }
     }
 }

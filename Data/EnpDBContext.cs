@@ -25,6 +25,7 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<Equipment> Equipment { get; set; } = null!;
         public virtual DbSet<FaultEntry> FaultEntries { get; set; } = null!;
         public virtual DbSet<FleetSchedule> FleetSchedules { get; set; } = null!;
+        public virtual DbSet<GroundEngTool> GroundEngTools { get; set; } = null!;
         public virtual DbSet<Group> Groups { get; set; } = null!;
         public virtual DbSet<Hourly> Hourlies { get; set; } = null!;
         public virtual DbSet<HoursEntry> HoursEntries { get; set; } = null!;
@@ -467,6 +468,25 @@ namespace ServiceManagerApi.Data
                     .WithMany(p => p.FleetSchedules)
                     .HasForeignKey(d => d.ServiceTypeId)
                     .HasConstraintName("FK_FleetSchedule_Services");
+            });
+
+            modelBuilder.Entity<GroundEngTool>(entity =>
+            {
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.EquipmentId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("equipmentID");
+
+                entity.Property(e => e.Reason).HasMaxLength(250);
+
+                entity.HasOne(d => d.Equipment)
+                    .WithMany(p => p.GroundEngTools)
+                    .HasPrincipalKey(p => p.EquipmentId)
+                    .HasForeignKey(d => d.EquipmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("GroundEngTools_Equipment_Equipment_id_fk");
             });
 
             modelBuilder.Entity<Group>(entity =>
