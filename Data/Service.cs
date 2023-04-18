@@ -15,6 +15,7 @@ namespace ServiceManagerApi.Data
         public string? Name { get; set; }
         public string? Model { get; set; }
 
+        public virtual Model? ModelNavigation { get; set; }
         public virtual ICollection<FleetSchedule> FleetSchedules { get; set; }
         public virtual ICollection<Section> Sections { get; set; }
     }

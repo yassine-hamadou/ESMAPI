@@ -23,6 +23,8 @@ namespace ServiceManagerApi.Controllers
         {
             return await _context.Services
                 .Include(ser=>ser.FleetSchedules)
+                .Include(model => model.ModelNavigation)
+                    .ThenInclude(equip => equip.Equipment)
                 .Include(ser=>ser.Sections)
                     .ThenInclude(sec=>sec.Groups)
                         .ThenInclude(grop=>grop.Items)

@@ -11,6 +11,7 @@ namespace ServiceManagerApi.Data
             Components = new HashSet<Component>();
             DefectEntries = new HashSet<DefectEntry>();
             GroundEngTools = new HashSet<GroundEngTool>();
+            HoursEntries = new HashSet<HoursEntry>();
         }
 
         public int Id { get; set; }
@@ -33,5 +34,6 @@ namespace ServiceManagerApi.Data
         public virtual ICollection<Component> Components { get; set; }
         public virtual ICollection<DefectEntry> DefectEntries { get; set; }
         public virtual ICollection<GroundEngTool> GroundEngTools { get; set; }
+        public virtual ICollection<HoursEntry> HoursEntries { get; set; }
     }
 }

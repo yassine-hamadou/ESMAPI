@@ -44,6 +44,7 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<RefillType> RefillTypes { get; set; } = null!;
         public virtual DbSet<Resolution> Resolutions { get; set; } = null!;
         public virtual DbSet<ResolutionType> ResolutionTypes { get; set; } = null!;
+        public virtual DbSet<ScheduleTransaction> ScheduleTransactions { get; set; } = null!;
         public virtual DbSet<Section> Sections { get; set; } = null!;
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<Vmequp> Vmequps { get; set; } = null!;
@@ -81,11 +82,11 @@ namespace ServiceManagerApi.Data
                 entity.ToTable("Category");
 
                 entity.Property(e => e.Code)
-                    .HasMaxLength(1)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
-                    .HasMaxLength(1)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
@@ -518,7 +519,14 @@ namespace ServiceManagerApi.Data
 
                 entity.Property(e => e.FleetId)
                     .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("FleetID");
+
+                entity.HasOne(d => d.Fleet)
+                    .WithMany(p => p.HoursEntries)
+                    .HasPrincipalKey(p => p.EquipmentId)
+                    .HasForeignKey(d => d.FleetId)
+                    .HasConstraintName("HoursEntry_Equipment_Equipment_id_fk");
             });
 
             modelBuilder.Entity<Item>(entity =>
@@ -636,6 +644,9 @@ namespace ServiceManagerApi.Data
             {
                 entity.ToTable("Model");
 
+                entity.HasIndex(e => e.Code, "Model_pk2")
+                    .IsUnique();
+
                 entity.Property(e => e.ModelId).HasColumnName("Model_id");
 
                 entity.Property(e => e.Code)
@@ -732,6 +743,23 @@ namespace ServiceManagerApi.Data
                 entity.ToTable("ResolutionType");
             });
 
+            modelBuilder.Entity<ScheduleTransaction>(entity =>
+            {
+                entity.ToTable("ScheduleTransaction");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.EquipmentId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ItemValueId).HasColumnName("ItemValueID");
+
+                entity.Property(e => e.ReferenceId)
+                    .IsRowVersion()
+                    .IsConcurrencyToken();
+            });
+
             modelBuilder.Entity<Section>(entity =>
             {
                 entity.ToTable("Section");
@@ -744,7 +772,15 @@ namespace ServiceManagerApi.Data
 
             modelBuilder.Entity<Service>(entity =>
             {
-                entity.Property(e => e.Model).HasMaxLength(50);
+                entity.Property(e => e.Model)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.ModelNavigation)
+                    .WithMany(p => p.Services)
+                    .HasPrincipalKey(p => p.Code)
+                    .HasForeignKey(d => d.Model)
+                    .HasConstraintName("Services_Model_Code_fk");
             });
 
             modelBuilder.Entity<Vmequp>(entity =>
