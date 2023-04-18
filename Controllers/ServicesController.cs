@@ -23,8 +23,8 @@ namespace ServiceManagerApi.Controllers
         {
             return await _context.Services
                 .Include(ser=>ser.FleetSchedules)
-                .Include(model => model.ModelNavigation)
-                    .ThenInclude(equip => equip.Equipment)
+                // .Include(equip => equip.ModelNavigation) 
+                // .ThenInclude(model => model.Equipment) //Making Service Type Extremely Slow to Load, let equipment load without other related data
                 .Include(ser=>ser.Sections)
                     .ThenInclude(sec=>sec.Groups)
                         .ThenInclude(grop=>grop.Items)

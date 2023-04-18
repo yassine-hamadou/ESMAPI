@@ -28,6 +28,7 @@ namespace ServiceManagerApi.Controllers
           {
               return NotFound();
           }
+          //lazy loading
             return await _context.Equipment.ToListAsync();
         }
 

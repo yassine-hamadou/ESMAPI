@@ -28,7 +28,10 @@ namespace ServiceManagerApi.Controllers
           {
               return NotFound();
           }
-            return await _context.Models.ToListAsync();
+            return await _context.Models
+                    .Include(model => model.Manufacturer)
+                    .Include(model => model.ModelClass)
+                    .ToListAsync();
         }
 
         // GET: api/Models/5
