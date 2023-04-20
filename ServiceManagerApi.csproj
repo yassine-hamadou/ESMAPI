@@ -25,8 +25,10 @@
   <ItemGroup>
     <Folder Include=".github\workflows\" />
     <Folder Include="Data\" />
+    <Folder Include="Uploads\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>
