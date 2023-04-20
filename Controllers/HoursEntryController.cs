@@ -26,9 +26,13 @@ namespace ServiceManagerApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IEnumerable<HoursEntry>> Get()
         {
-            return await _context.HoursEntries.ToListAsync();
+            //Return the most recent hours entry for each fleet 
+            return await _context.HoursEntries 
+                    .GroupBy(entry => entry.FleetId)
+                    .Select(group => group.OrderByDescending(entry => entry.Date)
+                            .ThenByDescending(i => i.Id).First())
+                    .ToListAsync();
         }
-
 
         // get by id
         [HttpGet("id")]
@@ -56,8 +60,8 @@ namespace ServiceManagerApi.Controllers
             _context.HoursEntries.Add(hourEntry);
             try
             {
-                hourEntry.Date = DateTime.Today.AddDays(-1);
-                hourEntry.PreviousReading = 0;
+                // hourEntry.Date = DateTime.Today.AddDays(-1);
+                // hourEntry.PreviousReading = 0;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
@@ -78,9 +82,11 @@ namespace ServiceManagerApi.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Put(int id, HoursEntry hourEntry)
+        public async Task<IActionResult> Put(int id, HoursEntriesPutDto hoursEntriesPutDto)
         {
 
+            HoursEntry hourEntry = _mapper.Map<HoursEntry>(hoursEntriesPutDto);
+            
             if (id != hourEntry.Id)
             {
                 return BadRequest();

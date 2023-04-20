@@ -12,6 +12,7 @@ namespace ServiceManagerApi.Data
             DefectEntries = new HashSet<DefectEntry>();
             GroundEngTools = new HashSet<GroundEngTool>();
             HoursEntries = new HashSet<HoursEntry>();
+            HoursEntryTemps = new HashSet<HoursEntryTemp>();
         }
 
         public int Id { get; set; }
@@ -35,5 +36,6 @@ namespace ServiceManagerApi.Data
         public virtual ICollection<DefectEntry> DefectEntries { get; set; }
         public virtual ICollection<GroundEngTool> GroundEngTools { get; set; }
         public virtual ICollection<HoursEntry> HoursEntries { get; set; }
+        public virtual ICollection<HoursEntryTemp> HoursEntryTemps { get; set; }
     }
 }

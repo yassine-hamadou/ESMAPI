@@ -38,6 +38,7 @@ namespace ServiceManagerApi.Helpers
             CreateMap<CompartmentPostDto, Compartment>();
             CreateMap<ResolutionPostDto, Resolution>();
             CreateMap<HoursEntriesPostDto, HoursEntry>();
+            CreateMap<HoursEntriesPutDto, HoursEntry>();
             CreateMap<ResolutionTypePostDto, ResolutionType>();
             CreateMap<ProductionActivityPostDto, ProductionActivity>();
             CreateMap<ProductionMineAreaPostDto, ProductionMineArea>();

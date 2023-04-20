@@ -25,6 +25,7 @@ namespace ServiceManagerApi.Data
         public DateTime? WtimeEnd { get; set; }
         public string? Comment { get; set; }
         public short Status { get; set; }
+        public byte[] ReferenceId { get; set; } = null!;
 
         public virtual ICollection<DefectEntry> DefectEntries { get; set; }
     }

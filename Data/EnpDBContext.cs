@@ -29,6 +29,7 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<Group> Groups { get; set; } = null!;
         public virtual DbSet<Hourly> Hourlies { get; set; } = null!;
         public virtual DbSet<HoursEntry> HoursEntries { get; set; } = null!;
+        public virtual DbSet<HoursEntryTemp> HoursEntryTemps { get; set; } = null!;
         public virtual DbSet<Item> Items { get; set; } = null!;
         public virtual DbSet<ItemValue> ItemValues { get; set; } = null!;
         public virtual DbSet<LubeBrand> LubeBrands { get; set; } = null!;
@@ -394,6 +395,9 @@ namespace ServiceManagerApi.Data
 
                 entity.ToTable("FaultEntry");
 
+                entity.HasIndex(e => e.ReferenceId, "FaultEntry_pk")
+                    .IsUnique();
+
                 entity.Property(e => e.EntryId)
                     .ValueGeneratedNever()
                     .HasColumnName("EntryID");
@@ -417,6 +421,11 @@ namespace ServiceManagerApi.Data
                 entity.Property(e => e.LocationId)
                     .HasMaxLength(50)
                     .HasColumnName("LocationID");
+
+                entity.Property(e => e.ReferenceId)
+                    .IsRowVersion()
+                    .IsConcurrencyToken()
+                    .HasColumnName("reference_id");
 
                 entity.Property(e => e.ResolutionId)
                     .HasMaxLength(50)
@@ -527,6 +536,22 @@ namespace ServiceManagerApi.Data
                     .HasPrincipalKey(p => p.EquipmentId)
                     .HasForeignKey(d => d.FleetId)
                     .HasConstraintName("HoursEntry_Equipment_Equipment_id_fk");
+            });
+
+            modelBuilder.Entity<HoursEntryTemp>(entity =>
+            {
+                entity.ToTable("HoursEntryTemp");
+
+                entity.Property(e => e.FleetId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("FleetID");
+
+                entity.HasOne(d => d.Fleet)
+                    .WithMany(p => p.HoursEntryTemps)
+                    .HasPrincipalKey(p => p.EquipmentId)
+                    .HasForeignKey(d => d.FleetId)
+                    .HasConstraintName("HoursEntryTemp_Equipment_Equipment_id_fk");
             });
 
             modelBuilder.Entity<Item>(entity =>
