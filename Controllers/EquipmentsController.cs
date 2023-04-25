@@ -28,8 +28,8 @@ namespace ServiceManagerApi.Controllers
           {
               return NotFound();
           }
-          //lazy loading
-            return await _context.Equipment.ToListAsync();
+          //explicitly load only the model 
+            return await _context.Equipment.Include(e => e.Model).ToListAsync();
         }
 
         // GET: api/Equipments/5

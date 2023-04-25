@@ -4,6 +4,7 @@ using ServiceManagerApi.Dtos.Compartments;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
 using ServiceManagerApi.Dtos.HoursEntries;
+using ServiceManagerApi.Dtos.HoursEntriesTemp;
 using ServiceManagerApi.Dtos.Items;
 using ServiceManagerApi.Dtos.ItemValue;
 using ServiceManagerApi.Dtos.LubeBrands;
@@ -39,6 +40,8 @@ namespace ServiceManagerApi.Helpers
             CreateMap<ResolutionPostDto, Resolution>();
             CreateMap<HoursEntriesPostDto, HoursEntry>();
             CreateMap<HoursEntriesPutDto, HoursEntry>();
+            CreateMap<HoursEntriesTempPostDto, HoursEntryTemp>();
+            CreateMap<HoursEntriesTempPutDto, HoursEntryTemp>();
             CreateMap<ResolutionTypePostDto, ResolutionType>();
             CreateMap<ProductionActivityPostDto, ProductionActivity>();
             CreateMap<ProductionMineAreaPostDto, ProductionMineArea>();

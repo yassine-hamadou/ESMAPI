@@ -27,6 +27,14 @@
     <Folder Include="Data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Copy\web.config" />
+    <_ContentIncludedByDefault Remove="Copy\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="Copy\appsettings.json" />
+    <_ContentIncludedByDefault Remove="Copy\ServiceManagerApi.deps.json" />
+    <_ContentIncludedByDefault Remove="Copy\ServiceManagerApi.runtimeconfig.json" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>
 
 </Project>

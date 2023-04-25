@@ -686,8 +686,6 @@ namespace ServiceManagerApi.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PictureLink).HasMaxLength(1);
-
                 entity.HasOne(d => d.Manufacturer)
                     .WithMany(p => p.Models)
                     .HasForeignKey(d => d.ManufacturerId)
