@@ -29,7 +29,7 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
-<<<<<<< HEAD
+<!--<<<<<<< HEAD-->
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Copy\web.config" />
     <_ContentIncludedByDefault Remove="Copy\appsettings.Development.json" />
@@ -38,9 +38,9 @@
     <_ContentIncludedByDefault Remove="Copy\ServiceManagerApi.runtimeconfig.json" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>
-=======
+<!--  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>-->
+<!--=======-->
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
->>>>>>> c1df7d9b09ee77c84c8cc8cf1f5f5ed42c9866b3
+<!--&gt;>>>>>> c1df7d9b09ee77c84c8cc8cf1f5f5ed42c9866b3-->
 
 </Project>

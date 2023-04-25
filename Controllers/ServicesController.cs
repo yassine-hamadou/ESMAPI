@@ -22,9 +22,9 @@ namespace ServiceManagerApi.Controllers
         public async Task<IEnumerable<Service>> GetServices()
         {
             return await _context.Services
-                .Include(ser=>ser.FleetSchedules)
-                // .Include(equip => equip.ModelNavigation) 
-                // .ThenInclude(model => model.Equipment) //Making Service Type Extremely Slow to Load, let equipment load without other related data
+                // .Include(ser=>ser.FleetSchedules)
+                .Include(equip => equip.ModelNavigation)
+                .ThenInclude(model => model.Equipment)
                 .Include(ser=>ser.Sections)
                     .ThenInclude(sec=>sec.Groups)
                         .ThenInclude(grop=>grop.Items)
