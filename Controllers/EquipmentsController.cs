@@ -28,8 +28,48 @@ namespace ServiceManagerApi.Controllers
           {
               return NotFound();
           }
-          //explicitly load only the model 
-            return await _context.Equipment.Include(e => e.Model).ToListAsync();
+          //explicitly return only the model and not the entire related entities
+          var equipment = await _context.Equipment
+                  .Include(e => e.Model)  
+                  .Select(e => new Equipment
+                  {
+                          Id = e.Id,
+                          ModelId = e.ModelId,
+                          EquipmentId = e.EquipmentId,
+                          Description = e.Description,
+                          SerialNumber = e.SerialNumber,
+                          ManufactureDate = e.ManufactureDate,
+                          PurchaseDate = e.PurchaseDate,
+                          EndOfLifeDate = e.EndOfLifeDate,
+                          Facode = e.Facode,
+                          Note = e.Note,
+                          WarrantyStartDate = e.WarrantyStartDate,
+                          WarrantyEndDate = e.WarrantyEndDate,
+                          UniversalCode = e.UniversalCode,
+                          MeterType = e.MeterType,
+                          Model = new Model
+                          {
+                                  ModelId = e.Model.ModelId,
+                                  ManufacturerId = e.Model.ManufacturerId,
+                                  ModelClassId = e.Model.ModelClassId,
+                                  Name = e.Model.Name,
+                                  Code = e.Model.Code,
+                                  PictureLink = e.Model.PictureLink,
+                                  Manufacturer = new Manufacturer
+                                  {
+                                          ManufacturerId = e.Model.Manufacturer.ManufacturerId,
+                                          Name = e.Model.Manufacturer.Name, 
+                                  },
+                                  ModelClass = new ModelClass
+                                  {
+                                          ModelClassId = e.Model.ModelClass.ModelClassId,
+                                          Name = e.Model.ModelClass.Name,
+                                          Code = e.Model.ModelClass.Code
+                                  },  
+                          }
+                  })
+                  .ToListAsync();
+            return equipment;
         }
 
         // GET: api/Equipments/5
