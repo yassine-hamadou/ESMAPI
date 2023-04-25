@@ -11,6 +11,7 @@ using ServiceManagerApi.Dtos.LubeBrands;
 using ServiceManagerApi.Dtos.LubeConfigs;
 using ServiceManagerApi.Dtos.LubeEntry;
 using ServiceManagerApi.Dtos.LubeGrades;
+using ServiceManagerApi.Dtos.Model;
 using ServiceManagerApi.Dtos.ProductionActivity;
 using ServiceManagerApi.Dtos.ProductionMineArea;
 using ServiceManagerApi.Dtos.ProductionShift;
@@ -48,6 +49,7 @@ namespace ServiceManagerApi.Helpers
             CreateMap<ProductionShiftPostDto, ProductionShift>();
             CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
             CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
+            CreateMap<ModelCreateDto, Model>();
         }
     }
 }

@@ -6,18 +6,21 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.Model;
 
 namespace ServiceManagerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ModelsController : ControllerBase
+    public class ModelsController : BaeApiController<ModelsController>
     {
         private readonly EnpDBContext _context;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public ModelsController(EnpDBContext context)
+        public ModelsController(EnpDBContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         // GET: api/Models
@@ -86,12 +89,14 @@ namespace ServiceManagerApi.Controllers
         // POST: api/Models
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Model>> PostModel(Model model)
+        public async Task<ActionResult<Model>> PostModel([FromForm] ModelCreateDto modelDto)
         {
           if (_context.Models == null)
           {
               return Problem("Entity set 'EnpDBContext.Models'  is null.");
           }
+            modelDto.PictureLink = await UploadImage(modelDto.ImageFile);
+            var model = _mapper.Map<Model>(modelDto);
             _context.Models.Add(model);
             await _context.SaveChangesAsync();
 
@@ -116,6 +121,37 @@ namespace ServiceManagerApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [NonAction]
+        public async Task<string> UploadImage(IFormFile? imageFile)
+        {
+            var mes = "No file was selected";
+
+            if (imageFile!=null)
+            {
+                try
+                {
+                    if (!Directory.Exists(webHostEnvironment.WebRootPath + "\\Uploads\\"))
+                    {
+                        Directory.CreateDirectory(webHostEnvironment.WebRootPath + "\\Uploads\\");
+                    }
+
+                    using (FileStream fileStream = System.IO.File.Create(webHostEnvironment.WebRootPath + "\\Uploads\\" + imageFile.FileName))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                        fileStream.Flush();
+                        return "\\Uploads\\" + imageFile.FileName;
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                    return e.ToString();
+                }
+            }
+            return mes;
         }
 
         private bool ModelExists(int id)
