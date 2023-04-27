@@ -29,7 +29,7 @@ namespace ServiceManagerApi.Controllers
           {
               return NotFound();
           }
-            return await _context.GroundEngTools.Include(tool =>  tool.Equipment).ToListAsync();
+          return await _context.GroundEngTools.Include(tool =>  tool.Equipment).ToListAsync();
         }
 
         // GET: api/GroundEngagingTools/5
