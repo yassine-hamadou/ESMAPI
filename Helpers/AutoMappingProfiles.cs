@@ -24,6 +24,7 @@ using ServiceManagerApi.Dtos.ProductionShift;
 using ServiceManagerApi.Dtos.RefillTypes;
 using ServiceManagerApi.Dtos.Resolution;
 using ServiceManagerApi.Dtos.ResolutionTypes;
+using ServiceManagerApi.Dtos.ScheduleTransactionsDto;
 using ServiceManagerApi.Dtos.Sections;
 using ServiceManagerApi.Dtos.Services;
 
@@ -56,12 +57,16 @@ namespace ServiceManagerApi.Helpers
             CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
             CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
             CreateMap<ModelCreateDto, Model>();
+<<<<<<< HEAD
             CreateMap<HaulerOperatorPostDto, HaulerOperator>();
             CreateMap<LoaderOperatorPostDto, LoaderOperator>();
             CreateMap<ProductionOriginPostDto, ProductionOrigin>();
             CreateMap<ProdRawMaterialPostDto, ProdRawMaterial>();
             CreateMap<ProductionDestinationPostDto, ProductionDestination>();
             CreateMap<ProdProcessedMaterialPostDto, ProdProcessedMaterial>();
+=======
+            CreateMap<ScheduleTransactionsPostDto, ScheduleTransaction>();
+>>>>>>> 4ecdc557701fce901526db68af66c351be2cf6c5
         }
     }
 }
