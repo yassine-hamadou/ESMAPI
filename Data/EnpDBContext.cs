@@ -20,6 +20,7 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Compartment> Compartments { get; set; } = null!;
         public virtual DbSet<Component> Components { get; set; } = null!;
+        public virtual DbSet<Custodian> Custodians { get; set; } = null!;
         public virtual DbSet<DefectEntry> DefectEntries { get; set; } = null!;
         public virtual DbSet<Eqdatum> Eqdata { get; set; } = null!;
         public virtual DbSet<Equipment> Equipment { get; set; } = null!;
@@ -27,11 +28,13 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<FleetSchedule> FleetSchedules { get; set; } = null!;
         public virtual DbSet<GroundEngTool> GroundEngTools { get; set; } = null!;
         public virtual DbSet<Group> Groups { get; set; } = null!;
+        public virtual DbSet<HaulerOperator> HaulerOperators { get; set; } = null!;
         public virtual DbSet<Hourly> Hourlies { get; set; } = null!;
         public virtual DbSet<HoursEntry> HoursEntries { get; set; } = null!;
         public virtual DbSet<HoursEntryTemp> HoursEntryTemps { get; set; } = null!;
         public virtual DbSet<Item> Items { get; set; } = null!;
         public virtual DbSet<ItemValue> ItemValues { get; set; } = null!;
+        public virtual DbSet<LoaderOperator> LoaderOperators { get; set; } = null!;
         public virtual DbSet<LubeBrand> LubeBrands { get; set; } = null!;
         public virtual DbSet<LubeConfig> LubeConfigs { get; set; } = null!;
         public virtual DbSet<LubeEntry> LubeEntries { get; set; } = null!;
@@ -39,9 +42,15 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<Manufacturer> Manufacturers { get; set; } = null!;
         public virtual DbSet<Model> Models { get; set; } = null!;
         public virtual DbSet<ModelClass> ModelClasses { get; set; } = null!;
+        public virtual DbSet<ProdProcessedMaterial> ProdProcessedMaterials { get; set; } = null!;
+        public virtual DbSet<ProdRawMaterial> ProdRawMaterials { get; set; } = null!;
         public virtual DbSet<ProductionActivity> ProductionActivities { get; set; } = null!;
+        public virtual DbSet<ProductionDestination> ProductionDestinations { get; set; } = null!;
         public virtual DbSet<ProductionMineArea> ProductionMineAreas { get; set; } = null!;
+        public virtual DbSet<ProductionOrigin> ProductionOrigins { get; set; } = null!;
         public virtual DbSet<ProductionShift> ProductionShifts { get; set; } = null!;
+        public virtual DbSet<ProhaulerUnit> ProhaulerUnits { get; set; } = null!;
+        public virtual DbSet<ProloaderUnit> ProloaderUnits { get; set; } = null!;
         public virtual DbSet<RefillType> RefillTypes { get; set; } = null!;
         public virtual DbSet<Resolution> Resolutions { get; set; } = null!;
         public virtual DbSet<ResolutionType> ResolutionTypes { get; set; } = null!;
@@ -51,6 +60,14 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<Vmequp> Vmequps { get; set; } = null!;
         public virtual DbSet<Vmmodl> Vmmodls { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=208.117.44.15;Database=EnPDB;User ID=sa;Password=Admin@EnP;MultipleActiveResultSets=true");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -106,6 +123,29 @@ namespace ServiceManagerApi.Data
                     .WithMany(p => p.Components)
                     .HasForeignKey(d => d.EquipmentId)
                     .HasConstraintName("Equipement_id_fk");
+            });
+
+            modelBuilder.Entity<Custodian>(entity =>
+            {
+                entity.Property(e => e.Address)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Code)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.HrCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<DefectEntry>(entity =>
@@ -499,6 +539,21 @@ namespace ServiceManagerApi.Data
                     .HasConstraintName("FK_Groups_Section");
             });
 
+            modelBuilder.Entity<HaulerOperator>(entity =>
+            {
+                entity.ToTable("HaulerOperator");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.EmpCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmpName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Hourly>(entity =>
             {
                 entity.HasKey(e => e.EntryId);
@@ -539,6 +594,10 @@ namespace ServiceManagerApi.Data
                     .IsUnicode(false)
                     .HasColumnName("FleetID");
 
+                entity.Property(e => e.PreviousDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Previous_Date");
+
                 entity.HasOne(d => d.Fleet)
                     .WithMany(p => p.HoursEntryTemps)
                     .HasPrincipalKey(p => p.EquipmentId)
@@ -565,6 +624,21 @@ namespace ServiceManagerApi.Data
                     .WithMany(p => p.ItemValues)
                     .HasForeignKey(d => d.ItemId)
                     .HasConstraintName("FK_ItemValues_Item");
+            });
+
+            modelBuilder.Entity<LoaderOperator>(entity =>
+            {
+                entity.ToTable("LoaderOperator");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.EmpCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EmpName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<LubeBrand>(entity =>
@@ -704,11 +778,48 @@ namespace ServiceManagerApi.Data
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<ProdProcessedMaterial>(entity =>
+            {
+                entity.ToTable("ProdProcessedMaterial");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProdRawMaterial>(entity =>
+            {
+                entity.ToTable("ProdRawMaterial");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<ProductionActivity>(entity =>
             {
                 entity.ToTable("ProductionActivity");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ProductionDestination>(entity =>
+            {
+                entity.ToTable("ProductionDestination");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ProductionMineArea>(entity =>
@@ -718,11 +829,76 @@ namespace ServiceManagerApi.Data
                 entity.Property(e => e.Name).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<ProductionOrigin>(entity =>
+            {
+                entity.ToTable("ProductionOrigin");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<ProductionShift>(entity =>
             {
                 entity.ToTable("ProductionShift");
 
                 entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ProhaulerUnit>(entity =>
+            {
+                entity.ToTable("PROHaulerUnits");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EquipmentId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModelName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.DescriptionNavigation)
+                    .WithMany(p => p.ProhaulerUnits)
+                    .HasPrincipalKey(p => p.EquipmentId)
+                    .HasForeignKey(d => d.Description)
+                    .HasConstraintName("FK_PROHaulerUnits_Equipment");
+            });
+
+            modelBuilder.Entity<ProloaderUnit>(entity =>
+            {
+                entity.ToTable("PROLoaderUnits");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.EquipmentId)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModelName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Equipment)
+                    .WithMany(p => p.ProloaderUnits)
+                    .HasPrincipalKey(p => p.EquipmentId)
+                    .HasForeignKey(d => d.EquipmentId)
+                    .HasConstraintName("FK_PROLoaderUnits_Equipment");
             });
 
             modelBuilder.Entity<RefillType>(entity =>
@@ -768,11 +944,15 @@ namespace ServiceManagerApi.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ItemValueId).HasColumnName("ItemValueID");
-
                 entity.Property(e => e.ReferenceId)
                     .IsRowVersion()
                     .IsConcurrencyToken();
+
+                entity.HasOne(d => d.ItemValue)
+                    .WithMany(p => p.ScheduleTransactions)
+                    .HasForeignKey(d => d.ItemValueId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("ScheduleTransaction_ItemValues_Id_fk");
             });
 
             modelBuilder.Entity<Section>(entity =>

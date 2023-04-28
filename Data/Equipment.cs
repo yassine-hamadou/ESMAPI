@@ -13,6 +13,8 @@ namespace ServiceManagerApi.Data
             GroundEngTools = new HashSet<GroundEngTool>();
             HoursEntries = new HashSet<HoursEntry>();
             HoursEntryTemps = new HashSet<HoursEntryTemp>();
+            ProhaulerUnits = new HashSet<ProhaulerUnit>();
+            ProloaderUnits = new HashSet<ProloaderUnit>();
         }
 
         public int Id { get; set; }
@@ -37,5 +39,7 @@ namespace ServiceManagerApi.Data
         public virtual ICollection<GroundEngTool> GroundEngTools { get; set; }
         public virtual ICollection<HoursEntry> HoursEntries { get; set; }
         public virtual ICollection<HoursEntryTemp> HoursEntryTemps { get; set; }
+        public virtual ICollection<ProhaulerUnit> ProhaulerUnits { get; set; }
+        public virtual ICollection<ProloaderUnit> ProloaderUnits { get; set; }
     }
 }
