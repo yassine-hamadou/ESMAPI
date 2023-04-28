@@ -938,8 +938,6 @@ namespace ServiceManagerApi.Data
             {
                 entity.ToTable("ScheduleTransaction");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.EquipmentId)
                     .HasMaxLength(50)
                     .IsUnicode(false);

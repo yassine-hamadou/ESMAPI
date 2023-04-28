@@ -18,6 +18,7 @@ using ServiceManagerApi.Dtos.ProductionShift;
 using ServiceManagerApi.Dtos.RefillTypes;
 using ServiceManagerApi.Dtos.Resolution;
 using ServiceManagerApi.Dtos.ResolutionTypes;
+using ServiceManagerApi.Dtos.ScheduleTransactionsDto;
 using ServiceManagerApi.Dtos.Sections;
 using ServiceManagerApi.Dtos.Services;
 
@@ -50,6 +51,7 @@ namespace ServiceManagerApi.Helpers
             CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
             CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
             CreateMap<ModelCreateDto, Model>();
+            CreateMap<ScheduleTransactionsPostDto, ScheduleTransaction>();
         }
     }
 }
