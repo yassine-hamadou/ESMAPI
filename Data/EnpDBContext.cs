@@ -65,7 +65,7 @@ namespace ServiceManagerApi.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=208.117.44.15;Database=EnPDB;User ID=sa;Password=Admin@EnP;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=208.117.44.15; Database=EnpDB; User ID=sa; Password=Admin@EnP; MultipleActiveResultSets=true");
             }
         }
 
@@ -937,8 +937,6 @@ namespace ServiceManagerApi.Data
             modelBuilder.Entity<ScheduleTransaction>(entity =>
             {
                 entity.ToTable("ScheduleTransaction");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.EquipmentId)
                     .HasMaxLength(50)

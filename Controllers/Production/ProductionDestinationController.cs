@@ -1,56 +1,55 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
-using ServiceManagerApi.Dtos.HaulerOperator;
+using ServiceManagerApi.Dtos.ProductionDestination;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-    public class HaulerOperatorController : BaeApiController<HaulerOperatorController>
+    public class ProductionDestinationController : BaeApiController<ProductionDestinationController>
     {
         private readonly EnpDBContext _context;
-        public HaulerOperatorController(EnpDBContext context)
+        public ProductionDestinationController(EnpDBContext context)
         {
             _context = context;
         }
+
         //get list
         [HttpGet]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProductionDestination), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<HaulerOperator>> Get()
+        public async Task<IEnumerable<ProductionDestination>> Get()
         {
-            return await _context.HaulerOperators.ToListAsync();
+            return await _context.ProductionDestinations.ToListAsync();
         }
 
         // get by id
         [HttpGet("id")]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProductionDestination), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
-            if (haulerOperator == null)
+            var productionDestination = await _context.ProductionDestinations.FindAsync(id);
+            if (productionDestination == null)
             {
                 return NotFound();
             }
-            return Ok(haulerOperator);
+            return Ok(productionDestination);
         }
 
-        // post groups
         [HttpPost]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProductionDestination), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(HaulerOperatorPostDto haulerOperatorPostDto)
+        public async Task<IActionResult> Create(ProductionDestinationPostDto productionDestinationPostDto)
         {
-            HaulerOperator haulerOperator = _mapper.Map<HaulerOperator>(haulerOperatorPostDto);
-            _context.HaulerOperators.Add(haulerOperator);
+            ProductionDestination productionDestination = _mapper.Map<ProductionDestination>(productionDestinationPostDto);
+            _context.ProductionDestinations.Add(productionDestination);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (HaulerOperatorExists(haulerOperator.Id))
+                if (ProductionDestinationExists(productionDestination.Id))
                 {
                     return Conflict();
                 }
@@ -59,31 +58,26 @@ namespace ServiceManagerApi.Controllers.Production
                     throw;
                 }
             }
-            return CreatedAtAction(nameof(GetById), new { id = haulerOperator.Id }, haulerOperator);
+            return CreatedAtAction("GetById", new { id = productionDestination.Id }, productionDestination);
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Put(int id, HaulerOperator haulerOperator)
+        public async Task<IActionResult> Update(int id, ProductionDestination productionDestination)
         {
-
-            if (id != haulerOperator.Id)
+            if (id != productionDestination.Id)
             {
                 return BadRequest();
             }
-
-
-
-            _context.Entry(haulerOperator).State = EntityState.Modified;
-
+            _context.Entry(productionDestination).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!HaulerOperatorExists(id))
+                if (!ProductionDestinationExists(id))
                 {
                     return NotFound();
                 }
@@ -92,28 +86,28 @@ namespace ServiceManagerApi.Controllers.Production
                     throw;
                 }
             }
-
             return NoContent();
         }
 
+        // delete
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
-            if (haulerOperator == null)
+            var productionDestination = await _context.ProductionDestinations.FindAsync(id);
+            if (productionDestination == null)
             {
                 return NotFound();
             }
-            _context.HaulerOperators.Remove(haulerOperator);
+            _context.ProductionDestinations.Remove(productionDestination);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool HaulerOperatorExists(int id)
+        private bool ProductionDestinationExists(int id)
         {
-            return _context.HaulerOperators.Any(e => e.Id == id);
+            return _context.ProductionDestinations.Any(e => e.Id == id);
         }
     }
 }

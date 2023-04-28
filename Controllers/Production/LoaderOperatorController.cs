@@ -2,55 +2,55 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
-using ServiceManagerApi.Dtos.HaulerOperator;
+using ServiceManagerApi.Dtos.LoaderOperator;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-    public class HaulerOperatorController : BaeApiController<HaulerOperatorController>
+    public class LoaderOperatorController : BaeApiController<LoaderOperatorController>
     {
         private readonly EnpDBContext _context;
-        public HaulerOperatorController(EnpDBContext context)
+        public LoaderOperatorController(EnpDBContext context)
         {
             _context = context;
         }
         //get list
         [HttpGet]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(LoaderOperator), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<HaulerOperator>> Get()
+        public async Task<IEnumerable<LoaderOperator>> Get()
         {
-            return await _context.HaulerOperators.ToListAsync();
+            return await _context.LoaderOperators.ToListAsync();
         }
 
         // get by id
         [HttpGet("id")]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(LoaderOperator), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
-            if (haulerOperator == null)
+            var loaderOperator = await _context.LoaderOperators.FindAsync(id);
+            if (loaderOperator == null)
             {
                 return NotFound();
             }
-            return Ok(haulerOperator);
+            return Ok(loaderOperator);
         }
 
         // post groups
         [HttpPost]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(LoaderOperator), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(HaulerOperatorPostDto haulerOperatorPostDto)
+        public async Task<IActionResult> Create(LoaderOperatorPostDto loaderOperatorPostDto)
         {
-            HaulerOperator haulerOperator = _mapper.Map<HaulerOperator>(haulerOperatorPostDto);
-            _context.HaulerOperators.Add(haulerOperator);
+            LoaderOperator loaderOperator = _mapper.Map<LoaderOperator>(loaderOperatorPostDto);
+            _context.LoaderOperators.Add(loaderOperator);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (HaulerOperatorExists(haulerOperator.Id))
+                if (LoaderOperatorExists(loaderOperator.Id))
                 {
                     return Conflict();
                 }
@@ -59,31 +59,28 @@ namespace ServiceManagerApi.Controllers.Production
                     throw;
                 }
             }
-            return CreatedAtAction(nameof(GetById), new { id = haulerOperator.Id }, haulerOperator);
+            return CreatedAtAction(nameof(GetById), new { id = loaderOperator.Id }, loaderOperator);
         }
 
-        [HttpPut("{id}")]
+        // put groups
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Put(int id, HaulerOperator haulerOperator)
+        public async Task<IActionResult> Put(int id, LoaderOperator loaderOperator)
         {
-
-            if (id != haulerOperator.Id)
+           
+            if (id != loaderOperator.Id)
             {
                 return BadRequest();
             }
-
-
-
-            _context.Entry(haulerOperator).State = EntityState.Modified;
-
+            _context.Entry(loaderOperator).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!HaulerOperatorExists(id))
+                if (!LoaderOperatorExists(loaderOperator.Id))
                 {
                     return NotFound();
                 }
@@ -92,28 +89,29 @@ namespace ServiceManagerApi.Controllers.Production
                     throw;
                 }
             }
-
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        // delete groups
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
-            if (haulerOperator == null)
+            var loaderOperator = await _context.LoaderOperators.FindAsync(id);
+            if (loaderOperator == null)
             {
                 return NotFound();
             }
-            _context.HaulerOperators.Remove(haulerOperator);
+            _context.LoaderOperators.Remove(loaderOperator);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool HaulerOperatorExists(int id)
+        private bool LoaderOperatorExists(int id)
         {
-            return _context.HaulerOperators.Any(e => e.Id == id);
+            return _context.LoaderOperators.Any(e => e.Id == id);
         }
+
     }
 }

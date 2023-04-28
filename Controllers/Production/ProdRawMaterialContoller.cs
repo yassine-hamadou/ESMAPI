@@ -2,55 +2,53 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
-using ServiceManagerApi.Dtos.HaulerOperator;
+using ServiceManagerApi.Dtos.ProdRawMaterial;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-    public class HaulerOperatorController : BaeApiController<HaulerOperatorController>
+
+    public class ProdRawMaterialContoller : BaeApiController<ProdRawMaterialContoller>
     {
         private readonly EnpDBContext _context;
-        public HaulerOperatorController(EnpDBContext context)
+        public ProdRawMaterialContoller(EnpDBContext context)
         {
             _context = context;
         }
         //get list
         [HttpGet]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProdRawMaterial), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<HaulerOperator>> Get()
+        public async Task<IEnumerable<ProdRawMaterial>> Get()
         {
-            return await _context.HaulerOperators.ToListAsync();
+            return await _context.ProdRawMaterials.ToListAsync();
         }
-
         // get by id
         [HttpGet("id")]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProdRawMaterial), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
-            if (haulerOperator == null)
+            var prodRawMaterial = await _context.ProdRawMaterials.FindAsync(id);
+            if (prodRawMaterial == null)
             {
                 return NotFound();
             }
-            return Ok(haulerOperator);
+            return Ok(prodRawMaterial);
         }
-
-        // post groups
         [HttpPost]
-        [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProdRawMaterial), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(HaulerOperatorPostDto haulerOperatorPostDto)
+        public async Task<IActionResult> Create(ProdRawMaterialPostDto prodRawMaterialPostDto)
         {
-            HaulerOperator haulerOperator = _mapper.Map<HaulerOperator>(haulerOperatorPostDto);
-            _context.HaulerOperators.Add(haulerOperator);
+            ProdRawMaterial prodRawMaterial = _mapper.Map<ProdRawMaterial>(prodRawMaterialPostDto);
+            _context.ProdRawMaterials.Add(prodRawMaterial);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (HaulerOperatorExists(haulerOperator.Id))
+                if (ProdRawMaterialExists(prodRawMaterial.Id))
                 {
                     return Conflict();
                 }
@@ -59,61 +57,52 @@ namespace ServiceManagerApi.Controllers.Production
                     throw;
                 }
             }
-            return CreatedAtAction(nameof(GetById), new { id = haulerOperator.Id }, haulerOperator);
+            return CreatedAtAction(nameof(GetById), new { id = prodRawMaterial.Id }, prodRawMaterial);
         }
-
-        [HttpPut("{id}")]
+        // put by id
+        [HttpPut("id")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Put(int id, HaulerOperator haulerOperator)
+        public async Task<IActionResult> Put(int id, ProdRawMaterial prodRawMaterial)
         {
-
-            if (id != haulerOperator.Id)
+            if (id != prodRawMaterial.Id)
             {
                 return BadRequest();
             }
-
-
-
-            _context.Entry(haulerOperator).State = EntityState.Modified;
-
+            _context.Entry(prodRawMaterial).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!HaulerOperatorExists(id))
+                if (!ProdRawMaterialExists(id))
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
             }
-
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        // delete by id
+        [HttpDelete("id")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
-            if (haulerOperator == null)
+            var prodRawMaterial = await _context.ProdRawMaterials.FindAsync(id);
+            if (prodRawMaterial == null)
             {
                 return NotFound();
             }
-            _context.HaulerOperators.Remove(haulerOperator);
+            _context.ProdRawMaterials.Remove(prodRawMaterial);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool HaulerOperatorExists(int id)
+        private bool ProdRawMaterialExists(int id)
         {
-            return _context.HaulerOperators.Any(e => e.Id == id);
+            return _context.ProdRawMaterials.Any(e => e.Id == id);
         }
     }
 }
