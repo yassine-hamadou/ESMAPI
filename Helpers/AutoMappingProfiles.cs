@@ -3,6 +3,7 @@ using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.Compartments;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
+using ServiceManagerApi.Dtos.HaulerOperator;
 using ServiceManagerApi.Dtos.HoursEntries;
 using ServiceManagerApi.Dtos.HoursEntriesTemp;
 using ServiceManagerApi.Dtos.Items;
@@ -50,6 +51,7 @@ namespace ServiceManagerApi.Helpers
             CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
             CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
             CreateMap<ModelCreateDto, Model>();
+            CreateMap<HaulerOperatorPostDto, HaulerOperator>();
         }
     }
 }
