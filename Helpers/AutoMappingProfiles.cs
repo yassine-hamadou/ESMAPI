@@ -21,6 +21,8 @@ using ServiceManagerApi.Dtos.ProductionDestination;
 using ServiceManagerApi.Dtos.ProductionMineArea;
 using ServiceManagerApi.Dtos.ProductionOrigin;
 using ServiceManagerApi.Dtos.ProductionShift;
+using ServiceManagerApi.Dtos.ProHaulerUnits;
+using ServiceManagerApi.Dtos.ProLoaderUnits;
 using ServiceManagerApi.Dtos.RefillTypes;
 using ServiceManagerApi.Dtos.Resolution;
 using ServiceManagerApi.Dtos.ResolutionTypes;
@@ -57,16 +59,16 @@ namespace ServiceManagerApi.Helpers
             CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
             CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
             CreateMap<ModelCreateDto, Model>();
-<<<<<<< HEAD
             CreateMap<HaulerOperatorPostDto, HaulerOperator>();
             CreateMap<LoaderOperatorPostDto, LoaderOperator>();
             CreateMap<ProductionOriginPostDto, ProductionOrigin>();
             CreateMap<ProdRawMaterialPostDto, ProdRawMaterial>();
             CreateMap<ProductionDestinationPostDto, ProductionDestination>();
             CreateMap<ProdProcessedMaterialPostDto, ProdProcessedMaterial>();
-=======
             CreateMap<ScheduleTransactionsPostDto, ScheduleTransaction>();
->>>>>>> 4ecdc557701fce901526db68af66c351be2cf6c5
+            CreateMap<ProLoaderUnitDto, ProloaderUnit>();
+            CreateMap<ProHaulerUnitDto, ProhaulerUnit>();
+
         }
     }
 }

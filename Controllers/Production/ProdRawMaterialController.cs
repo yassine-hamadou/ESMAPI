@@ -7,10 +7,10 @@ using ServiceManagerApi.Dtos.ProdRawMaterial;
 namespace ServiceManagerApi.Controllers.Production
 {
 
-    public class ProdRawMaterialContoller : BaeApiController<ProdRawMaterialContoller>
+    public class ProdRawMaterialController : BaeApiController<ProdRawMaterialController>
     {
         private readonly EnpDBContext _context;
-        public ProdRawMaterialContoller(EnpDBContext context)
+        public ProdRawMaterialController(EnpDBContext context)
         {
             _context = context;
         }
