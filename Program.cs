@@ -1,11 +1,6 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
-using NuGet.DependencyResolver;
-using ServiceManagerApi;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Helpers;
 using ServiceManagerApi.Models;
