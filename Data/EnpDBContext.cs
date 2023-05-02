@@ -21,6 +21,7 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<Compartment> Compartments { get; set; } = null!;
         public virtual DbSet<Component> Components { get; set; } = null!;
         public virtual DbSet<Custodian> Custodians { get; set; } = null!;
+        public virtual DbSet<CycleDetail> CycleDetails { get; set; } = null!;
         public virtual DbSet<DefectEntry> DefectEntries { get; set; } = null!;
         public virtual DbSet<Eqdatum> Eqdata { get; set; } = null!;
         public virtual DbSet<Equipment> Equipment { get; set; } = null!;
@@ -65,7 +66,7 @@ namespace ServiceManagerApi.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=208.117.44.15; Database=EnpDB; User ID=sa; Password=Admin@EnP; MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlServer("Server=208.117.44.15;Database=EnPDB;User ID=sa;Password=Admin@EnP;MultipleActiveResultSets=true");
             }
         }
 
@@ -144,6 +145,39 @@ namespace ServiceManagerApi.Data
                     .IsUnicode(false);
 
                 entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CycleDetail>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Destination)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Hauler)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Loader)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Material)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nominal)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Origin)
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
