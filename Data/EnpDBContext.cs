@@ -21,6 +21,7 @@ namespace ServiceManagerApi.Data
         public virtual DbSet<Compartment> Compartments { get; set; } = null!;
         public virtual DbSet<Component> Components { get; set; } = null!;
         public virtual DbSet<Custodian> Custodians { get; set; } = null!;
+        public virtual DbSet<CycleDetail> CycleDetails { get; set; } = null!;
         public virtual DbSet<DefectEntry> DefectEntries { get; set; } = null!;
         public virtual DbSet<Eqdatum> Eqdata { get; set; } = null!;
         public virtual DbSet<Equipment> Equipment { get; set; } = null!;
@@ -144,6 +145,39 @@ namespace ServiceManagerApi.Data
                     .IsUnicode(false);
 
                 entity.Property(e => e.Phone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CycleDetail>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.Destination)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Hauler)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Loader)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Material)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nominal)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Origin)
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
@@ -623,7 +657,7 @@ namespace ServiceManagerApi.Data
                 entity.HasOne(d => d.Item)
                     .WithMany(p => p.ItemValues)
                     .HasForeignKey(d => d.ItemId)
-                    .HasConstraintName("FK_ItemValues_Item");
+                    .HasConstraintName("ItemValues_Item_Id_fk");
             });
 
             modelBuilder.Entity<LoaderOperator>(entity =>

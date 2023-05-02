@@ -25,6 +25,7 @@ namespace ServiceManagerApi.Controllers
         public async Task<IEnumerable<ItemValue>> Get()
         {
             return await _context.ItemValues.Include(item=>item.Item).ToListAsync();
+            // return await _context.ItemValues.ToListAsync();
         }
 
 
@@ -67,7 +68,7 @@ namespace ServiceManagerApi.Controllers
                 else
                 {
                     throw;
-                }
+                }   
             }
             return CreatedAtAction(nameof(GetById), new { id = itemValue.Id }, itemValue);
         }

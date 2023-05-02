@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.ScheduleTransactionsDto;
 
 namespace ServiceManagerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ScheduleTransactionsController : ControllerBase
+    public class ScheduleTransactionsController : BaeApiController<ScheduleTransaction>
     {
         private readonly EnpDBContext _context;
 
@@ -83,16 +84,17 @@ namespace ServiceManagerApi.Controllers
         // POST: api/ScheduleTransactions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ScheduleTransaction>> PostScheduleTransaction(ScheduleTransaction scheduleTransaction)
+        public async Task<ActionResult<ScheduleTransaction>> Create(ScheduleTransactionsPostDto scheduleTransactionsPostDto)
         {
+            ScheduleTransaction scheduleTransaction = _mapper.Map<ScheduleTransaction>(scheduleTransactionsPostDto);   
           if (_context.ScheduleTransactions == null)
           {
               return Problem("Entity set 'EnpDBContext.ScheduleTransactions'  is null.");
-          }
-            _context.ScheduleTransactions.Add(scheduleTransaction);
-            await _context.SaveChangesAsync();
+          } 
+          _context.ScheduleTransactions.Add(scheduleTransaction);
+          await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetScheduleTransaction", new { id = scheduleTransaction.Id }, scheduleTransaction);
+          return CreatedAtAction("GetScheduleTransaction", new { id = scheduleTransaction.Id }, scheduleTransaction);
         }
 
         // DELETE: api/ScheduleTransactions/5
