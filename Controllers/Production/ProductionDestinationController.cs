@@ -64,7 +64,7 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update(int id, ProductionDestination productionDestination)
+        public async Task<IActionResult> Put(int id, ProductionDestination productionDestination)
         {
             if (id != productionDestination.Id)
             {

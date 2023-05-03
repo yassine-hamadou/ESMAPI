@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ServiceManagerApi.Data
+namespace ServiceManagerApi.Data;
+
+public partial class ProdProcessedMaterial
 {
-    public partial class ProdProcessedMaterial
-    {
-        public int Id { get; set; }
-        public string? Name { get; set; }
-    }
+    public int Id { get; set; }
+
+    public string? Name { get; set; }
 }

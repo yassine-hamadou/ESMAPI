@@ -63,7 +63,7 @@ namespace ServiceManagerApi.Controllers.Production
         }
 
         // put groups
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, LoaderOperator loaderOperator)
@@ -80,20 +80,18 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LoaderOperatorExists(loaderOperator.Id))
+                if (!LoaderOperatorExists(id))
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return NoContent();
         }
 
         // delete groups
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)

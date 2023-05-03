@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ServiceManagerApi.Data
+namespace ServiceManagerApi.Data;
+
+public partial class RefillType
 {
-    public partial class RefillType
-    {
-        public RefillType()
-        {
-            LubeEntries = new HashSet<LubeEntry>();
-        }
+    public int Id { get; set; }
 
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        public virtual ICollection<LubeEntry> LubeEntries { get; set; }
-    }
+    public virtual ICollection<LubeEntry> LubeEntries { get; set; } = new List<LubeEntry>();
 }

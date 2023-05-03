@@ -54,17 +54,15 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return CreatedAtAction(nameof(GetById), new { id = prodRawMaterial.Id }, prodRawMaterial);
         }
 
-        [HttpPut]
-        [ProducesResponseType(typeof(ProdRawMaterial), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, ProdRawMaterial prodRawMaterial)
         {
             if(id != prodRawMaterial.Id)
@@ -79,21 +77,19 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProdRawMaterialExists(prodRawMaterial.Id))
+                if (!ProdRawMaterialExists(id))
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return NoContent();
         }
 
-        [HttpDelete]
-        [ProducesResponseType(typeof(ProdRawMaterial), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(int id)
         {
             var prodRawMaterial = await _context.ProdRawMaterials.FindAsync(id);
