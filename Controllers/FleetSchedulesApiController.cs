@@ -33,7 +33,7 @@ namespace ServiceManagerApi.Controllers
         {
             var fleetSchedule = await _context.FleetSchedules.FindAsync(id);
 
-            var fleetSchedule1 = await _context.FleetSchedules.FindAsync(id);
+            // var fleetSchedule1 = await _context.FleetSchedules.FindAsync(id);
 
             if (fleetSchedule == null)
             {
@@ -79,7 +79,25 @@ namespace ServiceManagerApi.Controllers
         [HttpPost]
         public async Task<ActionResult<FleetSchedule>> PostFleetSchedule(FleetSchedule fleetSchedule)
         {
-            _context.FleetSchedules.Add(fleetSchedule);
+            Console.WriteLine(fleetSchedule.EntryId);
+            //generate a new guid for the entry as a new field
+            Random _rnd = new Random();
+            FleetSchedule newFleetSchedule = new FleetSchedule()
+            {  
+                    FleetId = fleetSchedule.FleetId,
+                    VmModel = fleetSchedule.VmModel,
+                    VmClass = fleetSchedule.VmClass,
+                    ServiceTypeId = fleetSchedule.ServiceTypeId,
+                    LocationId = fleetSchedule.LocationId,
+                    Description = fleetSchedule.Description,
+                    TimeStart = fleetSchedule.TimeStart,
+                    TimeEnd = fleetSchedule.TimeEnd,
+                    Responsible = fleetSchedule.Responsible, 
+                    ReferenceId = $"{fleetSchedule.FleetId.Trim()}{fleetSchedule.EntryId}{_rnd.Next():X}",
+                    ServiceType = fleetSchedule.ServiceType,
+            };
+            
+            _context.FleetSchedules.Add(newFleetSchedule);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetFleetSchedule", new { id = fleetSchedule.EntryId }, fleetSchedule);

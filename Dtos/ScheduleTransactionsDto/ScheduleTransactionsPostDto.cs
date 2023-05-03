@@ -4,4 +4,5 @@ public class ScheduleTransactionsPostDto
 { 
   public string? EquipmentId { get; set; }
   public int ItemValueId { get; set; }
+  public string? ReferenceId { get; set; }
 }

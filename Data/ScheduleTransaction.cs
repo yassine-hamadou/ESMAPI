@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ServiceManagerApi.Data
-{
-    public partial class ScheduleTransaction
-    {
-        public string? EquipmentId { get; set; }
-        public byte[]? ReferenceId { get; set; }
-        public int ItemValueId { get; set; }
-        public int Id { get; set; }
+namespace ServiceManagerApi.Data;
 
-        public virtual ItemValue ItemValue { get; set; } = null!;
-    }
+public partial class ScheduleTransaction
+{
+    public string? EquipmentId { get; set; }
+
+    public int ItemValueId { get; set; }
+
+    public int Id { get; set; }
+
+    public string? ReferenceId { get; set; }
+
+    public virtual ItemValue ItemValue { get; set; } = null!;
 }
