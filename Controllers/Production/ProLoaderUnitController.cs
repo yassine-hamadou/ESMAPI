@@ -19,14 +19,14 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet]
         [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProhaulerUnit>> Get()
+        public async Task<IEnumerable<ProloaderUnit>> Get()
         {
-            return await _context.ProhaulerUnits.ToListAsync();
+            return await _context.ProloaderUnits.ToListAsync();
         }
 
         // get by id
         [HttpGet("id")]
-        [ProducesResponseType(typeof(ProhaulerUnit), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
