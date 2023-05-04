@@ -13,6 +13,8 @@ public partial class PlannedOutput
 
     public int? Quantity { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ProductionActivity? Activity { get; set; }
 
     public virtual ProductionDestination? Destination { get; set; }

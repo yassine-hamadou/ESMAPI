@@ -13,6 +13,8 @@ public partial class ProhaulerUnit
 
     public string? Description { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 
     public virtual Equipment? Equipment { get; set; }

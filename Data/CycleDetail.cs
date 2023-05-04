@@ -43,6 +43,8 @@ public partial class CycleDetail
 
     public int? ShiftId { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ProductionDestination? Destination { get; set; }
 
     public virtual HaulerOperator? HaulerNavigation { get; set; }

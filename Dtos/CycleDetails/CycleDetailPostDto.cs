@@ -39,6 +39,8 @@ namespace ServiceManagerApi.Dtos.CycleDetails
         public TimeSpan? Duration { get; set; }
 
         public int? ShiftId { get; set; }
+        
+        public string? TenantId { get; set; }
 
     }
 }
