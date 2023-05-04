@@ -47,7 +47,7 @@ namespace ServiceManagerApi.Controllers.Production
         // PUT: api/CycleDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCycleDetail(int id, CycleDetail cycleDetail)
+        public async Task<IActionResult> Put(int id, CycleDetail cycleDetail)
         {
             if (id != cycleDetail.Id)
             {
@@ -66,10 +66,8 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return NoContent();

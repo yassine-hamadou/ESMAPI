@@ -55,16 +55,14 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return CreatedAtAction(nameof(GetById), new { id = prohaulerUnit.Id }, prohaulerUnit);
         }
 
         // put groups
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, ProhaulerUnit prohaulerUnit)
@@ -81,20 +79,18 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProhaulerUnitExists(prohaulerUnit.Id))
+                if (!ProhaulerUnitExists(id))
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return NoContent();
         }
 
         // delete groups
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
