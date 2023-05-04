@@ -36,7 +36,7 @@ namespace ServiceManagerApi.Dtos.CycleDetails
 
         public TimeSpan? TimeAtLoader { get; set; }
 
-        public TimeSpan? Duration { get; set; }
+        public int? Duration { get; set; }
 
         public int? ShiftId { get; set; }
         

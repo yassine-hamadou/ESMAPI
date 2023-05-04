@@ -37,13 +37,13 @@ public partial class CycleDetail
 
     public TimeSpan? TimeAtLoader { get; set; }
 
-    public TimeSpan? Duration { get; set; }
-
     public int Id { get; set; }
 
     public int? ShiftId { get; set; }
 
     public string? TenantId { get; set; }
+
+    public int? Duration { get; set; }
 
     public virtual ProductionDestination? Destination { get; set; }
 
