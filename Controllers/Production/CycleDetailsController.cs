@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.CycleDetails;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CycleDetailsController : ControllerBase
+  
+    public class CycleDetailsController : BaeApiController<CycleDetailsController>
     {
         private readonly EnpDBContext _context;
 
@@ -17,38 +17,60 @@ namespace ServiceManagerApi.Controllers.Production
 
         // GET: api/CycleDetails
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CycleDetail>>> GetCycleDetails()
+        [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IEnumerable<CycleDetail>> Get()
         {
-          if (_context.CycleDetails == null)
-          {
-              return NotFound();
-          }
             return await _context.CycleDetails.ToListAsync();
         }
 
         // GET: api/CycleDetails/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CycleDetail>> GetCycleDetail(int id)
+        [HttpGet("id")]
+        [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(int id)
         {
-          if (_context.CycleDetails == null)
-          {
-              return NotFound();
-          }
             var cycleDetail = await _context.CycleDetails.FindAsync(id);
-
             if (cycleDetail == null)
             {
                 return NotFound();
             }
 
-            return cycleDetail;
+            return Ok(cycleDetail);
         }
+        
+        [HttpPost]
+        [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Create(CycleDetailPostDto cycleDetailPostDto)
+        {
+            CycleDetail cycleDetail = _mapper.Map<CycleDetail>(cycleDetailPostDto);
 
+            _context.CycleDetails.Add(cycleDetail);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (CycleDetailExists(cycleDetail.Id))
+                {
+                    return Conflict();
+                }
+
+                throw;
+            }
+            return CreatedAtAction(nameof(GetById), new { id = cycleDetail.Id }, cycleDetail);
+        }
+        
         // PUT: api/CycleDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, CycleDetail cycleDetail)
         {
+            
             if (id != cycleDetail.Id)
             {
                 return BadRequest();
@@ -75,47 +97,16 @@ namespace ServiceManagerApi.Controllers.Production
 
         // POST: api/CycleDetails
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<CycleDetail>> PostCycleDetail(CycleDetail cycleDetail)
-        {
-          if (_context.CycleDetails == null)
-          {
-              return Problem("Entity set 'EnpDBContext.CycleDetails'  is null.");
-          }
-            _context.CycleDetails.Add(cycleDetail);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CycleDetailExists(cycleDetail.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction(nameof(GetCycleDetail), new { id = cycleDetail.Id }, cycleDetail);
-        }
+       
 
         // DELETE: api/CycleDetails/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCycleDetail(int id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Delete(int id)
         {
-            if (_context.CycleDetails == null)
-            {
-                return NotFound();
-            }
             var cycleDetail = await _context.CycleDetails.FindAsync(id);
-            if (cycleDetail == null)
-            {
-                return NotFound();
-            }
-
+            if (cycleDetail == null) return NotFound();
             _context.CycleDetails.Remove(cycleDetail);
             await _context.SaveChangesAsync();
 
@@ -124,7 +115,8 @@ namespace ServiceManagerApi.Controllers.Production
 
         private bool CycleDetailExists(int id)
         {
-            return (_context.CycleDetails?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.CycleDetails.Any(e => e.Id == id);
         }
+        
     }
 }

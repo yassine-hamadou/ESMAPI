@@ -1,4 +1,7 @@
-﻿namespace ServiceManagerApi.Data;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ServiceManagerApi.Data;
 
 public partial class PlannedOutput
 {

@@ -8,8 +8,5 @@
 
         public int? Quantity { get; set; }
 
-        public virtual Data.ProductionActivity? Activity { get; set; }
-
-        public virtual Data.ProductionDestination? Destination { get; set; }
     }
 }

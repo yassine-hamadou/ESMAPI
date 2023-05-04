@@ -40,20 +40,5 @@ namespace ServiceManagerApi.Dtos.CycleDetails
 
         public int? ShiftId { get; set; }
 
-        public virtual Data.ProductionDestination? Destination { get; set; }
-
-        public virtual Data.HaulerOperator? HaulerNavigation { get; set; }
-
-        public virtual ProhaulerUnit? HaulerUnit { get; set; }
-
-        public virtual Data.LoaderOperator? LoaderNavigation { get; set; }
-
-        public virtual ProloaderUnit? LoaderUnit { get; set; }
-
-        public virtual Data.ProdRawMaterial? Material { get; set; }
-
-        public virtual Data.ProductionOrigin? Origin { get; set; }
-
-        public virtual Data.ProductionShift? Shift { get; set; }
     }
 }

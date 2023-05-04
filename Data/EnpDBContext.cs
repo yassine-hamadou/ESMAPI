@@ -842,10 +842,10 @@ public partial class EnpDBContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.DescriptionNavigation).WithMany(p => p.ProhaulerUnits)
+            entity.HasOne(d => d.Equipment).WithMany(p => p.ProhaulerUnits)
                 .HasPrincipalKey(p => p.EquipmentId)
-                .HasForeignKey(d => d.Description)
-                .HasConstraintName("FK_PROHaulerUnits_Equipment");
+                .HasForeignKey(d => d.EquipmentId)
+                .HasConstraintName("PROHaulerUnits_Equipment_Equipment_id_fk");
         });
 
         modelBuilder.Entity<ProloaderUnit>(entity =>

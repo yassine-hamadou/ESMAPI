@@ -15,5 +15,5 @@ public partial class ProhaulerUnit
 
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 
-    public virtual Equipment? DescriptionNavigation { get; set; }
+    public virtual Equipment? Equipment { get; set; }
 }

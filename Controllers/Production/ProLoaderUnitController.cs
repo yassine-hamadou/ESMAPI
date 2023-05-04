@@ -42,9 +42,9 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpPost]
         [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(ProLoaderUnitDto proLoaderUnitDto)
+        public async Task<IActionResult> Create(ProLoaderUnitPostDto proLoaderUnitPostDto)
         {
-            ProloaderUnit proloaderUnit = _mapper.Map<ProloaderUnit>(proLoaderUnitDto);
+            ProloaderUnit proloaderUnit = _mapper.Map<ProloaderUnit>(proLoaderUnitPostDto);
 
             _context.ProloaderUnits.Add(proloaderUnit);
             try
