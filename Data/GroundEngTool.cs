@@ -19,5 +19,7 @@ public partial class GroundEngTool
 
     public DateTime? Date { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual Equipment Equipment { get; set; } = null!;
 }

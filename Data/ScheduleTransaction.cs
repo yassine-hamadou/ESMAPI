@@ -13,5 +13,7 @@ public partial class ScheduleTransaction
 
     public string? ReferenceId { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ItemValue ItemValue { get; set; } = null!;
 }

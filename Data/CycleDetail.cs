@@ -5,9 +5,9 @@ namespace ServiceManagerApi.Data;
 
 public partial class CycleDetail
 {
-    public DateTime? CycleDate { get; set; }
+    public string? CycleDate { get; set; }
 
-    public TimeSpan? CycleTime { get; set; }
+    public string? CycleTime { get; set; }
 
     public string? Loader { get; set; }
 
@@ -35,13 +35,15 @@ public partial class CycleDetail
 
     public int? Loads { get; set; }
 
-    public TimeSpan? TimeAtLoader { get; set; }
-
-    public TimeSpan? Duration { get; set; }
+    public string? TimeAtLoader { get; set; }
 
     public int Id { get; set; }
 
     public int? ShiftId { get; set; }
+
+    public string? TenantId { get; set; }
+
+    public int? Duration { get; set; }
 
     public virtual ProductionDestination? Destination { get; set; }
 

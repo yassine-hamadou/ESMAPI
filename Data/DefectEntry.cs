@@ -17,6 +17,8 @@ public partial class DefectEntry
 
     public Guid ReferenceId { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual Equipment DefectEquipment { get; set; } = null!;
 
     public virtual FaultEntry Reference { get; set; } = null!;

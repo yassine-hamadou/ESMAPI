@@ -11,5 +11,7 @@ public partial class ProductionShift
 
     public double? Duration { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 }
