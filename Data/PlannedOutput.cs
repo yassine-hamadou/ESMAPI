@@ -1,4 +1,7 @@
-﻿namespace ServiceManagerApi.Data;
+﻿using System;
+using System.Collections.Generic;
+
+namespace ServiceManagerApi.Data;
 
 public partial class PlannedOutput
 {
@@ -9,6 +12,8 @@ public partial class PlannedOutput
     public int? ActivityId { get; set; }
 
     public int? Quantity { get; set; }
+
+    public string? TenantId { get; set; }
 
     public virtual ProductionActivity? Activity { get; set; }
 

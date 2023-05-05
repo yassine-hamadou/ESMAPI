@@ -11,5 +11,7 @@ public partial class LoaderOperator
 
     public string? EmpName { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 }
