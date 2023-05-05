@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include=".github\workflows\" />
     <Folder Include="Data\" />
-    <Folder Include="Uploads\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
