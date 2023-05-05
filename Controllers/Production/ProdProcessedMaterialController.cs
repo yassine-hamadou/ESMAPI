@@ -54,16 +54,14 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return CreatedAtAction(nameof(GetById), new { id = prodProcessedMaterial.Id }, prodProcessedMaterial);
         }
 
         // put groups
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, ProdProcessedMaterial prodProcessedMaterial)
@@ -83,10 +81,8 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return NoContent();
         }

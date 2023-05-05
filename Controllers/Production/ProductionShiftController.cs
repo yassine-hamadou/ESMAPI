@@ -60,10 +60,8 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return CreatedAtAction(nameof(GetById), new { id = productionShift.Id }, productionShift);
         }
@@ -94,10 +92,8 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return NoContent();
