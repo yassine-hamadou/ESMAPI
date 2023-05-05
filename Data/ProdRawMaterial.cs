@@ -9,5 +9,7 @@ public partial class ProdRawMaterial
 
     public string? Name { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 }

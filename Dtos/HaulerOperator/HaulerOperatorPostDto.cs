@@ -4,5 +4,6 @@
     {
         public string? EmpCode { get; set; }
         public string? EmpName { get; set; }
+        public string? TenantId { get; set; }
     }
 }

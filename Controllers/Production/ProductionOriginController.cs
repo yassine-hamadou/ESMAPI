@@ -86,10 +86,8 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return NoContent();
         }
