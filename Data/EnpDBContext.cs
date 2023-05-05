@@ -189,7 +189,12 @@ public partial class EnpDBContext : DbContext
             entity.HasKey(e => e.Id).HasName("CycleDetails_pk");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.CycleDate).HasColumnType("date");
+            entity.Property(e => e.CycleDate)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.CycleTime)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.Hauler)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -200,6 +205,9 @@ public partial class EnpDBContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("tenantId");
+            entity.Property(e => e.TimeAtLoader)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Destination).WithMany(p => p.CycleDetails)
                 .HasForeignKey(d => d.DestinationId)

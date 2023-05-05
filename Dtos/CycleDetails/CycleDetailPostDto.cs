@@ -1,12 +1,10 @@
-﻿using ServiceManagerApi.Data;
-
-namespace ServiceManagerApi.Dtos.CycleDetails
+﻿namespace ServiceManagerApi.Dtos.CycleDetails
 {
     public class CycleDetailPostDto
     {
-        public DateTime? CycleDate { get; set; }
+        public string? CycleDate { get; set; }
 
-        public TimeSpan? CycleTime { get; set; }
+        public string? CycleTime { get; set; }
 
         public string? Loader { get; set; }
 
@@ -34,11 +32,11 @@ namespace ServiceManagerApi.Dtos.CycleDetails
 
         public int? Loads { get; set; }
 
-        public TimeSpan? TimeAtLoader { get; set; }
-
-        public int? Duration { get; set; }
+        public string? TimeAtLoader { get; set; }
 
         public int? ShiftId { get; set; }
+
+        public int? Duration { get; set; }
         
         public string? TenantId { get; set; }
 
