@@ -784,13 +784,10 @@ public partial class EnpDBContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.DestinationId).HasColumnName("DestinationId ");
-<<<<<<< HEAD
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("tenantId");
-=======
->>>>>>> 84a3e3c93f422be3597f76c8d69f336f048292b4
 
             entity.HasOne(d => d.Activity).WithMany(p => p.PlannedOutputs)
                 .HasForeignKey(d => d.ActivityId)

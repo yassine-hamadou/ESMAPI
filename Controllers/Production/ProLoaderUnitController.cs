@@ -19,14 +19,14 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet]
         [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProhaulerUnit>> Get()
+        public async Task<IEnumerable<ProloaderUnit>> Get()
         {
-            return await _context.ProhaulerUnits.ToListAsync();
+            return await _context.ProloaderUnits.ToListAsync();
         }
 
         // get by id
         [HttpGet("id")]
-        [ProducesResponseType(typeof(ProhaulerUnit), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
@@ -42,9 +42,9 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpPost]
         [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(ProLoaderUnitDto proLoaderUnitDto)
+        public async Task<IActionResult> Create(ProLoaderUnitPostDto proLoaderUnitPostDto)
         {
-            ProloaderUnit proloaderUnit = _mapper.Map<ProloaderUnit>(proLoaderUnitDto);
+            ProloaderUnit proloaderUnit = _mapper.Map<ProloaderUnit>(proLoaderUnitPostDto);
 
             _context.ProloaderUnits.Add(proloaderUnit);
             try
@@ -66,7 +66,7 @@ namespace ServiceManagerApi.Controllers.Production
         }
 
         // put groups
-        [HttpPut]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, ProloaderUnit proloaderUnit)
@@ -83,20 +83,18 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProloaderUnitExists(proloaderUnit.Id))
+                if (!ProloaderUnitExists(id))
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
             return NoContent();
         }
 
         // delete groups
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
