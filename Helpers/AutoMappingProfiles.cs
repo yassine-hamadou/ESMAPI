@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using ServiceManagerApi.Data;
+using ServiceManagerApi.Data; 
 using ServiceManagerApi.Dtos.Compartments;
+using ServiceManagerApi.Dtos.CycleDetails;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
 using ServiceManagerApi.Dtos.HaulerOperator;
@@ -14,6 +15,7 @@ using ServiceManagerApi.Dtos.LubeConfigs;
 using ServiceManagerApi.Dtos.LubeEntry;
 using ServiceManagerApi.Dtos.LubeGrades;
 using ServiceManagerApi.Dtos.Model;
+using ServiceManagerApi.Dtos.PlannedOutput;
 using ServiceManagerApi.Dtos.ProdProcessedMaterial;
 using ServiceManagerApi.Dtos.ProdRawMaterial;
 using ServiceManagerApi.Dtos.ProductionActivity;
@@ -66,9 +68,10 @@ namespace ServiceManagerApi.Helpers
             CreateMap<ProductionDestinationPostDto, ProductionDestination>();
             CreateMap<ProdProcessedMaterialPostDto, ProdProcessedMaterial>();
             CreateMap<ScheduleTransactionsPostDto, ScheduleTransaction>();
-            CreateMap<ProLoaderUnitDto, ProloaderUnit>();
-            CreateMap<ProHaulerUnitDto, ProhaulerUnit>();
-
+            CreateMap<ProLoaderUnitPostDto, ProloaderUnit>();
+            CreateMap<ProHaulerUnitPostDto, ProhaulerUnit>();
+            CreateMap<PlannedOutputPostDto, PlannedOutput>();
+            CreateMap<CycleDetailPostDto, CycleDetail>();
         }
     }
 }

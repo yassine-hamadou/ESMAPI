@@ -1,6 +1,6 @@
 ﻿namespace ServiceManagerApi.Dtos.HoursEntries
 {
-    public class HoursEntriesPutDto
+    public record HoursEntriesPutDto
     {
         public int Id { get; set; }
         public string? FleetId { get; set; }

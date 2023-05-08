@@ -1,6 +1,6 @@
 ﻿namespace ServiceManagerApi.Dtos.Groups
 {
-    public class GroupsPostDto
+    public record GroupsPostDto
     {
         public string? Name { get; set; }
         public int SectionId { get; set; }

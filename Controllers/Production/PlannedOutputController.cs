@@ -5,8 +5,6 @@ using ServiceManagerApi.Dtos.PlannedOutput;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class PlannedOutputController : BaeApiController<PlannedOutputController>
     {
         private readonly EnpDbContext _context;
@@ -37,6 +35,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             return Ok(plannedOutput);
         }
 
@@ -51,7 +50,9 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return BadRequest();
             }
+            
             _context.Entry(plannedOutput).State = EntityState.Modified;
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -65,17 +66,19 @@ namespace ServiceManagerApi.Controllers.Production
 
                 throw;
             }
+
             return NoContent();
         }
 
         // POST: api/PlannedOutput
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ProducesResponseType(typeof(PlannedOutput), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PlannedOutput), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(PlannedOutputPostDto plannedOutputPostDto)
         {
             PlannedOutput plannedOutput = _mapper.Map<PlannedOutput>(plannedOutputPostDto);
+
             _context.PlannedOutputs.Add(plannedOutput);
             try
             {
@@ -90,8 +93,10 @@ namespace ServiceManagerApi.Controllers.Production
 
                 throw;
             }
-            return CreatedAtAction("GetById", new { id = plannedOutput.Id }, plannedOutput);
+
+            return CreatedAtAction(nameof(GetById), new { id = plannedOutput.Id }, plannedOutput);
         }
+
 
         // DELETE: api/PlannedOutput/5
         [HttpDelete("{id}")]
