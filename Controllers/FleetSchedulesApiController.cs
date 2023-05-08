@@ -13,9 +13,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class FleetSchedulesApiController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public FleetSchedulesApiController(EnpDBContext context)
+        public FleetSchedulesApiController(EnpDbContext context)
         {
             _context = context;
         }

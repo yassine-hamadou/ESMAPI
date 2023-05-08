@@ -5,6 +5,6 @@ namespace ServiceManagerApi.Repository
 {
     public class ItemRepository:GenericRepositoryAsync<Item>,IItemsRepository
     {
-        public ItemRepository(EnpDBContext context) : base(context) { }
+        public ItemRepository(EnpDbContext context) : base(context) { }
     }
 }

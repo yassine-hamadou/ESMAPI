@@ -15,9 +15,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class FaultEntriesApiController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public FaultEntriesApiController(EnpDBContext context)
+        public FaultEntriesApiController(EnpDbContext context)
         {
             _context = context;
         }

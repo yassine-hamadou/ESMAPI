@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,10 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ModelsController : BaeApiController<ModelsController>
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
         private readonly IWebHostEnvironment webHostEnvironment;
 
-        public ModelsController(EnpDBContext context, IWebHostEnvironment webHostEnvironment)
+        public ModelsController(EnpDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             this.webHostEnvironment = webHostEnvironment;
@@ -31,10 +32,27 @@ namespace ServiceManagerApi.Controllers
           {
               return NotFound();
           }
-            return await _context.Models
-                    .Include(model => model.Manufacturer)
-                    .Include(model => model.ModelClass)
-                    .ToListAsync();
+        return await _context.Models
+                .Select(m => new Model
+                {
+                        ModelId = m.ModelId,
+                        ManufacturerId = m.ManufacturerId,
+                        ModelClassId = m.ModelClassId,
+                        Name = m.Name,
+                        Code = m.Code,
+                        PictureLink = m.PictureLink,
+                        Manufacturer = new Manufacturer()
+                        {
+                                ManufacturerId = m.Manufacturer.ManufacturerId,
+                                Name = m.Manufacturer.Name,
+                        },
+                        ModelClass = new ModelClass()
+                        {
+                                ModelClassId = m.ModelClass.ModelClassId,
+                                Name = m.ModelClass.Name,
+                        } 
+                })
+                .ToListAsync();
         }
 
         // GET: api/Models/5

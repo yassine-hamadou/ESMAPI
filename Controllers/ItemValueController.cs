@@ -12,8 +12,8 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ItemValueController : BaeApiController<ItemValueController>
     {
-        private readonly EnpDBContext _context;
-        public ItemValueController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ItemValueController(EnpDbContext context)
         {
             _context = context;
         }
@@ -25,6 +25,7 @@ namespace ServiceManagerApi.Controllers
         public async Task<IEnumerable<ItemValue>> Get()
         {
             return await _context.ItemValues.Include(item=>item.Item).ToListAsync();
+            // return await _context.ItemValues.ToListAsync();
         }
 
 
@@ -67,7 +68,7 @@ namespace ServiceManagerApi.Controllers
                 else
                 {
                     throw;
-                }
+                }   
             }
             return CreatedAtAction(nameof(GetById), new { id = itemValue.Id }, itemValue);
         }

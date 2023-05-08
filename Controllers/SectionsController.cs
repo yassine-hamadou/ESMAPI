@@ -11,8 +11,8 @@ namespace ServiceManagerApi.Controllers
     public class SectionsController : BaeApiController<SectionsController>
     {
 
-        private readonly EnpDBContext _context;
-        public SectionsController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public SectionsController(EnpDbContext context)
         {
             _context = context;
         }

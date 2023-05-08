@@ -13,22 +13,19 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public CategoriesController(EnpDBContext context)
+        public CategoriesController(EnpDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Categories
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<Category>> GetCategories(string tenantId)
         {
-          if (_context.Categories == null)
-          {
-              return NotFound();
-          }
-            return await _context.Categories.ToListAsync();
+            var categories = _context.Categories.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return categories;
         }
 
         // GET: api/Categories/5

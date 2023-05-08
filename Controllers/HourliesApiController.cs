@@ -13,9 +13,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class HourliesApiController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public HourliesApiController(EnpDBContext context)
+        public HourliesApiController(EnpDbContext context)
         {
             _context = context;
         }

@@ -1,11 +1,6 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
-using NuGet.DependencyResolver;
-using ServiceManagerApi;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Helpers;
 using ServiceManagerApi.Models;
@@ -22,7 +17,7 @@ builder.Services.AddDbContext<ServiceManagerContext>(options =>
 
 var EnPconnectionString = builder.Configuration.GetConnectionString("EnpConnectionString");
 
-builder.Services.AddDbContext<EnpDBContext>(options =>  options.UseSqlServer(EnPconnectionString));
+builder.Services.AddDbContext<EnpDbContext>(options =>  options.UseSqlServer(EnPconnectionString));
  
  
                                     //this will allow for patch request

@@ -13,9 +13,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ManufacturersController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public ManufacturersController(EnpDBContext context)
+        public ManufacturersController(EnpDbContext context)
         {
             _context = context;
         }

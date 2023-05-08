@@ -13,23 +13,59 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class EquipmentsController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public EquipmentsController(EnpDBContext context)
+        public EquipmentsController(EnpDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Equipments
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Equipment>>> GetEquipment()
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<Equipment>> GetEquipments(string tenantId)
         {
-          if (_context.Equipment == null)
-          {
-              return NotFound();
-          }
-          //lazy loading
-            return await _context.Equipment.ToListAsync();
+            var equipments = _context.Equipment
+                .Where(leav => leav.TenantId == tenantId)
+                .Include(e => e.Model)
+                  .Select(e => new Equipment
+                  {
+                      Id = e.Id,
+                      ModelId = e.ModelId,
+                      EquipmentId = e.EquipmentId,
+                      Description = e.Description,
+                      SerialNumber = e.SerialNumber,
+                      ManufactureDate = e.ManufactureDate,
+                      PurchaseDate = e.PurchaseDate,
+                      EndOfLifeDate = e.EndOfLifeDate,
+                      Facode = e.Facode,
+                      Note = e.Note,
+                      WarrantyStartDate = e.WarrantyStartDate,
+                      WarrantyEndDate = e.WarrantyEndDate,
+                      UniversalCode = e.UniversalCode,
+                      MeterType = e.MeterType,
+                      Model = new Model
+                      {
+                          ModelId = e.Model.ModelId,
+                          ManufacturerId = e.Model.ManufacturerId,
+                          ModelClassId = e.Model.ModelClassId,
+                          Name = e.Model.Name,
+                          Code = e.Model.Code,
+                          PictureLink = e.Model.PictureLink,
+                          Manufacturer = new Manufacturer
+                          {
+                              ManufacturerId = e.Model.Manufacturer.ManufacturerId,
+                              Name = e.Model.Manufacturer.Name,
+                          },
+                          ModelClass = new ModelClass
+                          {
+                              ModelClassId = e.Model.ModelClass.ModelClassId,
+                              Name = e.Model.ModelClass.Name,
+                              Code = e.Model.ModelClass.Code
+                          },
+                      }
+                  })
+                  .ToListAsync();
+
+            return equipments;
         }
 
         // GET: api/Equipments/5

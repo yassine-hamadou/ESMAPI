@@ -13,9 +13,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ComponentsController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public ComponentsController(EnpDBContext context)
+        public ComponentsController(EnpDbContext context)
         {
             _context = context;
         }

@@ -13,25 +13,25 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class HoursEntryController : BaeApiController<HoursEntryController>
     {
-        private readonly EnpDBContext _context;
-        public HoursEntryController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public HoursEntryController(EnpDbContext context)
         {
             _context = context;
         }
 
 
-        //get list
-        [HttpGet]
+        [HttpGet("tenant/{tenantId}")]
         [ProducesResponseType(typeof(HoursEntry), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<HoursEntry>> Get()
+        public Task<List<HoursEntry>> GetHoursEntries(string tenantId)
         {
-            //Return the most recent hours entry for each fleet 
-            return await _context.HoursEntries 
-                    .GroupBy(entry => entry.FleetId)
+            var hoursEntries = _context.HoursEntries
+                .Where(leav => leav.TenantId == tenantId)
+                .GroupBy(entry => entry.FleetId)
                     .Select(group => group.OrderByDescending(entry => entry.Date)
                             .ThenByDescending(i => i.Id).First())
                     .ToListAsync();
+            return hoursEntries;
         }
 
         // get by id
@@ -60,8 +60,6 @@ namespace ServiceManagerApi.Controllers
             _context.HoursEntries.Add(hourEntry);
             try
             {
-                // hourEntry.Date = DateTime.Today.AddDays(-1);
-                // hourEntry.PreviousReading = 0;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)

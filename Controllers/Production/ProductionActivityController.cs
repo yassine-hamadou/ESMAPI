@@ -8,8 +8,8 @@ namespace ServiceManagerApi.Controllers.Production
 {
     public class ProductionActivityController : BaeApiController<ProductionActivityController>
     {
-        private readonly EnpDBContext _context;
-        public ProductionActivityController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ProductionActivityController(EnpDbContext context)
         {
             _context = context;
         }

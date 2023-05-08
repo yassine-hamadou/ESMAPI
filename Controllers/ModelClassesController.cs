@@ -13,9 +13,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ModelClassesController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public ModelClassesController(EnpDBContext context)
+        public ModelClassesController(EnpDbContext context)
         {
             _context = context;
         }

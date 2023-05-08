@@ -12,8 +12,8 @@ namespace ServiceManagerApi.Controllers
     public class CompartmentController : BaeApiController<CompartmentController>
     {
 
-        private readonly EnpDBContext _context;
-        public CompartmentController( EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public CompartmentController( EnpDbContext context)
         {
             _context= context;
         }
