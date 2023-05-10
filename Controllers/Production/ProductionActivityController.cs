@@ -13,17 +13,15 @@ namespace ServiceManagerApi.Controllers.Production
         {
             _context = context;
         }
-
-
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(ProductionActivity), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProductionActivity>> Get()
+        
+        
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProductionActivity>> GetProductionActivities(string tenantId)
         {
-            return await _context.ProductionActivities.ToListAsync();
-        }
+            var productionActivities = _context.ProductionActivities.Where(leav => leav.TenantId == tenantId).ToListAsync();
 
+            return productionActivities;
+        }
 
         // get by id
         [HttpGet("id")]
