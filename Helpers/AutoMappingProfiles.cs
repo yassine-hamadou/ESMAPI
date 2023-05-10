@@ -2,6 +2,7 @@
 using ServiceManagerApi.Data; 
 using ServiceManagerApi.Dtos.Compartments;
 using ServiceManagerApi.Dtos.CycleDetails;
+using ServiceManagerApi.Dtos.FaultEntry;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
 using ServiceManagerApi.Dtos.HaulerOperator;
@@ -72,6 +73,7 @@ namespace ServiceManagerApi.Helpers
             CreateMap<ProHaulerUnitPostDto, ProhaulerUnit>();
             CreateMap<PlannedOutputPostDto, PlannedOutput>();
             CreateMap<CycleDetailPostDto, CycleDetail>();
+            CreateMap<FaultEntryPostDto, FaultEntry>();
         }
     }
 }

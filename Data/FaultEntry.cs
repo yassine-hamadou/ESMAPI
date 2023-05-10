@@ -35,9 +35,7 @@ public partial class FaultEntry
 
     public short Status { get; set; }
 
-    public byte[] ReferenceId { get; set; } = null!;
-
     public string? TenantId { get; set; }
 
-    public virtual ICollection<DefectEntry> DefectEntries { get; set; } = new List<DefectEntry>();
+    public string? ReferenceId { get; set; }
 }
