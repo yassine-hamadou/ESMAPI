@@ -105,6 +105,10 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<Vmmodl> Vmmodls { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=208.117.44.15;Database=EnPDB;User ID=sa;Password=Admin@EnP;MultipleActiveResultSets=true; TrustServerCertificate=true;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Agreement>(entity =>
@@ -190,7 +194,12 @@ public partial class EnpDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("CycleDetails_pk");
 
+            entity.HasIndex(e => e.BatchNumber, "CycleDetails_pk2").IsUnique();
+
             entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.BatchNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.CycleDate)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -259,13 +268,17 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("defect_equipment_Id");
+            entity.Property(e => e.EquipmentDescription)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("Equipment_description");
             entity.Property(e => e.ExpectedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("expected_date");
-            entity.Property(e => e.Item)
-                .HasMaxLength(250)
-                .HasColumnName("item");
-            entity.Property(e => e.ReferenceId).HasColumnName("referenceId");
+            entity.Property(e => e.Item).HasMaxLength(250);
+            entity.Property(e => e.ReferenceId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -275,11 +288,6 @@ public partial class EnpDbContext : DbContext
                 .HasForeignKey(d => d.DefectEquipmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("DefectEntry_Equipment_Equipment_id_fk");
-
-            entity.HasOne(d => d.Reference).WithMany(p => p.DefectEntries)
-                .HasForeignKey(d => d.ReferenceId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("DefectEntry___fk2");
         });
 
         modelBuilder.Entity<Eqdatum>(entity =>
