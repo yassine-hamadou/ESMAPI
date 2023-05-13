@@ -17,13 +17,11 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           
-      - name: Build with dotnet
-        shell: cmd
-        run: dotnet build --configuration Release
+      - name: Build with dotnet 
+        run: dotnet build --configuration Release -o ./publish
         
-      - name: dotnet publish
-        shell: cmd
-        run: dotnet publish -c Release -o ./publish
+#      - name: dotnet publish 
+#        run: dotnet publish -c Release -o ./publish
         
       - name: Deploy to IIS
         shell: powershell 
