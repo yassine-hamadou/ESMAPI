@@ -28,8 +28,9 @@ jobs:
       - name: Deploy to IIS
         shell: powershell 
         run: |
-          iisreset /stop 
-          iisreset /start  
+          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
+          Start-Sleep -Seconds 10 
+          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
           
           
 #          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\ 
@@ -42,7 +43,6 @@ jobs:
           
           
           
-#          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
 #          run as administrator
 #          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"
 
