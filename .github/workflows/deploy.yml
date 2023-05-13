@@ -26,12 +26,14 @@ jobs:
         run: dotnet publish -c Release -o ./publish
         
       - name: Deploy to IIS
-        shell: cmd
+        shell: pwsh
         run: |
-          iisreset /stop
-          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\
-          iisreset /start
-
+#          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
+#          run as administrator
+          iisreset /stop -RunAsAdmin
+          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\ 
+#          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"
+          iisreset /start -RunAsAdmin 
 
 
 
