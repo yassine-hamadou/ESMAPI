@@ -29,10 +29,10 @@ jobs:
         shell: pwsh
         run: |
           iisreset /stop -RunAsAdmin
-          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\ 
           iisreset /start -RunAsAdmin 
           
           
+#          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\ 
           
           
           
