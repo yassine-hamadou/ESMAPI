@@ -26,10 +26,10 @@ jobs:
         run: dotnet publish -c Release -o ./publish
         
       - name: Deploy to IIS
-        shell: powershell
+        shell: powershell 
         run: |
-          iisreset /stop -RunAsAdmin
-          iisreset /start -RunAsAdmin 
+          iisreset /stop 
+          iisreset /start  
           
           
 #          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\ 
