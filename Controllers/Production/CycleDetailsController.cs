@@ -19,7 +19,61 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("tenant/{tenantId}")]
         public Task<List<CycleDetail>> GetCycleDetails(string tenantId)
         {
-            var cycleDetails = _context.CycleDetails.Where(leav => leav.TenantId == tenantId).ToListAsync();
+            var cycleDetails = _context.CycleDetails
+                .Where(leav => leav.TenantId == tenantId)
+                .Select(c=> new CycleDetail
+                {
+                    Id = c.Id,
+                    CycleDate = c.CycleDate,
+                    CycleTime = c.CycleTime,
+                    Loader = c.Loader,
+                    Hauler = c.Hauler,
+                    Loads = c.Loads,
+                    Volumes = c.Volumes,
+                    Weight = c.Weight,
+                    PayloadWeight = c.PayloadWeight,
+                    ReportedWeight = c.ReportedWeight,
+                    NominalWeight = c.NominalWeight,
+                    TimeAtLoader = c.TimeAtLoader,
+                    Duration = c.Duration,
+                    BatchNumber = c.BatchNumber,
+                    TenantId = c.TenantId,  
+                    HaulerNavigation = new HaulerOperator
+                    {
+                       EmpName = c.HaulerNavigation.EmpName,
+                       EmpCode = c.HaulerNavigation.EmpCode
+                    },
+                    LoaderNavigation = new LoaderOperator
+                    {
+                        EmpName = c.LoaderNavigation.EmpName,
+                        EmpCode = c.LoaderNavigation.EmpCode
+                    },
+                    HaulerUnit = new ProhaulerUnit
+                    {
+                        EquipmentId = c.HaulerUnit.EquipmentId
+                    },
+                    LoaderUnit = new ProloaderUnit
+                    {
+                        EquipmentId = c.LoaderUnit.EquipmentId
+                    },
+                    Destination = new ProductionDestination
+                    {
+                        Name = c.Destination.Name
+                    },
+                    Origin = new ProductionOrigin
+                    {
+                        Name = c.Origin.Name
+                    },
+                    Material = new ProdRawMaterial
+                    {
+                        Name = c.Material.Name
+                    },
+                    Shift = new ProductionShift
+                    {
+                        Name = c.Shift.Name
+                    }
+                })
+                .ToListAsync();
 
             return cycleDetails;
 
@@ -40,7 +94,7 @@ namespace ServiceManagerApi.Controllers.Production
             return Ok(cycleDetail);
         }
         
-        [HttpPost]
+        /*[HttpPost]
         [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(CycleDetailPostDto cycleDetailPostDto)
@@ -62,7 +116,34 @@ namespace ServiceManagerApi.Controllers.Production
                 throw;
             }
             return CreatedAtAction(nameof(GetById), new { id = cycleDetail.Id }, cycleDetail);
+        }*/
+        
+        [HttpPost]
+        [ProducesResponseType(typeof(IEnumerable<CycleDetail>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Create(IEnumerable<CycleDetailPostDto> cycleDetailPostDtos)
+        {
+            var cycleDetails = _mapper.Map<IEnumerable<CycleDetail>>(cycleDetailPostDtos);
+
+            _context.CycleDetails.AddRange(cycleDetails);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok();
+            } 
+            catch (DbUpdateException)
+            {
+                if (true)
+                {
+                    throw new DbUpdateException("Error saving cycle details");
+                }
+                // Handle the conflict if necessary
+                throw;
+            }
+
+            return CreatedAtAction(nameof(GetById), new { id = cycleDetails.Select(cd => cd.Id) }, cycleDetails);
         }
+
         
         // PUT: api/CycleDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

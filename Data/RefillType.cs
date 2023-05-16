@@ -9,5 +9,7 @@ public partial class RefillType
 
     public string Name { get; set; } = null!;
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<LubeEntry> LubeEntries { get; set; } = new List<LubeEntry>();
 }

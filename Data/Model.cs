@@ -17,6 +17,8 @@ public partial class Model
 
     public string? PictureLink { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
 
     public virtual Manufacturer? Manufacturer { get; set; }

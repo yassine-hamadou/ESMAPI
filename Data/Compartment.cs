@@ -9,6 +9,8 @@ public partial class Compartment
 
     public string? Name { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<LubeConfig> LubeConfigs { get; set; } = new List<LubeConfig>();
 
     public virtual ICollection<LubeEntry> LubeEntries { get; set; } = new List<LubeEntry>();

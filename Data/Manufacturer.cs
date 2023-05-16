@@ -19,5 +19,7 @@ public partial class Manufacturer
 
     public string? Code { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<Model> Models { get; set; } = new List<Model>();
 }

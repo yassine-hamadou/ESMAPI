@@ -15,5 +15,7 @@ public partial class Agreement
 
     public int? Status { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual Equipment? Equipment { get; set; }
 }

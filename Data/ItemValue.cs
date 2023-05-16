@@ -11,6 +11,8 @@ public partial class ItemValue
 
     public int? ItemId { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual Item? Item { get; set; }
 
     public virtual ICollection<ScheduleTransaction> ScheduleTransactions { get; set; } = new List<ScheduleTransaction>();

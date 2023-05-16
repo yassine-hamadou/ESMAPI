@@ -18,8 +18,9 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProhaulerUnit>> GetProhaulerUnits(string tenantId)
         {
-            var prohaulerUnits = _context.ProhaulerUnits.Where(leav => leav.TenantId == tenantId).ToListAsync();
-
+            var prohaulerUnits = _context.ProhaulerUnits
+                .Where(leav => leav.TenantId == tenantId)
+                .ToListAsync();
             return prohaulerUnits;
         }
 

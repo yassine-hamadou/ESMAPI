@@ -120,6 +120,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.AgreementDate).HasColumnType("datetime");
             entity.Property(e => e.EquipmentId).HasColumnName("Equipment_id");
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Equipment).WithMany(p => p.Agreements)
                 .HasForeignKey(d => d.EquipmentId)
@@ -146,6 +149,10 @@ public partial class EnpDbContext : DbContext
         modelBuilder.Entity<Compartment>(entity =>
         {
             entity.ToTable("Compartment");
+
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Component>(entity =>
@@ -158,6 +165,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(1);
             entity.Property(e => e.EquipmentId).HasColumnName("Equipment_id");
             entity.Property(e => e.SerialNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
@@ -196,7 +206,6 @@ public partial class EnpDbContext : DbContext
 
             entity.HasIndex(e => e.BatchNumber, "CycleDetails_pk2").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.BatchNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -545,6 +554,10 @@ public partial class EnpDbContext : DbContext
 
         modelBuilder.Entity<Group>(entity =>
         {
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
             entity.HasOne(d => d.Section).WithMany(p => p.Groups)
                 .HasForeignKey(d => d.SectionId)
                 .HasConstraintName("FK_Groups_Section");
@@ -580,6 +593,9 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("FleetID");
             entity.Property(e => e.ReadingDate).HasColumnType("datetime");
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<HoursEntry>(entity =>
@@ -622,6 +638,10 @@ public partial class EnpDbContext : DbContext
         {
             entity.ToTable("Item");
 
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
             entity.HasOne(d => d.Group).WithMany(p => p.Items)
                 .HasForeignKey(d => d.GroupId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -631,6 +651,9 @@ public partial class EnpDbContext : DbContext
         modelBuilder.Entity<ItemValue>(entity =>
         {
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Item).WithMany(p => p.ItemValues)
                 .HasForeignKey(d => d.ItemId)
@@ -734,6 +757,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Model>(entity =>
@@ -751,6 +777,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.ManufacturerId).HasColumnName("Manufacturer_id");
             entity.Property(e => e.ModelClassId).HasColumnName("ModelClass_id");
             entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
@@ -774,6 +803,9 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
@@ -958,6 +990,10 @@ public partial class EnpDbContext : DbContext
         modelBuilder.Entity<RefillType>(entity =>
         {
             entity.ToTable("RefillType");
+
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Resolution>(entity =>
@@ -978,11 +1014,18 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("FleetID");
             entity.Property(e => e.Model).HasMaxLength(50);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<ResolutionType>(entity =>
         {
             entity.ToTable("ResolutionType");
+
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<ScheduleTransaction>(entity =>
@@ -1012,6 +1055,10 @@ public partial class EnpDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Section__3214EC0733B5DB02");
 
             entity.ToTable("Section");
+
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Service).WithMany(p => p.Sections)
                 .HasForeignKey(d => d.ServiceId)

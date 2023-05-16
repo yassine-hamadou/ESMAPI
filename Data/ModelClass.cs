@@ -11,5 +11,7 @@ public partial class ModelClass
 
     public string? Name { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<Model> Models { get; set; } = new List<Model>();
 }
