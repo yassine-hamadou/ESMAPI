@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  deploy:
+  build:
     runs-on: self-hosted
 
     steps:
@@ -15,22 +15,37 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '6.x'
           
       - name: Build with dotnet 
-        run: dotnet build --configuration Release -o ./publish
+        run: dotnet build --configuration Release -o ${{ env.DOTNET_ROOT }}/publish 
         
-#      - name: dotnet publish 
-#        run: dotnet publish -c Release -o ./publish
-        
-      - name: Deploy to IIS
-        shell: powershell 
-        run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
-          Start-Sleep -Seconds 10 
-          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\      
-          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{ env.DOTNET_ROOT }}/publish
           
+          
+          
+  deploy on IIS:
+    runs-on: self-hosted
+    needs: build 
+    environment: 
+      name: production 
+      url: http://localhost:5000 
+      steps:
+        - name: Download artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: .net-app 
+            
+        - name: Deploy to IIS 
+          shell: powershell
+          run: |
+            Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"   
+            xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+            Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start" 
           
           
           
