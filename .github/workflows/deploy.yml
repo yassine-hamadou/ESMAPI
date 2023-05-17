@@ -28,7 +28,7 @@ jobs:
           
           
           
-  deploy on IIS:
+  deploy:
     runs-on: self-hosted
     needs: build  
     steps:
