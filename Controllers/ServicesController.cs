@@ -11,6 +11,7 @@ namespace ServiceManagerApi.Controllers
     public class ServicesController : BaeApiController<ServicesController>
     {
         private readonly EnpDbContext _context;
+
         public ServicesController(EnpDbContext context)
         {
             _context = context;
@@ -21,7 +22,7 @@ namespace ServiceManagerApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public Task<List<Service>> GetServices(string tenantId)
         {
-            var services = _context
+                var services = _context
                 .Services
                 .Where(serv => serv.TenantId == tenantId)
                 .Include(equip => equip.ModelNavigation)
