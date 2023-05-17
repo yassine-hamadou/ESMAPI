@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using ServiceManagerApi.Data; 
+using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.Compartments;
 using ServiceManagerApi.Dtos.CycleDetails;
+using ServiceManagerApi.Dtos.Equipments;
 using ServiceManagerApi.Dtos.FaultEntry;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
@@ -33,47 +34,47 @@ using ServiceManagerApi.Dtos.ScheduleTransactionsDto;
 using ServiceManagerApi.Dtos.Sections;
 using ServiceManagerApi.Dtos.Services;
 
-namespace ServiceManagerApi.Helpers
+namespace ServiceManagerApi.Helpers;
+
+public class AutoMappingProfiles : Profile
 {
-    public class AutoMappingProfiles :Profile
-    {
-        public AutoMappingProfiles()
-        {
-            CreateMap<RefillTypePostDto, RefillType>();
-            CreateMap<ItemsPostDto, Item>();          
-            CreateMap<ItemValuePostDto, ItemValue>();          
-            CreateMap<GroupsPostDto, Group>();              
-            CreateMap<SectionPostDto, Section>();          
-            CreateMap<ServicePostDto, Service>();     
-            CreateMap<LubeBrandPostDto, LubeBrand>();
-            CreateMap<LubeGradePostDto, LubeGrade>();
-            CreateMap<LubeConfigPostDto, LubeConfig>();
-            CreateMap<LubeEntryPostDto, LubeEntry>();
-            CreateMap<CompartmentPostDto, Compartment>();
-            CreateMap<ResolutionPostDto, Resolution>();
-            CreateMap<HoursEntriesPostDto, HoursEntry>();
-            CreateMap<HoursEntriesPutDto, HoursEntry>();
-            CreateMap<HoursEntriesTempPostDto, HoursEntryTemp>();
-            CreateMap<HoursEntriesTempPutDto, HoursEntryTemp>();
-            CreateMap<ResolutionTypePostDto, ResolutionType>();
-            CreateMap<ProductionActivityPostDto, ProductionActivity>();
-            CreateMap<ProductionMineAreaPostDto, ProductionMineArea>();
-            CreateMap<ProductionShiftPostDto, ProductionShift>();
-            CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
-            CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
-            CreateMap<ModelCreateDto, Model>();
-            CreateMap<HaulerOperatorPostDto, HaulerOperator>();
-            CreateMap<LoaderOperatorPostDto, LoaderOperator>();
-            CreateMap<ProductionOriginPostDto, ProductionOrigin>();
-            CreateMap<ProdRawMaterialPostDto, ProdRawMaterial>();
-            CreateMap<ProductionDestinationPostDto, ProductionDestination>();
-            CreateMap<ProdProcessedMaterialPostDto, ProdProcessedMaterial>();
-            CreateMap<ScheduleTransactionsPostDto, ScheduleTransaction>();
-            CreateMap<ProLoaderUnitPostDto, ProloaderUnit>();
-            CreateMap<ProHaulerUnitPostDto, ProhaulerUnit>();
-            CreateMap<PlannedOutputPostDto, PlannedOutput>();
-            CreateMap<CycleDetailPostDto, CycleDetail>();
-            CreateMap<FaultEntryPostDto, FaultEntry>();
-        }
-    }
+  public AutoMappingProfiles()
+  {
+    CreateMap<RefillTypePostDto, RefillType>();
+    CreateMap<ItemsPostDto, Item>();
+    CreateMap<ItemValuePostDto, ItemValue>();
+    CreateMap<GroupsPostDto, Group>();
+    CreateMap<SectionPostDto, Section>();
+    CreateMap<ServicePostDto, Service>();
+    CreateMap<LubeBrandPostDto, LubeBrand>();
+    CreateMap<LubeGradePostDto, LubeGrade>();
+    CreateMap<LubeConfigPostDto, LubeConfig>();
+    CreateMap<LubeEntryPostDto, LubeEntry>();
+    CreateMap<CompartmentPostDto, Compartment>();
+    CreateMap<ResolutionPostDto, Resolution>();
+    CreateMap<HoursEntriesPostDto, HoursEntry>();
+    CreateMap<HoursEntriesPutDto, HoursEntry>();
+    CreateMap<HoursEntriesTempPostDto, HoursEntryTemp>();
+    CreateMap<HoursEntriesTempPutDto, HoursEntryTemp>();
+    CreateMap<ResolutionTypePostDto, ResolutionType>();
+    CreateMap<ProductionActivityPostDto, ProductionActivity>();
+    CreateMap<ProductionMineAreaPostDto, ProductionMineArea>();
+    CreateMap<ProductionShiftPostDto, ProductionShift>();
+    CreateMap<GroundEngagingToolsPostDto, GroundEngTool>();
+    CreateMap<GroundEngagingToolsPutDto, GroundEngTool>();
+    CreateMap<ModelCreateDto, Model>();
+    CreateMap<HaulerOperatorPostDto, HaulerOperator>();
+    CreateMap<LoaderOperatorPostDto, LoaderOperator>();
+    CreateMap<ProductionOriginPostDto, ProductionOrigin>();
+    CreateMap<ProdRawMaterialPostDto, ProdRawMaterial>();
+    CreateMap<ProductionDestinationPostDto, ProductionDestination>();
+    CreateMap<ProdProcessedMaterialPostDto, ProdProcessedMaterial>();
+    CreateMap<ScheduleTransactionsPostDto, ScheduleTransaction>();
+    CreateMap<ProLoaderUnitPostDto, ProloaderUnit>();
+    CreateMap<ProHaulerUnitPostDto, ProhaulerUnit>();
+    CreateMap<PlannedOutputPostDto, PlannedOutput>();
+    CreateMap<CycleDetailPostDto, CycleDetail>();
+    CreateMap<FaultEntryPostDto, FaultEntry>();
+    CreateMap<EquipmentPostDto, Equipment>();
+  }
 }
