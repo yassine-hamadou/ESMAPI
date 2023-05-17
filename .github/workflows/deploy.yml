@@ -18,31 +18,15 @@ jobs:
           dotnet-version: '6.x'
           
       - name: Build with dotnet 
-        run: dotnet build --configuration Release -o ${{ env.DOTNET_ROOT }}/publish 
-        
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: .net-app
-          path: ${{ env.DOTNET_ROOT }}/publish
-          
-          
-          
-  deploy:
-    runs-on: self-hosted
-    needs: build  
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-app 
-          
-      - name: Deploy to IIS 
-        shell: powershell
+        run: dotnet build --configuration Release -o ${{ env.DOTNET_ROOT }}/publish   
+           
+      - name: Deploy to IIS  
         run: |
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"   
-          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\
-          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start" 
+          xcopy /Y /S /I ${{ env.DOTNET_ROOT }}/publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"
+       
+          
           
           
           
