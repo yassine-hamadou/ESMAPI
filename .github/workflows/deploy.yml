@@ -30,22 +30,19 @@ jobs:
           
   deploy on IIS:
     runs-on: self-hosted
-    needs: build 
-    environment: 
-      name: production 
-      url: http://localhost:5000 
-      steps:
-        - name: Download artifact
-          uses: actions/download-artifact@v2
-          with:
-            name: .net-app 
-            
-        - name: Deploy to IIS 
-          shell: powershell
-          run: |
-            Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"   
-            xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\
-            Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start" 
+    needs: build  
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app 
+          
+      - name: Deploy to IIS 
+        shell: powershell
+        run: |
+          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"   
+          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start" 
           
           
           
