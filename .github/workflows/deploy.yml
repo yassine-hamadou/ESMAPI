@@ -18,11 +18,12 @@ jobs:
           dotnet-version: '6.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release -o ./publish
+        run: dotnet build --configuration Release -o ${{ env.DOTNET_ROOT }}\publish
 
       - name: Deploy to IIS
         run: |
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"   
-          xcopy /Y /S /I publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+          Start-Sleep -Seconds 10
+          xcopy /Y /S /I ${{ env.DOTNET_ROOT }}\publish\* C:\inetpub\wwwroot\ServiceManagerApi\
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"
         
