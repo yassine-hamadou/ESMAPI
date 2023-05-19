@@ -25,8 +25,7 @@ jobs:
         with:
           name: publish
           path: publish
-    
-    steps2:
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
