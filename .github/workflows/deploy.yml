@@ -27,23 +27,23 @@ jobs:
   #          path: publish
 
   copy:
-  runs-on: self-hosted
-  needs: deploy
-  
-  steps:
-    #    - name: Checkout code
-    #      uses: actions/checkout@v3
+    runs-on: self-hosted
+    needs: deploy
+    
+    steps:
+      #    - name: Checkout code
+      #      uses: actions/checkout@v3
 
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v2
-      with:
-        name: publish
-        path: publish
-      
-    - name: Deploy to IIS
-      run: |
-        Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
-        Start-Sleep -Seconds 10 
-        xcopy /Y /S /I /F publish\* C:\inetpub\wwwroot\ServiceManagerApi\
-        Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: publish
+          path: publish
+
+      - name: Deploy to IIS
+        run: |
+          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
+          Start-Sleep -Seconds 10 
+          xcopy /Y /S /I /F publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
           
