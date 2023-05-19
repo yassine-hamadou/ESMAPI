@@ -19,15 +19,20 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release -o publish
-          
-          #      - name: Create publish artifact
-          #        uses: actions/upload-artifact@v2
-          #        with:
-          #          name: publish
-          #          path: publish
 
-      - name: Deploy to IIS
-        shell: powershell
+      - name: Create publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: publish
+          path: publish
+
+      - name: Download
+        uses: actions/download-artifact@v3
+        with:
+          name: publish
+          path: publish 
+
+      - name: Deploy to IIS 
         run: |
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
           Start-Sleep -Seconds 10 
