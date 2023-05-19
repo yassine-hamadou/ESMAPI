@@ -18,13 +18,19 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release -o ./publish
+        run: dotnet build --configuration Release -o publish
 
+      - name: Create publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: publish
+          path: publish
+          
       - name: Deploy to IIS
         shell: powershell
         run: |
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
-          Start-Sleep -Seconds 10 
+          Start-Sleep -Seconds 15 
           xcopy /Y /S /I /F publish\* C:\inetpub\wwwroot\ServiceManagerApi\
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
           
