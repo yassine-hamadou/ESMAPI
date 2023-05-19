@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -25,15 +25,8 @@ jobs:
         with:
           name: publish
           path: publish
-
-  copy:
-    runs-on: self-hosted
-    needs: deploy
     
-    steps:
-      #    - name: Checkout code
-      #      uses: actions/checkout@v3
-
+    steps2:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
