@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
@@ -19,23 +19,31 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release -o publish
+  
+  #      - name: Create publish artifact
+  #        uses: actions/upload-artifact@v2
+  #        with:
+  #          name: publish
+  #          path: publish
 
-      - name: Create publish artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: publish
-          path: publish
+  copy:
+  runs-on: self-hosted
+  needs: deploy
+  
+  steps:
+    #    - name: Checkout code
+    #      uses: actions/checkout@v3
 
-      - name: Download
-        uses: actions/download-artifact@v3
-        with:
-          name: publish
-          path: publish 
-
-      - name: Deploy to IIS 
-        run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
-          Start-Sleep -Seconds 10 
-          xcopy /Y /S /I /F publish\* C:\inetpub\wwwroot\ServiceManagerApi\
-          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: publish
+        path: publish
+      
+    - name: Deploy to IIS
+      run: |
+        Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
+        Start-Sleep -Seconds 10 
+        xcopy /Y /S /I /F publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+        Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
           
