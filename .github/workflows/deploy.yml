@@ -19,12 +19,12 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release -o publish
-  
-  #      - name: Create publish artifact
-  #        uses: actions/upload-artifact@v2
-  #        with:
-  #          name: publish
-  #          path: publish
+
+      - name: Create publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: publish
+          path: publish
 
   copy:
     runs-on: self-hosted
