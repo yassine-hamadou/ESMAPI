@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
-using ServiceManagerApi.Dtos.ProHaulerUnits;
 using ServiceManagerApi.Dtos.ProLoaderUnits;
 
 namespace ServiceManagerApi.Controllers.Production
@@ -19,7 +17,28 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProloaderUnit>> GetProloaderUnits(string tenantId)
         {
-            var proloaderUnits = _context.ProloaderUnits.Where(leav => leav.TenantId == tenantId).ToListAsync();
+            var proloaderUnits = _context.ProloaderUnits
+                .Where(leav => leav.TenantId == tenantId)
+                .Select(h => new ProloaderUnit
+                {
+                    Id = h.Id,
+                    EquipmentId = h.EquipmentId,
+                    ModelName = h.ModelName,
+                    Description = h.Description,
+                    TenantId = h.TenantId,
+                    Equipment = new Equipment
+                    {
+                        Id = h.Equipment.Id,
+                        EquipmentId = h.Equipment.EquipmentId,
+                        Description = h.Equipment.Description,
+                        Model = new Model
+                        {
+                            ModelId = h.Equipment.Model.ModelId,
+                            Name = h.Equipment.Model.Name,
+                        }
+                    }
+                })
+                .ToListAsync();
 
             return proloaderUnits;
 

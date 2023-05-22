@@ -38,6 +38,12 @@ namespace ServiceManagerApi.Controllers.Production
                     Duration = c.Duration,
                     BatchNumber = c.BatchNumber,
                     TenantId = c.TenantId,  
+                    HaulerUnitId = c.HaulerUnitId,
+                    LoaderUnitId = c.LoaderUnitId,
+                    DestinationId = c.DestinationId,
+                    OriginId = c.OriginId,
+                    MaterialId = c.MaterialId,
+                    ShiftId = c.ShiftId,
                     HaulerNavigation = new HaulerOperator
                     {
                        EmpName = c.HaulerNavigation.EmpName,
@@ -94,30 +100,7 @@ namespace ServiceManagerApi.Controllers.Production
             return Ok(cycleDetail);
         }
         
-        /*[HttpPost]
-        [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(CycleDetailPostDto cycleDetailPostDto)
-        {
-            CycleDetail cycleDetail = _mapper.Map<CycleDetail>(cycleDetailPostDto);
-
-            _context.CycleDetails.Add(cycleDetail);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CycleDetailExists(cycleDetail.Id))
-                {
-                    return Conflict();
-                }
-
-                throw;
-            }
-            return CreatedAtAction(nameof(GetById), new { id = cycleDetail.Id }, cycleDetail);
-        }*/
-        
+       
         [HttpPost]
         [ProducesResponseType(typeof(IEnumerable<CycleDetail>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

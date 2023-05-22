@@ -71,6 +71,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<PlannedOutput> PlannedOutputs { get; set; }
 
+    public virtual DbSet<ProFuelIntake> ProFuelIntakes { get; set; }
+
     public virtual DbSet<ProdProcessedMaterial> ProdProcessedMaterials { get; set; }
 
     public virtual DbSet<ProdRawMaterial> ProdRawMaterials { get; set; }
@@ -82,6 +84,8 @@ public partial class EnpDbContext : DbContext
     public virtual DbSet<ProductionMineArea> ProductionMineAreas { get; set; }
 
     public virtual DbSet<ProductionOrigin> ProductionOrigins { get; set; }
+
+    public virtual DbSet<ProductionPump> ProductionPumps { get; set; }
 
     public virtual DbSet<ProductionShift> ProductionShifts { get; set; }
 
@@ -100,6 +104,10 @@ public partial class EnpDbContext : DbContext
     public virtual DbSet<Section> Sections { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
+
+    public virtual DbSet<TarkwaModel> TarkwaModels { get; set; }
+
+    public virtual DbSet<TarkwaModelClass> TarkwaModelClasses { get; set; }
 
     public virtual DbSet<Vmequp> Vmequps { get; set; }
 
@@ -203,8 +211,6 @@ public partial class EnpDbContext : DbContext
         modelBuilder.Entity<CycleDetail>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("CycleDetails_pk");
-
-            entity.HasIndex(e => e.BatchNumber, "CycleDetails_pk2").IsUnique();
 
             entity.Property(e => e.BatchNumber)
                 .HasMaxLength(50)
@@ -832,6 +838,46 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("PlannedOutput_ProductionDestination_id_fk");
         });
 
+        modelBuilder.Entity<ProFuelIntake>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProFuelIntake_pk");
+
+            entity.ToTable("ProFuelIntake");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.BatchNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("batchNumber");
+            entity.Property(e => e.EquipmentId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("equipmentId");
+            entity.Property(e => e.IntakeDate)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("intakeDate");
+            entity.Property(e => e.PumpId).HasColumnName("pumpId");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("tenantId");
+            entity.Property(e => e.TransactionType)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("transactionType");
+
+            entity.HasOne(d => d.Equipment).WithMany(p => p.ProFuelIntakes)
+                .HasPrincipalKey(p => p.EquipmentId)
+                .HasForeignKey(d => d.EquipmentId)
+                .HasConstraintName("ProFuelIntake_Equipment_Equipment_id_fk");
+
+            entity.HasOne(d => d.Pump).WithMany(p => p.ProFuelIntakes)
+                .HasForeignKey(d => d.PumpId)
+                .HasConstraintName("ProFuelIntake___fk");
+        });
+
         modelBuilder.Entity<ProdProcessedMaterial>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("ProdProcessedMaterial_pk");
@@ -918,6 +964,23 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("tenantId");
+        });
+
+        modelBuilder.Entity<ProductionPump>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProductionPump_pk");
+
+            entity.ToTable("ProductionPump");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("name");
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -1078,6 +1141,44 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.Code)
                 .HasForeignKey(d => d.Model)
                 .HasConstraintName("Services_Model_Code_fk");
+        });
+
+        modelBuilder.Entity<TarkwaModel>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("TarkwaModel");
+
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ManufacturerId).HasColumnName("Manufacturer_id");
+            entity.Property(e => e.ModelClassId).HasColumnName("ModelClass_id");
+            entity.Property(e => e.ModelId).HasColumnName("Model_id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<TarkwaModelClass>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("TarkwaModelClass");
+
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ModelClassId).HasColumnName("ModelClass_id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Vmequp>(entity =>
