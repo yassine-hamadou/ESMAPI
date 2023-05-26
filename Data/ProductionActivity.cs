@@ -11,5 +11,11 @@ public partial class ProductionActivity
 
     public string? TenantId { get; set; }
 
+    public string? Code { get; set; }
+
+    public string? ActivityType { get; set; }
+
     public virtual ICollection<PlannedOutput> PlannedOutputs { get; set; } = new List<PlannedOutput>();
+
+    public virtual ICollection<ProActivityDetail> ProActivityDetails { get; set; } = new List<ProActivityDetail>();
 }

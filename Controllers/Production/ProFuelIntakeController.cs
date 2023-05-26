@@ -18,7 +18,7 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<List<ProFuelIntake>> GetProFuelIntakes(string tenantId)
         {
             var proFuelIntakes = _context.ProFuelIntakes
-                .Where(leav => leav.TenantId == tenantId)
+                .Where(leav => leav.TenantId == tenantId )
                 .Select(f => new ProFuelIntake
                 {
                     Id = f.Id,

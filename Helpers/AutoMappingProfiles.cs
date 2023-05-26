@@ -80,5 +80,6 @@ public class AutoMappingProfiles : Profile
     CreateMap<EquipmentPostDto, Equipment>();
     CreateMap<ProdPumpPostDto, ProductionPump>();
     CreateMap<FuelIntakePostDto, ProFuelIntake>();
+    CreateMap<ProActivityDetailsPostDto, ProActivityDetail>();
   }
 }
