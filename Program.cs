@@ -31,16 +31,7 @@ builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(AutoMappingProfiles).Assembly);
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("MyAllowedOrigins",
-//        policy => 
-//        {
-//            policy.WithOrigins("http://localhost:3000") // note the port is included 
-//                .AllowAnyHeader()
-//                .AllowAnyMethod();
-//        });
-//});
+ 
 builder.Services.AddCors();
 
 
