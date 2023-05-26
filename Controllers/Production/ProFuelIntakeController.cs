@@ -24,9 +24,11 @@ namespace ServiceManagerApi.Controllers.Production
                     Id = f.Id,
                     Quantity = f.Quantity,
                     TransactionType = f.TransactionType,
-                    IntakeDate = f.TenantId,
+                    IntakeDate = f.IntakeDate,
                     BatchNumber = f.BatchNumber,
                     TenantId = f.TenantId,
+                    PumpId = f.PumpId,
+                    EquipmentId = f.EquipmentId,
                     Pump = new ProductionPump
                     {
                         Name = f.Pump.Name,
@@ -114,6 +116,8 @@ namespace ServiceManagerApi.Controllers.Production
                 {
                     throw new DbUpdateException("Error saving ProFuelIntake");
                 }
+
+                throw;
             }
             return CreatedAtAction(nameof(GetById), new { id = proFuelIntake.Select(cd => cd.Id) }, proFuelIntake);
         }
