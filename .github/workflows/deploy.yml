@@ -87,5 +87,5 @@ jobs:
         run: |
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
           Start-Sleep -Seconds 10 
-          xcopy /Y /S /I /F publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+          xcopy /Y /S /I /F /C publish\* C:\inetpub\wwwroot\ServiceManagerApi\
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
