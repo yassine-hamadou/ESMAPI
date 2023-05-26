@@ -20,6 +20,25 @@ namespace ServiceManagerApi.Controllers.Production
         {
             var prohaulerUnits = _context.ProhaulerUnits
                 .Where(leav => leav.TenantId == tenantId)
+                .Select(h => new ProhaulerUnit
+                {
+                    Id = h.Id,
+                    EquipmentId = h.EquipmentId,
+                    ModelName = h.ModelName,
+                    Description = h.Description,
+                    TenantId = h.TenantId,
+                    Equipment = new Equipment
+                    {
+                        Id = h.Equipment.Id,
+                        EquipmentId = h.Equipment.EquipmentId,
+                        Description = h.Equipment.Description,
+                        Model = new Model
+                        {
+                            ModelId = h.Equipment.Model.ModelId,
+                            Name = h.Equipment.Model.Name,
+                        }
+                    }
+                })
                 .ToListAsync();
             return prohaulerUnits;
         }

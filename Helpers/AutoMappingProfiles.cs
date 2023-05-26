@@ -5,6 +5,7 @@ using ServiceManagerApi.Dtos.CycleDetails;
 using ServiceManagerApi.Dtos.Equipments;
 using ServiceManagerApi.Dtos.FaultEntry;
 using ServiceManagerApi.Dtos.FleetSchedule;
+using ServiceManagerApi.Dtos.FuelIntake;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
 using ServiceManagerApi.Dtos.HaulerOperator;
@@ -78,5 +79,8 @@ public class AutoMappingProfiles : Profile
     CreateMap<FaultEntryPostDto, FaultEntry>();
     CreateMap<EquipmentPostDto, Equipment>();
     CreateMap<FleetSchedulePostDto, FleetSchedule>();
+    CreateMap<ProdPumpPostDto, ProductionPump>();
+    CreateMap<FuelIntakePostDto, ProFuelIntake>();
+    CreateMap<ProActivityDetailsPostDto, ProActivityDetail>();
   }
 }

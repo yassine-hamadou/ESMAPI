@@ -21,6 +21,8 @@ public partial class Model
 
     public virtual ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
 
+    public virtual ICollection<Equipment1> Equipment1s { get; set; } = new List<Equipment1>();
+
     public virtual Manufacturer? Manufacturer { get; set; }
 
     public virtual ModelClass? ModelClass { get; set; }
