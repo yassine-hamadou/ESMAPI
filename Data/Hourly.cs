@@ -16,4 +16,6 @@ public partial class Hourly
     public int? DailyHoursWorked { get; set; }
 
     public DateTime? ReadingDate { get; set; }
+
+    public string? TenantId { get; set; }
 }

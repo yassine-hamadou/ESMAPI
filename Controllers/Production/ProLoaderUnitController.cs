@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
-using ServiceManagerApi.Dtos.ProHaulerUnits;
 using ServiceManagerApi.Dtos.ProLoaderUnits;
 
 namespace ServiceManagerApi.Controllers.Production
@@ -10,18 +8,40 @@ namespace ServiceManagerApi.Controllers.Production
   
     public class ProLoaderUnitController : BaeApiController<ProLoaderUnitController>
     {
-        private readonly EnpDBContext _context;
-        public ProLoaderUnitController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ProLoaderUnitController(EnpDbContext context)
         {
             _context = context;
         }
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProloaderUnit>> Get()
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProloaderUnit>> GetProloaderUnits(string tenantId)
         {
-            return await _context.ProloaderUnits.ToListAsync();
+            var proloaderUnits = _context.ProloaderUnits
+                .Where(leav => leav.TenantId == tenantId)
+                .Select(h => new ProloaderUnit
+                {
+                    Id = h.Id,
+                    EquipmentId = h.EquipmentId,
+                    ModelName = h.ModelName,
+                    Description = h.Description,
+                    TenantId = h.TenantId,
+                    Equipment = new Equipment
+                    {
+                        Id = h.Equipment.Id,
+                        EquipmentId = h.Equipment.EquipmentId,
+                        Description = h.Equipment.Description,
+                        Model = new Model
+                        {
+                            ModelId = h.Equipment.Model.ModelId,
+                            Name = h.Equipment.Model.Name,
+                        }
+                    }
+                })
+                .ToListAsync();
+
+            return proloaderUnits;
+
         }
 
         // get by id

@@ -15,5 +15,7 @@ public partial class Component
 
     public int? Quantity { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual Equipment? Equipment { get; set; }
 }

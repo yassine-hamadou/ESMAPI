@@ -14,22 +14,21 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ScheduleTransactionsController : BaeApiController<ScheduleTransaction>
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public ScheduleTransactionsController(EnpDBContext context)
+        public ScheduleTransactionsController(EnpDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/ScheduleTransactions
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ScheduleTransaction>>> GetScheduleTransactions()
+        
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ScheduleTransaction>> GetScheduleTransactions(string tenantId)
         {
-          if (_context.ScheduleTransactions == null)
-          {
-              return NotFound();
-          }
-            return await _context.ScheduleTransactions.ToListAsync();
+            var scheduleTransactions = _context.ScheduleTransactions.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return scheduleTransactions;
         }
 
         // GET: api/ScheduleTransactions/5

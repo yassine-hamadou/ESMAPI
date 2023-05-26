@@ -29,9 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include=".github\workflows\" />
     <Folder Include="Data\" />
-    <Folder Include="Uploads\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -42,6 +40,9 @@
     <_ContentIncludedByDefault Remove="Copy\appsettings.json" />
     <_ContentIncludedByDefault Remove="Copy\ServiceManagerApi.deps.json" />
     <_ContentIncludedByDefault Remove="Copy\ServiceManagerApi.runtimeconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".github\workflows\deploy.yml" />
   </ItemGroup>
 
 <!--  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>-->

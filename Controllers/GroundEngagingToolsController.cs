@@ -14,22 +14,19 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class GroundEngagingToolsController : BaeApiController<GroundEngagingToolsController>
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public GroundEngagingToolsController(EnpDBContext context)
+        public GroundEngagingToolsController(EnpDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/GroundEngagingTools
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<GroundEngTool>>> GetGroundEngTools()
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<GroundEngTool>> GetGroundEngTools(string tenantId)
         {
-          if (_context.GroundEngTools == null)
-          {
-              return NotFound();
-          }
-          return await _context.GroundEngTools.Include(tool =>  tool.Equipment).ToListAsync();
+            var groundEngTools = _context.GroundEngTools.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return groundEngTools;
         }
 
         // GET: api/GroundEngagingTools/5

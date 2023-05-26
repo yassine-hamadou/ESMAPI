@@ -13,22 +13,20 @@ namespace ServiceManagerApi.Controllers.Production
     [ApiController]
     public class ProductionMineAreaController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public ProductionMineAreaController(EnpDBContext context)
+        public ProductionMineAreaController(EnpDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/ProductionMineArea
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductionMineArea>>> GetProductionMineAreas()
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProductionMineArea>> GetProductionDestinations(string tenantId)
         {
-          if (_context.ProductionMineAreas == null)
-          {
-              return NotFound();
-          }
-            return await _context.ProductionMineAreas.ToListAsync();
+            var productionMineAreas = _context.ProductionMineAreas.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return productionMineAreas;
         }
 
         // GET: api/ProductionMineArea/5

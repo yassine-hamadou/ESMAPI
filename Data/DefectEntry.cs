@@ -15,9 +15,11 @@ public partial class DefectEntry
 
     public string? Comment { get; set; }
 
-    public Guid ReferenceId { get; set; }
+    public string? TenantId { get; set; }
+
+    public string? ReferenceId { get; set; }
+
+    public string? EquipmentDescription { get; set; }
 
     public virtual Equipment DefectEquipment { get; set; } = null!;
-
-    public virtual FaultEntry Reference { get; set; } = null!;
 }

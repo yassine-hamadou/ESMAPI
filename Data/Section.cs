@@ -13,6 +13,8 @@ public partial class Section
 
     public short? Status { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
 
     public virtual Service? Service { get; set; }

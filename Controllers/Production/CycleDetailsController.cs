@@ -8,20 +8,81 @@ namespace ServiceManagerApi.Controllers.Production
   
     public class CycleDetailsController : BaeApiController<CycleDetailsController>
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public CycleDetailsController(EnpDBContext context)
+        public CycleDetailsController(EnpDbContext context)
         {
             _context = context;
         }
+        
 
-        // GET: api/CycleDetails
-        [HttpGet]
-        [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<CycleDetail>> Get()
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<CycleDetail>> GetCycleDetails(string tenantId)
         {
-            return await _context.CycleDetails.ToListAsync();
+            var cycleDetails = _context.CycleDetails
+                .Where(leav => leav.TenantId == tenantId)
+                .Select(c=> new CycleDetail
+                {
+                    Id = c.Id,
+                    CycleDate = c.CycleDate,
+                    CycleTime = c.CycleTime,
+                    Loader = c.Loader,
+                    Hauler = c.Hauler,
+                    Loads = c.Loads,
+                    Volumes = c.Volumes,
+                    Weight = c.Weight,
+                    PayloadWeight = c.PayloadWeight,
+                    ReportedWeight = c.ReportedWeight,
+                    NominalWeight = c.NominalWeight,
+                    TimeAtLoader = c.TimeAtLoader,
+                    Duration = c.Duration,
+                    BatchNumber = c.BatchNumber,
+                    TenantId = c.TenantId,  
+                    HaulerUnitId = c.HaulerUnitId,
+                    LoaderUnitId = c.LoaderUnitId,
+                    DestinationId = c.DestinationId,
+                    OriginId = c.OriginId,
+                    MaterialId = c.MaterialId,
+                    ShiftId = c.ShiftId,
+                    HaulerNavigation = new HaulerOperator
+                    {
+                       EmpName = c.HaulerNavigation.EmpName,
+                       EmpCode = c.HaulerNavigation.EmpCode
+                    },
+                    LoaderNavigation = new LoaderOperator
+                    {
+                        EmpName = c.LoaderNavigation.EmpName,
+                        EmpCode = c.LoaderNavigation.EmpCode
+                    },
+                    HaulerUnit = new ProhaulerUnit
+                    {
+                        EquipmentId = c.HaulerUnit.EquipmentId
+                    },
+                    LoaderUnit = new ProloaderUnit
+                    {
+                        EquipmentId = c.LoaderUnit.EquipmentId
+                    },
+                    Destination = new ProductionDestination
+                    {
+                        Name = c.Destination.Name
+                    },
+                    Origin = new ProductionOrigin
+                    {
+                        Name = c.Origin.Name
+                    },
+                    Material = new ProdRawMaterial
+                    {
+                        Name = c.Material.Name
+                    },
+                    Shift = new ProductionShift
+                    {
+                        Name = c.Shift.Name
+                    }
+                })
+                .ToListAsync();
+
+            return cycleDetails;
+
         }
 
         // GET: api/CycleDetails/5
@@ -39,29 +100,33 @@ namespace ServiceManagerApi.Controllers.Production
             return Ok(cycleDetail);
         }
         
+       
         [HttpPost]
-        [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(IEnumerable<CycleDetail>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(CycleDetailPostDto cycleDetailPostDto)
+        public async Task<IActionResult> Create(IEnumerable<CycleDetailPostDto> cycleDetailPostDtos)
         {
-            CycleDetail cycleDetail = _mapper.Map<CycleDetail>(cycleDetailPostDto);
+            var cycleDetails = _mapper.Map<IEnumerable<CycleDetail>>(cycleDetailPostDtos);
 
-            _context.CycleDetails.Add(cycleDetail);
+            _context.CycleDetails.AddRange(cycleDetails);
             try
             {
                 await _context.SaveChangesAsync();
-            }
+                return Ok();
+            } 
             catch (DbUpdateException)
             {
-                if (CycleDetailExists(cycleDetail.Id))
+                if (true)
                 {
-                    return Conflict();
+                    throw new DbUpdateException("Error saving cycle details");
                 }
-
+                // Handle the conflict if necessary
                 throw;
             }
-            return CreatedAtAction(nameof(GetById), new { id = cycleDetail.Id }, cycleDetail);
+
+            return CreatedAtAction(nameof(GetById), new { id = cycleDetails.Select(cd => cd.Id) }, cycleDetails);
         }
+
         
         // PUT: api/CycleDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

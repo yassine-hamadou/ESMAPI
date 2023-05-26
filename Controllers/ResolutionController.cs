@@ -10,9 +10,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ResolutionsController : BaeApiController<ResolutionsController>
     {
-        private EnpDBContext _context;
+        private EnpDbContext _context;
 
-        public ResolutionsController(EnpDBContext context)
+        public ResolutionsController(EnpDbContext context)
         {
             _context = context;
         }

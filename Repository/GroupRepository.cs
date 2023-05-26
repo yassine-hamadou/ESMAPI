@@ -5,6 +5,6 @@ namespace ServiceManagerApi.Repository
 {
     public class GroupRepository: GenericRepositoryAsync<Group>, IGroupRepository
     {
-        public GroupRepository(EnpDBContext context) : base(context) { }
+        public GroupRepository(EnpDbContext context) : base(context) { }
     }
 }

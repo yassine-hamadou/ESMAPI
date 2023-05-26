@@ -8,19 +8,19 @@ namespace ServiceManagerApi.Controllers.Production
 {
     public class ProductionOriginController : BaeApiController<ProductionOriginController>
     {
-        private readonly EnpDBContext _context;
-        public ProductionOriginController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ProductionOriginController(EnpDbContext context)
         {
             _context = context;
         }
 
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(ProductionOrigin), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProductionOrigin>> Get()
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProductionOrigin>> GetProductionDestinations(string tenantId)
         {
-            return await _context.ProductionOrigins.ToListAsync();
+            var productionOrigins = _context.ProductionOrigins.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return productionOrigins;
         }
 
         // get by id

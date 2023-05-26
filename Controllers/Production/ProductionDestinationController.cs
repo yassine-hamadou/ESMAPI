@@ -7,19 +7,18 @@ namespace ServiceManagerApi.Controllers.Production
 {
     public class ProductionDestinationController : BaeApiController<ProductionDestinationController>
     {
-        private readonly EnpDBContext _context;
-        public ProductionDestinationController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ProductionDestinationController(EnpDbContext context)
         {
             _context = context;
         }
 
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(ProductionDestination), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProductionDestination>> Get()
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProductionDestination>> GetProductionDestinations(string tenantId)
         {
-            return await _context.ProductionDestinations.ToListAsync();
+            var productionDestinations = _context.ProductionDestinations.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return productionDestinations;
         }
 
         // get by id

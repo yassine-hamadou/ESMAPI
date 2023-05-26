@@ -7,20 +7,21 @@ namespace ServiceManagerApi.Controllers.Production
 {
     public class PlannedOutputController : BaeApiController<PlannedOutputController>
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public PlannedOutputController(EnpDBContext context)
+        public PlannedOutputController(EnpDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/PlannedOutput
-        [HttpGet]
-        [ProducesResponseType(typeof(PlannedOutput), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<PlannedOutput>> Get()
+        
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<PlannedOutput>> GetPlannedOutputs(string tenantId)
         {
-            return await _context.PlannedOutputs.ToListAsync();
+            var plannedOutput = _context.PlannedOutputs.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return plannedOutput;
         }
 
         // GET: api/PlannedOutput/5

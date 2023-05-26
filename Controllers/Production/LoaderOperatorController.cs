@@ -8,18 +8,19 @@ namespace ServiceManagerApi.Controllers.Production
 {
     public class LoaderOperatorController : BaeApiController<LoaderOperatorController>
     {
-        private readonly EnpDBContext _context;
-        public LoaderOperatorController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public LoaderOperatorController(EnpDbContext context)
         {
             _context = context;
         }
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(LoaderOperator), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<LoaderOperator>> Get()
+        
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<LoaderOperator>> GetPlannedOutputs(string tenantId)
         {
-            return await _context.LoaderOperators.ToListAsync();
+            var loaderOperators = _context.LoaderOperators.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return loaderOperators;
         }
 
         // get by id

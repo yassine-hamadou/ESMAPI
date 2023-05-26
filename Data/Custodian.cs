@@ -16,4 +16,6 @@ public partial class Custodian
     public string? Address { get; set; }
 
     public string? HrCode { get; set; }
+
+    public string? TenantId { get; set; }
 }

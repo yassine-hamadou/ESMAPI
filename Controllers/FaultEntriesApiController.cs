@@ -8,25 +8,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.FaultEntry;
 
 namespace ServiceManagerApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FaultEntriesApiController : ControllerBase
+    public class FaultEntriesApiController : BaeApiController<FaultEntryPostDto>
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public FaultEntriesApiController(EnpDBContext context)
+        public FaultEntriesApiController(EnpDbContext context)
         {
             _context = context;
         }
 
         // GET: api/FaultEntriesApi
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<FaultEntry>>> GetFaultEntries()
+        [HttpGet("tenant/{tenantId}")]
+        public async Task<ActionResult<IEnumerable<FaultEntry>>> GetFaultEntries(string tenantId)
         {
-            return await _context.FaultEntries.ToListAsync();
+            return await _context.FaultEntries.Where(fault => fault.TenantId == tenantId).ToListAsync();
         }
 
         // GET: api/FaultEntriesApi/5
@@ -77,8 +78,9 @@ namespace ServiceManagerApi.Controllers
         // POST: api/FaultEntriesApi
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<FaultEntry>> PostFaultEntry(FaultEntry faultEntry)
+        public async Task<ActionResult<FaultEntry>> PostFaultEntry(FaultEntryPostDto faultEntryPostDto)
         {
+            var faultEntry = _mapper.Map<FaultEntry>(faultEntryPostDto);
             _context.FaultEntries.Add(faultEntry);
             try
             {

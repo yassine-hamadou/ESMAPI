@@ -12,8 +12,8 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ItemValueController : BaeApiController<ItemValueController>
     {
-        private readonly EnpDBContext _context;
-        public ItemValueController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ItemValueController(EnpDbContext context)
         {
             _context = context;
         }

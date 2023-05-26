@@ -8,18 +8,39 @@ namespace ServiceManagerApi.Controllers.Production
 {
     public class ProHaulerUnitController : BaeApiController<ProHaulerUnitController>
     {
-        private readonly EnpDBContext _context;
-        public ProHaulerUnitController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ProHaulerUnitController(EnpDbContext context)
         {
             _context = context;
         }
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(ProhaulerUnit), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProhaulerUnit>> Get()
+
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProhaulerUnit>> GetProhaulerUnits(string tenantId)
         {
-            return await _context.ProhaulerUnits.ToListAsync();
+            var prohaulerUnits = _context.ProhaulerUnits
+                .Where(leav => leav.TenantId == tenantId)
+                .Select(h => new ProhaulerUnit
+                {
+                    Id = h.Id,
+                    EquipmentId = h.EquipmentId,
+                    ModelName = h.ModelName,
+                    Description = h.Description,
+                    TenantId = h.TenantId,
+                    Equipment = new Equipment
+                    {
+                        Id = h.Equipment.Id,
+                        EquipmentId = h.Equipment.EquipmentId,
+                        Description = h.Equipment.Description,
+                        Model = new Model
+                        {
+                            ModelId = h.Equipment.Model.ModelId,
+                            Name = h.Equipment.Model.Name,
+                        }
+                    }
+                })
+                .ToListAsync();
+            return prohaulerUnits;
         }
 
         // get by id

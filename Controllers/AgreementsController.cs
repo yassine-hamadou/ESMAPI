@@ -13,9 +13,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class AgreementsController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public AgreementsController(EnpDBContext context)
+        public AgreementsController(EnpDbContext context)
         {
             _context = context;
         }
@@ -24,12 +24,21 @@ namespace ServiceManagerApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Agreement>>> GetAgreements()
         {
-          if (_context.Agreements == null)
-          {
-              return NotFound();
-          }
+            if (_context.Agreements == null)
+            {
+                return NotFound();
+            }
             return await _context.Agreements.ToListAsync();
         }
+
+
+        //[HttpGet("tenant/{tenantId}")]
+        //public Task<List<Agreement>> GetAppraisals(string tenantId)
+        //{
+        //    var agreements = _context.Agreements.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+        //    return agreements;
+        //}
 
         // GET: api/Agreements/5
         [HttpGet("{id}")]

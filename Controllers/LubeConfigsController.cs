@@ -10,9 +10,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class LubeConfigsController : BaeApiController<LubeConfigsController>
     {
-        private EnpDBContext _context;
+        private EnpDbContext _context;
 
-        public LubeConfigsController(EnpDBContext context)
+        public LubeConfigsController(EnpDbContext context)
         {
             _context = context;
         }

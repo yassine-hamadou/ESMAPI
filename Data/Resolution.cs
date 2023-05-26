@@ -28,4 +28,6 @@ public partial class Resolution
     public DateTime? TimeStarted { get; set; }
 
     public DateTime? TimeCompleted { get; set; }
+
+    public string? TenantId { get; set; }
 }

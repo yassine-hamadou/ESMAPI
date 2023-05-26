@@ -11,6 +11,8 @@ public partial class Group
 
     public int? SectionId { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<Item> Items { get; set; } = new List<Item>();
 
     public virtual Section? Section { get; set; }

@@ -10,28 +10,31 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ServicesController : BaeApiController<ServicesController>
     {
-        private readonly EnpDBContext _context;
-        public ServicesController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+
+        public ServicesController(EnpDbContext context)
         {
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("tenant/{tenantId}")]
         [ProducesResponseType(typeof(Service), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<Service>> GetServices()
+        public Task<List<Service>> GetServices(string tenantId)
         {
-            return await _context.Services
-                // .Include(ser=>ser.FleetSchedules)
+                var services = _context
+                .Services
+                .Where(serv => serv.TenantId == tenantId)
                 .Include(equip => equip.ModelNavigation)
                 .ThenInclude(model => model.Equipment)
-                .Include(ser=>ser.Sections)
-                    .ThenInclude(sec=>sec.Groups)
-                        .ThenInclude(grop=>grop.Items)
-                        .ThenInclude(grop=>grop.ItemValues)
+                .Include(ser => ser.Sections)
+                    .ThenInclude(sec => sec.Groups)
+                        .ThenInclude(grop => grop.Items)
+                        .ThenInclude(grop => grop.ItemValues)
                 .ToListAsync();
-        }
 
+            return services;
+        }
 
 
         [HttpGet("id")]

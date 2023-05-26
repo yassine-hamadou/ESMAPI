@@ -10,9 +10,9 @@ namespace ServiceManagerApi.Controllers
     public class RefillTypeController : BaeApiController<RefillTypeController>
     {
 
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public RefillTypeController(EnpDBContext context)
+        public RefillTypeController(EnpDbContext context)
         {
             _context = context;
         }

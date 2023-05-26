@@ -11,9 +11,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class ResolutionTypesController : BaeApiController<ResolutionTypesController>
     {
-        private EnpDBContext _context;
+        private EnpDbContext _context;
 
-        public ResolutionTypesController(EnpDBContext context)
+        public ResolutionTypesController(EnpDbContext context)
         {
             _context = context;
         }

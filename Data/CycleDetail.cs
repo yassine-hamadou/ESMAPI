@@ -45,6 +45,8 @@ public partial class CycleDetail
 
     public int? Duration { get; set; }
 
+    public string? BatchNumber { get; set; }
+
     public virtual ProductionDestination? Destination { get; set; }
 
     public virtual HaulerOperator? HaulerNavigation { get; set; }

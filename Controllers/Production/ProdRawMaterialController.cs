@@ -8,19 +8,20 @@ namespace ServiceManagerApi.Controllers.Production
 {
      public class ProdRawMaterialController : BaeApiController<ProdRawMaterialController>
     {
-        private readonly EnpDBContext _context;
-        public ProdRawMaterialController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ProdRawMaterialController(EnpDbContext context)
         {
             _context = context;
         }
 
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(ProdRawMaterial), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProdRawMaterial>> Get()
+        
+
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProdRawMaterial>> GetProdRawMaterials(string tenantId)
         {
-            return await _context.ProdRawMaterials.ToListAsync();
+            var prodRawMaterials = _context.ProdRawMaterials.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return prodRawMaterials;
         }
 
         // get by id

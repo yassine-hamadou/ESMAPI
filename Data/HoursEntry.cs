@@ -15,5 +15,7 @@ public partial class HoursEntry
 
     public double? CurrentReading { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual Equipment? Fleet { get; set; }
 }

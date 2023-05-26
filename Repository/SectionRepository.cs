@@ -5,6 +5,6 @@ namespace ServiceManagerApi.Repository
 {
        public class SectionRepository : GenericRepositoryAsync<Section>, ISectionRepository
     {
-        public SectionRepository(EnpDBContext context) : base(context) { }
+        public SectionRepository(EnpDbContext context) : base(context) { }
     }
 }

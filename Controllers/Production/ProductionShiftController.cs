@@ -7,21 +7,20 @@ namespace ServiceManagerApi.Controllers.Production
 {
     public class ProductionShiftController : BaeApiController<ProductionShiftController>
     {
-        private readonly EnpDBContext _context;
-        public ProductionShiftController(EnpDBContext context)
+        private readonly EnpDbContext _context;
+        public ProductionShiftController(EnpDbContext context)
         {
             _context = context;
         }
 
-        //get list
-        [HttpGet]
-        [ProducesResponseType(typeof(ProductionShift), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IEnumerable<ProductionShift>> Get()
-        {
-            return await _context.ProductionShifts.ToListAsync();
-        }
 
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<ProductionShift>> GetProductionShifts(string tenantId)
+        {
+            var productionShifts = _context.ProductionShifts.Where(leav => leav.TenantId == tenantId).ToListAsync();
+
+            return productionShifts;
+        }
 
         // get by id
         [HttpGet("id")]

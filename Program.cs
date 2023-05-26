@@ -17,16 +17,16 @@ builder.Services.AddDbContext<ServiceManagerContext>(options =>
 
 var EnPconnectionString = builder.Configuration.GetConnectionString("EnpConnectionString");
 
-builder.Services.AddDbContext<EnpDBContext>(options =>  options.UseSqlServer(EnPconnectionString));
- 
- 
-                                    //this will allow for patch request
+builder.Services.AddDbContext<EnpDbContext>(options => options.UseSqlServer(EnPconnectionString));
+
+
+//this will allow for patch request
 builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                .AddNewtonsoftJson(opt =>  opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,32 +44,29 @@ builder.Services.AddAutoMapper(typeof(AutoMappingProfiles).Assembly);
 builder.Services.AddCors();
 
 
-
 var app = builder.Build();
 
 //cors configuration for 
 app.UseCors(
-    options => {
-        string frontendUrl = "http://localhost:3000";
-        string serverUrl = "http://208.117.44.15/";
-        options.WithOrigins(frontendUrl, serverUrl )
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+    options =>
+    {
+      var frontendUrl = "http://localhost:3000";
+      var serverUrl = "http://208.117.44.15/";
+      options.WithOrigins(frontendUrl, serverUrl)
+          .AllowAnyHeader()
+          .AllowAnyMethod();
     });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 else
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "SipPay API V1");
-    });
+  app.UseSwagger();
+  app.UseSwaggerUI(c => { c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "ESMS API V1"); });
 }
 
 app.UseHttpsRedirection();

@@ -5,7 +5,7 @@ namespace ServiceManagerApi.Repository
 {
     public class ServiceRepository:GenericRepositoryAsync<Service>, IServiceRepository
     {
-        public ServiceRepository(EnpDBContext context) : base(context) { }
+        public ServiceRepository(EnpDbContext context) : base(context) { }
     }
 
 

@@ -10,9 +10,9 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class GroupsController : BaeApiController<GroupsController>
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public GroupsController(EnpDBContext context)
+        public GroupsController(EnpDbContext context)
         {
             _context = context;
         }

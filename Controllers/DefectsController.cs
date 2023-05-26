@@ -13,22 +13,18 @@ namespace ServiceManagerApi.Controllers
     [ApiController]
     public class DefectsController : ControllerBase
     {
-        private readonly EnpDBContext _context;
+        private readonly EnpDbContext _context;
 
-        public DefectsController(EnpDBContext context)
+        public DefectsController(EnpDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Defects
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DefectEntry>>> GetDefectEntries()
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<DefectEntry>> GetDefectEntries(string tenantId)
         {
-          if (_context.DefectEntries == null)
-          {
-              return NotFound();
-          }
-            return await _context.DefectEntries.ToListAsync();
+            var defectEntries = _context.DefectEntries.Where(leav => leav.TenantId == tenantId).ToListAsync();
+            return defectEntries;
         }
 
         // GET: api/Defects/5

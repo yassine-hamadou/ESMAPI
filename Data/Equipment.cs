@@ -33,6 +33,8 @@ public partial class Equipment
 
     public string? MeterType { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual ICollection<Agreement> Agreements { get; set; } = new List<Agreement>();
 
     public virtual ICollection<Component> Components { get; set; } = new List<Component>();
@@ -46,6 +48,8 @@ public partial class Equipment
     public virtual ICollection<HoursEntryTemp> HoursEntryTemps { get; set; } = new List<HoursEntryTemp>();
 
     public virtual Model? Model { get; set; }
+
+    public virtual ICollection<ProFuelIntake> ProFuelIntakes { get; set; } = new List<ProFuelIntake>();
 
     public virtual ICollection<ProhaulerUnit> ProhaulerUnits { get; set; } = new List<ProhaulerUnit>();
 
