@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.FleetSchedule;
 
 namespace ServiceManagerApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class FleetSchedulesApiController : ControllerBase
+public class FleetSchedulesApiController : BaeApiController<FleetSchedule>
 {
   private readonly EnpDbContext _context;
 
@@ -17,10 +18,11 @@ public class FleetSchedulesApiController : ControllerBase
 
   // GET: api/FleetSchedulesApi/tenant/tarkwa
   [HttpGet("tenant/{tenantId}")]
-  public async Task<ActionResult<IEnumerable<FleetSchedule>>> GetFleetSchedules()
+  public async Task<ActionResult<IEnumerable<FleetSchedule>>> GetFleetSchedules(string tenantId)
   {
     return await _context
         .FleetSchedules
+        .Where(fleetSchedule => fleetSchedule.TenantId == tenantId)
         .Select(fleetSchedule => new FleetSchedule()
         {
             EntryId = fleetSchedule.EntryId,
@@ -85,8 +87,9 @@ public class FleetSchedulesApiController : ControllerBase
   // POST: api/FleetSchedulesApi
   // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
   [HttpPost]
-  public async Task<ActionResult<FleetSchedule>> PostFleetSchedule(FleetSchedule fleetSchedule)
+  public async Task<ActionResult<FleetSchedule>> PostFleetSchedule(FleetSchedulePostDto fleetSchedulePostDto)
   {
+    var fleetSchedule = _mapper.Map<FleetSchedule>(fleetSchedulePostDto);
     _context.FleetSchedules.Add(fleetSchedule);
     await _context.SaveChangesAsync();
 

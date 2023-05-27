@@ -44,7 +44,7 @@ namespace ServiceManagerApi.Controllers.Production
         }
 
         // get by id
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProhaulerUnit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)

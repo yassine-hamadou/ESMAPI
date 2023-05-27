@@ -49,6 +49,8 @@ public partial class Equipment
 
     public virtual Model? Model { get; set; }
 
+    public virtual ICollection<ProDrill> ProDrills { get; set; } = new List<ProDrill>();
+
     public virtual ICollection<ProFuelIntake> ProFuelIntakes { get; set; } = new List<ProFuelIntake>();
 
     public virtual ICollection<ProhaulerUnit> ProhaulerUnits { get; set; } = new List<ProhaulerUnit>();

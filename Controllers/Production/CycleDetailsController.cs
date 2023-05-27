@@ -86,7 +86,7 @@ namespace ServiceManagerApi.Controllers.Production
         }
 
         // GET: api/CycleDetails/5
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)

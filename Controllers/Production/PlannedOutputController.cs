@@ -19,7 +19,26 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("tenant/{tenantId}")]
         public Task<List<PlannedOutput>> GetPlannedOutputs(string tenantId)
         {
-            var plannedOutput = _context.PlannedOutputs.Where(leav => leav.TenantId == tenantId).ToListAsync();
+            var plannedOutput = _context.PlannedOutputs
+                .Where(leav => leav.TenantId == tenantId)
+                .Select(p => new PlannedOutput
+                {
+                    Id = p.Id,
+                    Quantity = p.Quantity,
+                    TenantId = p.TenantId,
+                    DestinationId = p.DestinationId,
+                    ActivityId = p.ActivityId,
+                    Activity = new ProductionActivity
+                    {
+                        Name = p.Activity.Name,
+                    },
+                    Destination = new ProductionDestination
+                    {
+                        Name = p.Destination.Name,
+                        Description = p.Destination.Description
+                    }
+                })
+                .ToListAsync();
 
             return plannedOutput;
         }

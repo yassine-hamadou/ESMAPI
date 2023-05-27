@@ -77,6 +77,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<ProActivityDetail> ProActivityDetails { get; set; }
 
+    public virtual DbSet<ProDrill> ProDrills { get; set; }
+
     public virtual DbSet<ProFuelIntake> ProFuelIntakes { get; set; }
 
     public virtual DbSet<ProdProcessedMaterial> ProdProcessedMaterials { get; set; }
@@ -890,12 +892,9 @@ public partial class EnpDbContext : DbContext
 
             entity.ToTable("PlannedOutput");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.DestinationId).HasColumnName("DestinationId ");
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("tenantId");
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Activity).WithMany(p => p.PlannedOutputs)
                 .HasForeignKey(d => d.ActivityId)
@@ -903,7 +902,7 @@ public partial class EnpDbContext : DbContext
 
             entity.HasOne(d => d.Destination).WithMany(p => p.PlannedOutputs)
                 .HasForeignKey(d => d.DestinationId)
-                .HasConstraintName("PlannedOutput_ProductionDestination_id_fk");
+                .HasConstraintName("PlannedOutput___fk");
         });
 
         modelBuilder.Entity<ProActivityDetail>(entity =>
@@ -923,6 +922,31 @@ public partial class EnpDbContext : DbContext
             entity.HasOne(d => d.Activity).WithMany(p => p.ProActivityDetails)
                 .HasForeignKey(d => d.ActivityId)
                 .HasConstraintName("ProActivityDetails_ProductionActivity_Id_fk");
+        });
+
+        modelBuilder.Entity<ProDrill>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProDrill_pk");
+
+            entity.ToTable("ProDrill");
+
+            entity.Property(e => e.Description)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.EquipmentId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ModelName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Equipment).WithMany(p => p.ProDrills)
+                .HasPrincipalKey(p => p.EquipmentId)
+                .HasForeignKey(d => d.EquipmentId)
+                .HasConstraintName("ProDrill_Equipment_Equipment_id_fk");
         });
 
         modelBuilder.Entity<ProFuelIntake>(entity =>

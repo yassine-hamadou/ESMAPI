@@ -5,6 +5,7 @@ using ServiceManagerApi.Dtos.CycleDetails;
 using ServiceManagerApi.Dtos.Equipments;
 using ServiceManagerApi.Dtos.FaultEntry;
 using ServiceManagerApi.Dtos.FuelIntake;
+using ServiceManagerApi.Dtos.FleetSchedule;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
 using ServiceManagerApi.Dtos.HaulerOperator;
@@ -22,6 +23,7 @@ using ServiceManagerApi.Dtos.PlannedOutput;
 using ServiceManagerApi.Dtos.ProdProcessedMaterial;
 using ServiceManagerApi.Dtos.ProdPump;
 using ServiceManagerApi.Dtos.ProdRawMaterial;
+using ServiceManagerApi.Dtos.ProDrill;
 using ServiceManagerApi.Dtos.ProductionActivity;
 using ServiceManagerApi.Dtos.ProductionDestination;
 using ServiceManagerApi.Dtos.ProductionMineArea;
@@ -81,5 +83,7 @@ public class AutoMappingProfiles : Profile
     CreateMap<ProdPumpPostDto, ProductionPump>();
     CreateMap<FuelIntakePostDto, ProFuelIntake>();
     CreateMap<ProActivityDetailsPostDto, ProActivityDetail>();
+    CreateMap<FleetSchedulePostDto, FleetSchedule>();
+    CreateMap<ProDrillPostDto, ProDrill>();
   }
 }

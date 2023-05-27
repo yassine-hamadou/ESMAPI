@@ -5,21 +5,21 @@ using ServiceManagerApi.Dtos.FuelIntake;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-    public class ProFuelIntakeController : BaeApiController<ProFuelIntakeController>
+    public class ProFuelIssueController : BaeApiController<ProFuelIssueController>
     {
         private readonly EnpDbContext _context;
 
-        public ProFuelIntakeController(EnpDbContext context)
+        public ProFuelIssueController(EnpDbContext context)
         {
             _context = context;
         }
 
         [HttpGet("tenant/{tenantId}")]
-        public async Task<List<ProFuelIntake>> GetProFuelIntakes(string tenantId)
+        public Task<List<ProFuelIntake>> GetProFuelIntakes(string tenantId)
         {
             var proFuelIntakes = _context.ProFuelIntakes
-                .Where(leav => leav.TenantId == tenantId )
-                .Select(f => new ProFuelIntake
+                .Where(leav => leav.TenantId == tenantId && leav.TransactionType == "Fuel Issue")
+                /*.Select(f => new ProFuelIntake
                 {
                     Id = f.Id,
                     Quantity = f.Quantity,
@@ -39,20 +39,15 @@ namespace ServiceManagerApi.Controllers.Production
                         Id = f.Equipment.Id,
                         EquipmentId = f.Equipment.EquipmentId,
                         Description = f.Equipment.Description,
-                        Model = new Model
-                        {
-                            ModelId = f.Equipment.Model.ModelId,
-                            Name = f.Equipment.Model.Name,
-                        }
                     }
-                })
+                })*/
                 .ToListAsync();
 
-            return await proFuelIntakes;
+            return proFuelIntakes;
         }
 
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProFuelIntake), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
