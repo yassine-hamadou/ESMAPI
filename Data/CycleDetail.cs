@@ -5,9 +5,9 @@ namespace ServiceManagerApi.Data;
 
 public partial class CycleDetail
 {
-    public string? CycleDate { get; set; }
+    public DateTime? CycleDate { get; set; }
 
-    public string? CycleTime { get; set; }
+    public DateTime? CycleTime { get; set; }
 
     public string? Loader { get; set; }
 
@@ -35,7 +35,7 @@ public partial class CycleDetail
 
     public int? Loads { get; set; }
 
-    public string? TimeAtLoader { get; set; }
+    public DateTime? TimeAtLoader { get; set; }
 
     public int Id { get; set; }
 

@@ -19,7 +19,7 @@ namespace ServiceManagerApi.Controllers.Production
         {
             var proActivityDetails = _context.ProActivityDetails
                 .Where(leav => leav.TenantId == tenantId)
-                .Select(h => new ProActivityDetail
+                /*.Select(h => new ProActivityDetail
                 {
                     Id = h.Id,
                     Name = h.Name,
@@ -32,7 +32,7 @@ namespace ServiceManagerApi.Controllers.Production
                         Name = h.Activity.Name,
                         Code = h.Activity.Code
                     }
-                })
+                })*/
                 .ToListAsync();
             return proActivityDetails;
         }

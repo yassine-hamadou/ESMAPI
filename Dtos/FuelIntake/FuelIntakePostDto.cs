@@ -8,7 +8,7 @@ public class FuelIntakePostDto
 
     public int? Quantity { get; set; }
 
-    public string? IntakeDate { get; set; }
+    public DateTime? IntakeDate { get; set; }
 
     public string? TransactionType { get; set; }
 

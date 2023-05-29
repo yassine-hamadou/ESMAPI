@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ServiceManagerApi.Data;
+﻿namespace ServiceManagerApi.Data;
 
 public partial class ProFuelIntake
 {
@@ -13,7 +10,7 @@ public partial class ProFuelIntake
 
     public int? Quantity { get; set; }
 
-    public string? IntakeDate { get; set; }
+    public DateTime? IntakeDate { get; set; }
 
     public string? TransactionType { get; set; }
 
