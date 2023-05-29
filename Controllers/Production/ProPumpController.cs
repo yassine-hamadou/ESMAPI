@@ -16,7 +16,7 @@ namespace ServiceManagerApi.Controllers.Production
 
         // GET: api/ProPump
         [HttpGet("tenant/{tenantId}")]
-        public  Task<List<ProductionPump>> GetProductionPumps(string tenantId)
+        public Task<List<ProductionPump>> GetProductionPumps(string tenantId)
         {
             var proPump = _context.ProductionPumps.Where(pump => pump.TenantId == tenantId).ToListAsync();
             return proPump;
@@ -33,6 +33,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             return Ok(productionPump);
         }
 
@@ -56,7 +57,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductionPumpExists(id))
+                if (!ProductionPumpExists(productionPump.Name))
                 {
                     return NotFound();
                 }
@@ -75,20 +76,13 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(ProdPumpPostDto prodPumpPostDto)
         {
             ProductionPump productionPump = _mapper.Map<ProductionPump>(prodPumpPostDto);
-            _context.ProductionPumps.Add(productionPump);
-            try
+            if (ProductionPumpExists(productionPump.Name))
             {
-                await _context.SaveChangesAsync();
+                return Conflict();
             }
-            catch (DbUpdateException)
-            {
-                if (ProductionPumpExists(productionPump.Id))
-                {
-                    return Conflict();
-                }
 
-                throw;
-            }
+            _context.ProductionPumps.Add(productionPump);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = productionPump.Id }, productionPump);
         }
 
@@ -98,7 +92,6 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteProductionPump(int id)
         {
-            
             var productionPump = await _context.ProductionPumps.FindAsync(id);
             if (productionPump == null)
             {
@@ -111,9 +104,9 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProductionPumpExists(int id)
+        private bool ProductionPumpExists(string name)
         {
-            return _context.ProductionPumps.Any(e => e.Id == id);
+            return _context.ProductionPumps.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
     }
 }

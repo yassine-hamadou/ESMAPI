@@ -51,15 +51,17 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-          if (_context.ProDrills == null)
-          {
-              return NotFound();
-          }
+            if (_context.ProDrills == null)
+            {
+                return NotFound();
+            }
+
             var proDrill = await _context.ProDrills.FindAsync(id);
             if (proDrill == null)
             {
                 return NotFound();
             }
+
             return Ok(proDrill);
         }
 
@@ -83,7 +85,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProDrillExists(id))
+                if (!ProDrillExists(proDrill.EquipmentId))
                 {
                     return NotFound();
                 }
@@ -102,21 +104,13 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(ProDrillPostDto proDrillPostDto)
         {
             ProDrill proDrill = _mapper.Map<ProDrill>(proDrillPostDto);
+            if (ProDrillExists(proDrill.EquipmentId))
+            {
+                return Conflict();
+            }
+
             _context.ProDrills.Add(proDrill);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProDrillExists(proDrill.Id))
-                {
-                    return Conflict();
-                }
-
-                throw;
-            }
-
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = proDrill.Id }, proDrill);
         }
 
@@ -124,7 +118,6 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProDrill(int id)
         {
-            
             var proDrill = await _context.ProDrills.FindAsync(id);
             if (proDrill == null)
             {
@@ -137,9 +130,9 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProDrillExists(int id)
+        private bool ProDrillExists(string equipmentId)
         {
-            return _context.ProDrills.Any(e => e.Id == id);
+            return _context.ProDrills.Any(e => e.EquipmentId.ToLower().Trim() == equipmentId.ToLower().Trim());
         }
     }
 }

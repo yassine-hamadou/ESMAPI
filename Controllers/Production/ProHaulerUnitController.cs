@@ -66,19 +66,13 @@ namespace ServiceManagerApi.Controllers.Production
             ProhaulerUnit prohaulerUnit = _mapper.Map<ProhaulerUnit>(proHaulerUnitPostDto);
 
             _context.ProhaulerUnits.Add(prohaulerUnit);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProhaulerUnitExists(prohaulerUnit.Id))
+                if (ProhaulerUnitExists(prohaulerUnit.EquipmentId))
                 {
                     return Conflict();
                 }
-
-                throw;
-            }
+           
+                await _context.SaveChangesAsync();
+           
             return CreatedAtAction(nameof(GetById), new { id = prohaulerUnit.Id }, prohaulerUnit);
         }
 
@@ -100,7 +94,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProhaulerUnitExists(id))
+                if (!ProhaulerUnitExists(prohaulerUnit.EquipmentId))
                 {
                     return NotFound();
                 }
@@ -126,9 +120,9 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProhaulerUnitExists(int id)
+        private bool ProhaulerUnitExists(string equipmentId)
         {
-            return _context.ProhaulerUnits.Any(e => e.Id == id);
+            return _context.ProhaulerUnits.Any(e=> e.EquipmentId.ToLower().Trim() == equipmentId.ToLower().Trim());
         }
     }
 }

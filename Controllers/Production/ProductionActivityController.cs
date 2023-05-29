@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
-using ServiceManagerApi.Dtos.Compartments;
 using ServiceManagerApi.Dtos.ProductionActivity;
 
 namespace ServiceManagerApi.Controllers.Production
@@ -48,23 +47,14 @@ namespace ServiceManagerApi.Controllers.Production
             ProductionActivity productionActivity = _mapper.Map<ProductionActivity>(productionActivityPostDto);
 
 
+            if (IsProductionActivityPostDtoExist(productionActivityPostDto))
+            {
+               return Conflict();
+            }
 
             _context.ProductionActivities.Add(productionActivity);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProductionActivityExists(productionActivity.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
+            
             return CreatedAtAction(nameof(GetById), new { id = productionActivity.Id }, productionActivity);
         }
 
@@ -121,5 +111,17 @@ namespace ServiceManagerApi.Controllers.Production
         {
             return _context.ProductionActivities.Any(e => e.Id == id);
         }
+        
+        // function to check if productionActivity exists based on postDto
+        private bool IsProductionActivityPostDtoExist(ProductionActivityPostDto productionActivityPostDto)
+        {
+            // Perform a database query to check if a matching ProductionActivity exists based on the properties in the ProductionActivityPostDto
+            return _context.ProductionActivities.Any(pa =>
+                pa.Name.ToLower().Trim() == productionActivityPostDto.Name.ToLower().Trim() &&
+                pa.Code.ToLower().Trim() == productionActivityPostDto.Code.ToLower().Trim() &&
+                pa.ActivityType.ToLower().Trim() == productionActivityPostDto.ActivityType.ToLower().Trim()
+            );
+        }
+        
     }
 }

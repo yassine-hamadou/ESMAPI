@@ -9,10 +9,6 @@ public partial class CycleDetail
 
     public DateTime? CycleTime { get; set; }
 
-    public string? Loader { get; set; }
-
-    public string? Hauler { get; set; }
-
     public int? LoaderUnitId { get; set; }
 
     public int? HaulerUnitId { get; set; }
@@ -46,6 +42,10 @@ public partial class CycleDetail
     public int? Duration { get; set; }
 
     public string? BatchNumber { get; set; }
+
+    public string? Hauler { get; set; }
+
+    public string? Loader { get; set; }
 
     public virtual ProductionDestination? Destination { get; set; }
 

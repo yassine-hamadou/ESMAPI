@@ -65,7 +65,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductionMineAreaExists(id))
+                if (!ProductionMineAreaExists(productionMineArea.Name))
                 {
                     return NotFound();
                 }
@@ -112,10 +112,10 @@ namespace ServiceManagerApi.Controllers.Production
 
             return NoContent();
         }
-
-        private bool ProductionMineAreaExists(int id)
+        
+        private bool ProductionMineAreaExists(string name)
         {
-            return (_context.ProductionMineAreas?.Any(e => e.Id == id)).GetValueOrDefault();
+            return _context.ProductionMineAreas.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
     }
 }

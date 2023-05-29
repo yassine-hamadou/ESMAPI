@@ -1,20 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.ProdRawMaterial;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-     public class ProdRawMaterialController : BaeApiController<ProdRawMaterialController>
+    public class ProdRawMaterialController : BaeApiController<ProdRawMaterialController>
     {
         private readonly EnpDbContext _context;
+
         public ProdRawMaterialController(EnpDbContext context)
         {
             _context = context;
         }
 
-        
 
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProdRawMaterial>> GetProdRawMaterials(string tenantId)
@@ -35,6 +34,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             return Ok(prodRawMaterial);
         }
 
@@ -44,20 +44,15 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(ProdRawMaterialPostDto prodRawMaterialPostDto)
         {
             ProdRawMaterial prodRawMaterial = _mapper.Map<ProdRawMaterial>(prodRawMaterialPostDto);
-            _context.ProdRawMaterials.Add(prodRawMaterial);
-            try
+            if (ProdRawMaterialExists(prodRawMaterial.Name))
             {
-                await _context.SaveChangesAsync();
+                return Conflict();
             }
-            catch (DbUpdateException)
-            {
-                if (ProdRawMaterialExists(prodRawMaterial.Id))
-                {
-                    return Conflict();
-                }
 
-                throw;
-            }
+            _context.ProdRawMaterials.Add(prodRawMaterial);
+
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetById), new { id = prodRawMaterial.Id }, prodRawMaterial);
         }
 
@@ -66,7 +61,7 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, ProdRawMaterial prodRawMaterial)
         {
-            if(id != prodRawMaterial.Id)
+            if (id != prodRawMaterial.Id)
             {
                 return BadRequest();
             }
@@ -78,13 +73,14 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProdRawMaterialExists(id))
+                if (!ProdRawMaterialExists(prodRawMaterial.Name))
                 {
                     return NotFound();
                 }
 
                 throw;
             }
+
             return NoContent();
         }
 
@@ -98,14 +94,15 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             _context.ProdRawMaterials.Remove(prodRawMaterial);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool ProdRawMaterialExists(int id)
+        private bool ProdRawMaterialExists(string name)
         {
-            return _context.ProdRawMaterials.Any(e => e.Id == id);
+            return _context.ProdRawMaterials.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.ProductionOrigin;
@@ -9,6 +8,7 @@ namespace ServiceManagerApi.Controllers.Production
     public class ProductionOriginController : BaeApiController<ProductionOriginController>
     {
         private readonly EnpDbContext _context;
+
         public ProductionOriginController(EnpDbContext context)
         {
             _context = context;
@@ -34,6 +34,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             return Ok(productionOrigin);
         }
 
@@ -44,22 +45,13 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(ProductionOriginPostDto productionOriginPostDto)
         {
             ProductionOrigin productionOrigin = _mapper.Map<ProductionOrigin>(productionOriginPostDto);
+            if (ProductionOriginExists(productionOrigin.Name))
+            {
+                return Conflict();
+            }
+
             _context.ProductionOrigins.Add(productionOrigin);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProductionOriginExists(productionOrigin.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = productionOrigin.Id }, productionOrigin);
         }
 
@@ -82,13 +74,14 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductionOriginExists(id))
+                if (!ProductionOriginExists(productionOrigin.Name))
                 {
                     return NotFound();
                 }
 
                 throw;
             }
+
             return NoContent();
         }
 
@@ -103,15 +96,15 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             _context.ProductionOrigins.Remove(productionOrigin);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool ProductionOriginExists(int id)
+        private bool ProductionOriginExists(string name)
         {
-            return _context.ProductionOrigins.Any(e => e.Id == id);
+            return _context.ProductionOrigins.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
-
     }
 }

@@ -66,22 +66,12 @@ namespace ServiceManagerApi.Controllers.Production
         {
             ProloaderUnit proloaderUnit = _mapper.Map<ProloaderUnit>(proLoaderUnitPostDto);
 
-            _context.ProloaderUnits.Add(proloaderUnit);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProloaderUnitExists(proloaderUnit.Id))
+                if (ProloaderUnitExists(proloaderUnit.EquipmentId))
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.ProloaderUnits.Add(proloaderUnit);         
+                await _context.SaveChangesAsync();           
             return CreatedAtAction(nameof(GetById), new { id = proloaderUnit.Id }, proloaderUnit);
         }
 
@@ -103,7 +93,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProloaderUnitExists(id))
+                if (!ProloaderUnitExists(proloaderUnit.EquipmentId))
                 {
                     return NotFound();
                 }
@@ -129,9 +119,10 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProloaderUnitExists(int id)
+        private bool ProloaderUnitExists(string equipmentId)
         {
-            return _context.ProloaderUnits.Any(e => e.Id == id);
+            return _context.ProloaderUnits.Any(e => e.EquipmentId.ToLower().Trim() == equipmentId.ToLower().Trim());
         }
+        
     }
 }

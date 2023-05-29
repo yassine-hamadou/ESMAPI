@@ -244,7 +244,6 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("CycleDetails_ProductionDestination_id_fk");
 
             entity.HasOne(d => d.HaulerNavigation).WithMany(p => p.CycleDetails)
-                .HasPrincipalKey(p => p.EmpCode)
                 .HasForeignKey(d => d.Hauler)
                 .HasConstraintName("CycleDetails_HaulerOperator_EmpCode_fk");
 
@@ -253,7 +252,6 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("CycleDetails_PROHaulerUnits_id_fk");
 
             entity.HasOne(d => d.LoaderNavigation).WithMany(p => p.CycleDetails)
-                .HasPrincipalKey(p => p.EmpCode)
                 .HasForeignKey(d => d.Loader)
                 .HasConstraintName("CycleDetails_LoaderOperator_EmpCode_fk");
 
@@ -635,11 +633,10 @@ public partial class EnpDbContext : DbContext
 
         modelBuilder.Entity<HaulerOperator>(entity =>
         {
+            entity.HasKey(e => e.EmpCode).HasName("HaulerOperator_pk");
+
             entity.ToTable("HaulerOperator");
 
-            entity.HasIndex(e => e.EmpCode, "HaulerOperator_pk").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.EmpCode)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -732,17 +729,17 @@ public partial class EnpDbContext : DbContext
 
         modelBuilder.Entity<LoaderOperator>(entity =>
         {
+            entity.HasKey(e => e.EmpCode).HasName("LoaderOperator1_pk");
+
             entity.ToTable("LoaderOperator");
 
-            entity.HasIndex(e => e.EmpCode, "LoaderOperator_pk").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.EmpCode)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.EmpName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
