@@ -14,7 +14,6 @@ namespace ServiceManagerApi.Controllers.Production
             _context = context;
         }
 
-        
 
         [HttpGet("tenant/{tenantId}")]
         public Task<List<PlannedOutput>> GetPlannedOutputs(string tenantId)
@@ -69,7 +68,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return BadRequest();
             }
-            
+
             _context.Entry(plannedOutput).State = EntityState.Modified;
 
             try
@@ -78,7 +77,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PlannedOutputExists(id))
+                if (!PlannedOutputExistsById(id))
                 {
                     return NotFound();
                 }
@@ -98,21 +97,13 @@ namespace ServiceManagerApi.Controllers.Production
         {
             PlannedOutput plannedOutput = _mapper.Map<PlannedOutput>(plannedOutputPostDto);
 
+            if (PlannedOutputExists(plannedOutput))
+            {
+                return Conflict();
+            }
             _context.PlannedOutputs.Add(plannedOutput);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (PlannedOutputExists(plannedOutput.Id))
-                {
-                    return Conflict();
-                }
-
-                throw;
-            }
-
+            await _context.SaveChangesAsync();
+            
             return CreatedAtAction(nameof(GetById), new { id = plannedOutput.Id }, plannedOutput);
         }
 
@@ -131,11 +122,17 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool PlannedOutputExists(int id)
+        private bool PlannedOutputExistsById(int id)
         {
             return _context.PlannedOutputs.Any(e => e.Id == id);
         }
-        
-        
+
+        private bool PlannedOutputExists(PlannedOutput plannedOutput)
+        {
+            return _context.PlannedOutputs.Any(e =>
+                e.ActivityId == plannedOutput.ActivityId &&
+                e.DestinationId == plannedOutput.DestinationId
+            );
+        }
     }
 }
