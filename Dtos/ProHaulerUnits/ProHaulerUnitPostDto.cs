@@ -1,6 +1,6 @@
 ﻿namespace ServiceManagerApi.Dtos.ProHaulerUnits
 {
-    public class ProHaulerUnitPostDto
+    public record ProHaulerUnitPostDto
     {
         public string? EquipmentId { get; set; }
         public string? ModelName { get; set; }

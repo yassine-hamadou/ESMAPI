@@ -3,12 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.ProLoaderUnits;
 
-namespace ServiceManagerApi.Controllers.Production
-{
-  
+namespace ServiceManagerApi.Controllers.Production;
+[Route("api/[controller]")]
+[ApiController]
     public class ProLoaderUnitController : BaeApiController<ProLoaderUnitController>
     {
         private readonly EnpDbContext _context;
+
         public ProLoaderUnitController(EnpDbContext context)
         {
             _context = context;
@@ -19,7 +20,7 @@ namespace ServiceManagerApi.Controllers.Production
         {
             var proloaderUnits = _context.ProloaderUnits
                 .Where(leav => leav.TenantId == tenantId)
-                .Select(h => new ProloaderUnit
+                /*.Select(h => new ProloaderUnit
                 {
                     Id = h.Id,
                     EquipmentId = h.EquipmentId,
@@ -37,41 +38,42 @@ namespace ServiceManagerApi.Controllers.Production
                             Name = h.Equipment.Model.Name,
                         }
                     }
-                })
+                })*/
                 .ToListAsync();
 
             return proloaderUnits;
-
         }
 
         // get by id
         [HttpGet("id")]
         [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<ProloaderUnit>> GetById(int id)
         {
             var ProloaderUnit = await _context.ProloaderUnits.FindAsync(id);
             if (ProloaderUnit == null)
             {
                 return NotFound();
             }
-            return Ok(ProloaderUnit);
+
+            return ProloaderUnit;
         }
 
         // post groups
         [HttpPost]
         [ProducesResponseType(typeof(ProloaderUnit), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(ProLoaderUnitPostDto proLoaderUnitPostDto)
+        public async Task<ActionResult<ProloaderUnit>> Create(ProLoaderUnitPostDto proLoaderUnitPostDto)
         {
             ProloaderUnit proloaderUnit = _mapper.Map<ProloaderUnit>(proLoaderUnitPostDto);
 
-                if (ProloaderUnitExists(proloaderUnit.EquipmentId))
-                {
-                    return Conflict();
-                }
-            _context.ProloaderUnits.Add(proloaderUnit);         
-                await _context.SaveChangesAsync();           
+            if (ProloaderUnitExists(proloaderUnit.EquipmentId))
+            {
+                return Conflict();
+            }
+
+            _context.ProloaderUnits.Add(proloaderUnit);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = proloaderUnit.Id }, proloaderUnit);
         }
 
@@ -93,13 +95,14 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProloaderUnitExists(proloaderUnit.EquipmentId))
+                if (!ProloaderUnitExistsById(id))
                 {
                     return NotFound();
                 }
 
                 throw;
             }
+
             return NoContent();
         }
 
@@ -114,6 +117,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             _context.ProloaderUnits.Remove(proloaderUnit);
             await _context.SaveChangesAsync();
             return NoContent();
@@ -123,6 +127,9 @@ namespace ServiceManagerApi.Controllers.Production
         {
             return _context.ProloaderUnits.Any(e => e.EquipmentId.ToLower().Trim() == equipmentId.ToLower().Trim());
         }
-        
+
+        private bool ProloaderUnitExistsById(int id)
+        {
+            return (_context.ProloaderUnits?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
     }
-}

@@ -27,7 +27,7 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("id")]
         [ProducesResponseType(typeof(LoaderOperator), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<LoaderOperator>> GetById(int id)
         {
             var loaderOperator = await _context.LoaderOperators.FindAsync(id);
             if (loaderOperator == null)
@@ -35,7 +35,7 @@ namespace ServiceManagerApi.Controllers.Production
                 return NotFound();
             }
 
-            return Ok(loaderOperator);
+            return loaderOperator;
         }
 
         // post groups

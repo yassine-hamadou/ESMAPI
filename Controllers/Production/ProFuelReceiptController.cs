@@ -5,6 +5,7 @@ using ServiceManagerApi.Dtos.FuelIntake;
 
 namespace ServiceManagerApi.Controllers.Production
 {
+
     public class ProFuelReceiptController : BaeApiController<ProFuelReceiptController>
     {
         private readonly EnpDbContext _context;
@@ -14,51 +15,25 @@ namespace ServiceManagerApi.Controllers.Production
             _context = context;
         }
 
+        // GET: api/ProFuelReceipt
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProFuelIntake>> GetProFuelIntakes(string tenantId)
         {
             var proFuelIntakes = _context.ProFuelIntakes
-                .Where(intake => intake.TenantId == tenantId && intake.TransactionType == "Fuel Receipt")
-                /*.Select(f => new ProFuelIntake
-                {
-                    Id = f.Id,
-                    Quantity = f.Quantity,
-                    TransactionType = f.TransactionType,
-                    IntakeDate = f.IntakeDate,
-                    BatchNumber = f.BatchNumber,
-                    TenantId = f.TenantId,
-                    PumpId = f.PumpId,
-                    EquipmentId = f.EquipmentId,
-                    Pump = new ProductionPump
-                    {
-                        Name = f.Pump.Name,
-                        Id = f.Pump.Id,
-                    },
-                    Equipment = new Equipment
-                    {
-                        Id = f.Equipment.Id,
-                        EquipmentId = f.Equipment.EquipmentId,
-                        Description = f.Equipment.Description,
-                        Model = new Model
-                        {
-                            ModelId = f.Equipment.Model.ModelId,
-                            Name = f.Equipment.Model.Name,
-                        }
-                    }
-                })*/
+                .Where(leav => leav.TenantId == tenantId && leav.TransactionType == "Fuel Receipt")
                 .ToListAsync();
-
+          
             return proFuelIntakes;
         }
 
-
-        [HttpGet("id")]
+        // GET: api/ProFuelReceipt/5
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProFuelIntake), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
             var proFuelIntake = await _context.ProFuelIntakes.FindAsync(id);
-
+          
             if (proFuelIntake == null)
             {
                 return NotFound();
@@ -67,6 +42,8 @@ namespace ServiceManagerApi.Controllers.Production
             return Ok(proFuelIntake);
         }
 
+        // PUT: api/ProFuelReceipt/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -95,46 +72,40 @@ namespace ServiceManagerApi.Controllers.Production
 
             return NoContent();
         }
-        
-        
-        [HttpPost]
-        [ProducesResponseType(typeof(IEnumerable<ProFuelIntake>), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(IEnumerable<FuelIntakePostDto> fuelIntakePostDtos)
-        {
-            var proFuelIntake = _mapper.Map<IEnumerable<ProFuelIntake>>(fuelIntakePostDtos);
-            _context.ProFuelIntakes.AddRange(proFuelIntake);
 
+        // POST: api/ProFuelReceipt
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        [ProducesResponseType(typeof(ProFuelIntake), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Create(IEnumerable<ProFuelReceiptPostDto> proFuelReceiptPostDto)
+        {
             try
             {
+                var proFuelIntake = _mapper.Map<IEnumerable<ProFuelIntake>>(proFuelReceiptPostDto);
+                _context.ProFuelIntakes.AddRange(proFuelIntake);
+
                 await _context.SaveChangesAsync();
                 return Ok();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                if (true)
-                {
-                    throw new DbUpdateException("Error saving ProFuelIntake");
-                }
-
-                throw;
+                throw new ApplicationException("Error saving cycle details", ex);
             }
-            return CreatedAtAction(nameof(GetById), new { id = proFuelIntake.Select(cd => cd.Id) }, proFuelIntake);
         }
 
-        // DELETE: api/ProFuelIntake/5
+        // DELETE: api/ProFuelReceipt/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteProFuelIntake(int id)
         {
-           
             var proFuelIntake = await _context.ProFuelIntakes.FindAsync(id);
+            
             if (proFuelIntake == null)
             {
                 return NotFound();
             }
-
             _context.ProFuelIntakes.Remove(proFuelIntake);
             await _context.SaveChangesAsync();
 
@@ -143,7 +114,18 @@ namespace ServiceManagerApi.Controllers.Production
 
         private bool ProFuelIntakeExists(int id)
         {
-            return _context.ProFuelIntakes.Any(e => e.Id == id);
+            return (_context.ProFuelIntakes?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        
+        private bool IsProFuelReceiptPostDtoExist(ProFuelReceiptPostDto proFuelReceiptPostDto)
+        {
+            // Perform a database query to check if a matching ProductionActivity exists based on the properties in the ProductionActivityPostDto
+            return _context.ProFuelIntakes.Any(e => 
+                e.PumpId == proFuelReceiptPostDto.PumpId &&
+                e.TenantId == proFuelReceiptPostDto.TenantId &&
+                e.TransactionType == proFuelReceiptPostDto.TransactionType &&
+                e.IntakeDate == proFuelReceiptPostDto.IntakeDate
+            );
         }
     }
 }

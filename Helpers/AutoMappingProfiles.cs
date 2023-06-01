@@ -81,7 +81,8 @@ public class AutoMappingProfiles : Profile
     CreateMap<FaultEntryPostDto, FaultEntry>();
     CreateMap<EquipmentPostDto, Equipment>();
     CreateMap<ProdPumpPostDto, ProductionPump>();
-    CreateMap<FuelIntakePostDto, ProFuelIntake>();
+    CreateMap<ProFuelIssuePostDto, ProFuelIntake>();
+    CreateMap<ProFuelReceiptPostDto, ProFuelIntake>();
     CreateMap<ProActivityDetailsPostDto, ProActivityDetail>();
     CreateMap<FleetSchedulePostDto, FleetSchedule>();
     CreateMap<ProDrillPostDto, ProDrill>();

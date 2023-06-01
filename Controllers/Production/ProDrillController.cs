@@ -5,9 +5,7 @@ using ServiceManagerApi.Dtos.ProDrill;
 
 namespace ServiceManagerApi.Controllers.Production
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProDrillController : BaeApiController<ProDrill>
+    public class ProDrillController : BaeApiController<ProDrillController>
     {
         private readonly EnpDbContext _context;
 
@@ -16,40 +14,22 @@ namespace ServiceManagerApi.Controllers.Production
             _context = context;
         }
 
-        // GET: api/ProDrill
+        
+        // GET: api/ProDrill/5
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProDrill>> GetProDrill(string tenantId)
         {
+            
             var proDrills = _context.ProDrills
                 .Where(leav => leav.TenantId == tenantId)
-                .Select(h => new ProDrill
-                {
-                    Id = h.Id,
-                    EquipmentId = h.EquipmentId,
-                    ModelName = h.ModelName,
-                    Description = h.Description,
-                    TenantId = h.TenantId,
-                    Equipment = new Equipment
-                    {
-                        Id = h.Equipment.Id,
-                        EquipmentId = h.Equipment.EquipmentId,
-                        Description = h.Equipment.Description,
-                        Model = new Model
-                        {
-                            ModelId = h.Equipment.Model.ModelId,
-                            Name = h.Equipment.Model.Name,
-                        }
-                    }
-                })
                 .ToListAsync();
             return proDrills;
         }
-
-        // GET: api/ProDrill/5
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProDrill), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async  Task<ActionResult<ProDrill>> GetById(int id)
         {
             if (_context.ProDrills == null)
             {
@@ -62,14 +42,13 @@ namespace ServiceManagerApi.Controllers.Production
                 return NotFound();
             }
 
-            return Ok(proDrill);
+            return proDrill;
         }
 
         // PUT: api/ProDrill/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+   
         public async Task<IActionResult> PutProDrill(int id, ProDrill proDrill)
         {
             if (id != proDrill.Id)
@@ -85,7 +64,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProDrillExists(proDrill.EquipmentId))
+                if (!ProDrillExistsById(id))
                 {
                     return NotFound();
                 }
@@ -99,20 +78,23 @@ namespace ServiceManagerApi.Controllers.Production
         // POST: api/ProDrill
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ProducesResponseType(typeof(ProDrill), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(ProDrillPostDto proDrillPostDto)
+        public async Task<ActionResult<ProDrill>>Create(ProDrillPostDto proDrillPostDto)
         {
             ProDrill proDrill = _mapper.Map<ProDrill>(proDrillPostDto);
-            if (ProDrillExists(proDrill.EquipmentId))
+            if (ProDrillExists(proDrill.EquipmentId) )
             {
-                return Conflict();
+               // return problem
+               return Conflict();
+            }  if (_context.ProDrills == null)
+            {
+                return Problem("Entity cannot be null.");
             }
 
             _context.ProDrills.Add(proDrill);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = proDrill.Id }, proDrill);
         }
+
 
         // DELETE: api/ProDrill/5
         [HttpDelete("{id}")]
@@ -133,6 +115,11 @@ namespace ServiceManagerApi.Controllers.Production
         private bool ProDrillExists(string equipmentId)
         {
             return _context.ProDrills.Any(e => e.EquipmentId.ToLower().Trim() == equipmentId.ToLower().Trim());
+        }
+        
+        private bool ProDrillExistsById(int id)
+        {
+            return (_context.ProDrills?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

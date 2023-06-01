@@ -28,7 +28,7 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("id")]
         [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<HaulerOperator>> GetById(int id)
         {
             var haulerOperator = await _context.HaulerOperators.FindAsync(id);
             if (haulerOperator == null)
@@ -36,7 +36,7 @@ namespace ServiceManagerApi.Controllers.Production
                 return NotFound();
             }
 
-            return Ok(haulerOperator);
+            return haulerOperator;
         }
 
         // post groups
@@ -87,12 +87,12 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{empCode}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string empCode)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
+            var haulerOperator = await _context.HaulerOperators.FindAsync(empCode);
             if (haulerOperator == null)
             {
                 return NotFound();

@@ -104,7 +104,7 @@ namespace ServiceManagerApi.Controllers.Production
 
         private bool ProdProcessedMaterialExists(string name)
         {
-            return _context.ProdProcessedMaterials.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
+            return (_context.ProdProcessedMaterials?.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim())).GetValueOrDefault();
         }
     }
 }
