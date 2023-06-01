@@ -2,17 +2,15 @@
 
 public class FleetSchedulePostDto
 {
-  public long EntryId { get; set; }
-
   public string FleetId { get; set; } = null!;
 
-  public string VmModel { get; set; } = null!;
+  public string VmModel { get; set; }
 
-  public string VmClass { get; set; } = null!;
+  public string VmClass { get; set; }
 
   public int? ServiceTypeId { get; set; }
 
-  public string LocationId { get; set; } = null!;
+  public string LocationId { get; set; }
 
   public string? Description { get; set; }
 

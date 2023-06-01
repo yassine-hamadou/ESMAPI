@@ -8,4 +8,5 @@ public class GroundEngagingToolsPostDto
   public int? Quantity { get; set; }
   public string? Reason { get; set; }
   public DateTime? Date { get; set; }
+  public string TenantId { get; set; } = null!;
 }

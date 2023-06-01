@@ -7,7 +7,7 @@ namespace ServiceManagerApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class FleetSchedulesApiController : BaeApiController<FleetSchedule>
+public class FleetSchedulesApiController : BaeApiController<FleetSchedulesApiController>
 {
   private readonly EnpDbContext _context;
 
@@ -89,6 +89,7 @@ public class FleetSchedulesApiController : BaeApiController<FleetSchedule>
   [HttpPost]
   public async Task<ActionResult<FleetSchedule>> PostFleetSchedule(FleetSchedulePostDto fleetSchedulePostDto)
   {
+    if (_context.FleetSchedules == null) return Problem("Entity set 'EnpDBContext.FleetSchedule'  is null.");
     var fleetSchedule = _mapper.Map<FleetSchedule>(fleetSchedulePostDto);
     _context.FleetSchedules.Add(fleetSchedule);
     await _context.SaveChangesAsync();

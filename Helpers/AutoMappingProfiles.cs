@@ -21,6 +21,7 @@ using ServiceManagerApi.Dtos.LubeGrades;
 using ServiceManagerApi.Dtos.Model;
 using ServiceManagerApi.Dtos.PlannedOutput;
 using ServiceManagerApi.Dtos.ProdProcessedMaterial;
+using ServiceManagerApi.Dtos.ProdPump;
 using ServiceManagerApi.Dtos.ProdRawMaterial;
 using ServiceManagerApi.Dtos.ProductionActivity;
 using ServiceManagerApi.Dtos.ProductionDestination;
