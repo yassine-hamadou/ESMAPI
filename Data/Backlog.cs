@@ -22,4 +22,6 @@ public partial class Backlog
     public int? Status { get; set; }
 
     public DateTime? Cdate { get; set; }
+
+    public string? TenantId { get; set; }
 }
