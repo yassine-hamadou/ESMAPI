@@ -41,22 +41,13 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(ProductionDestinationPostDto productionDestinationPostDto)
         {
             ProductionDestination productionDestination = _mapper.Map<ProductionDestination>(productionDestinationPostDto);
-            _context.ProductionDestinations.Add(productionDestination);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProductionDestinationExists(productionDestination.Id))
+                if (ProductionDestinationExists(productionDestination.Name))
                 {
                     return Conflict();
                 }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.ProductionDestinations.Add(productionDestination);
+            await _context.SaveChangesAsync();
+           
             return CreatedAtAction("GetById", new { id = productionDestination.Id }, productionDestination);
         }
 
@@ -76,7 +67,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductionDestinationExists(id))
+                if (!ProductionDestinationExists(productionDestination.Name))
                 {
                     return NotFound();
                 }
@@ -104,9 +95,9 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProductionDestinationExists(int id)
+        private bool ProductionDestinationExists(string name)
         {
-            return _context.ProductionDestinations.Any(e => e.Id == id);
+            return _context.ProductionDestinations.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
     }
 }

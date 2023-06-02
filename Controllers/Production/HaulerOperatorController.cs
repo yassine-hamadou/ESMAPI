@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.HaulerOperator;
@@ -9,6 +8,7 @@ namespace ServiceManagerApi.Controllers.Production
     public class HaulerOperatorController : BaeApiController<HaulerOperatorController>
     {
         private readonly EnpDbContext _context;
+
         public HaulerOperatorController(EnpDbContext context)
         {
             _context = context;
@@ -28,14 +28,15 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("id")]
         [ProducesResponseType(typeof(HaulerOperator), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<HaulerOperator>> GetById(int id)
         {
             var haulerOperator = await _context.HaulerOperators.FindAsync(id);
             if (haulerOperator == null)
             {
                 return NotFound();
             }
-            return Ok(haulerOperator);
+
+            return haulerOperator;
         }
 
         // post groups
@@ -45,22 +46,15 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(HaulerOperatorPostDto haulerOperatorPostDto)
         {
             HaulerOperator haulerOperator = _mapper.Map<HaulerOperator>(haulerOperatorPostDto);
+            if (HaulerOperatorExists(haulerOperator.EmpCode))
+            {
+                return Conflict();
+            }
+
             _context.HaulerOperators.Add(haulerOperator);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (HaulerOperatorExists(haulerOperator.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
+
+
             return CreatedAtAction(nameof(GetById), new { id = haulerOperator.Id }, haulerOperator);
         }
 
@@ -69,12 +63,10 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, HaulerOperator haulerOperator)
         {
-
             if (id != haulerOperator.Id)
             {
                 return BadRequest();
             }
-
 
 
             _context.Entry(haulerOperator).State = EntityState.Modified;
@@ -85,37 +77,35 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!HaulerOperatorExists(id))
+                if (!HaulerOperatorExists(haulerOperator.EmpCode))
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{empCode}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string empCode)
         {
-            var haulerOperator = await _context.HaulerOperators.FindAsync(id);
+            var haulerOperator = await _context.HaulerOperators.FindAsync(empCode);
             if (haulerOperator == null)
             {
                 return NotFound();
             }
+
             _context.HaulerOperators.Remove(haulerOperator);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool HaulerOperatorExists(int id)
+        private bool HaulerOperatorExists(string empCode)
         {
-            return _context.HaulerOperators.Any(e => e.Id == id);
+            return _context.HaulerOperators.Any(e => e.EmpCode.ToLower().Trim() == empCode.ToLower().Trim());
         }
     }
 }

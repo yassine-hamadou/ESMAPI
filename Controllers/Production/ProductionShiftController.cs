@@ -8,6 +8,7 @@ namespace ServiceManagerApi.Controllers.Production
     public class ProductionShiftController : BaeApiController<ProductionShiftController>
     {
         private readonly EnpDbContext _context;
+
         public ProductionShiftController(EnpDbContext context)
         {
             _context = context;
@@ -43,25 +44,13 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(ProductionShiftPostDto productionShiftPostDto)
         {
-
             ProductionShift productionShift = _mapper.Map<ProductionShift>(productionShiftPostDto);
-
-
-
+            if (ProductionShiftExists(productionShift.Name))
+            {
+                return Conflict();
+            }
             _context.ProductionShifts.Add(productionShift);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProductionShiftExists(productionShift.Id))
-                {
-                    return Conflict();
-                }
-
-                throw;
-            }
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = productionShift.Id }, productionShift);
         }
 
@@ -71,12 +60,10 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, ProductionShift productionShift)
         {
-
             if (id != productionShift.Id)
             {
                 return BadRequest();
             }
-
 
 
             _context.Entry(productionShift).State = EntityState.Modified;
@@ -87,7 +74,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductionShiftExists(id))
+                if (!ProductionShiftExists(productionShift.Name))
                 {
                     return NotFound();
                 }
@@ -112,9 +99,9 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProductionShiftExists(int id)
+        private bool ProductionShiftExists(string name)
         {
-            return _context.ProductionShifts.Any(e => e.Id == id);
+            return _context.ProductionShifts.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
         }
     }
 }

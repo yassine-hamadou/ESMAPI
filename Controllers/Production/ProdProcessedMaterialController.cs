@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.ProdProcessedMaterial;
@@ -9,17 +8,18 @@ namespace ServiceManagerApi.Controllers.Production
     public class ProdProcessedMaterialController : BaeApiController<ProdProcessedMaterialController>
     {
         private readonly EnpDbContext _context;
+
         public ProdProcessedMaterialController(EnpDbContext context)
         {
             _context = context;
         }
 
-        
 
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProdProcessedMaterial>> GetPlannedOutputs(string tenantId)
         {
-            var prodProcessedMaterials = _context.ProdProcessedMaterials.Where(leav => leav.TenantId == tenantId).ToListAsync();
+            var prodProcessedMaterials =
+                _context.ProdProcessedMaterials.Where(leav => leav.TenantId == tenantId).ToListAsync();
 
             return prodProcessedMaterials;
         }
@@ -35,6 +35,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             return Ok(prodProcessedMaterial);
         }
 
@@ -43,21 +44,15 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(ProdProcessedMaterialPostDto prodProcessedMaterialPostDto)
         {
-            ProdProcessedMaterial prodProcessedMaterial = _mapper.Map<ProdProcessedMaterial>(prodProcessedMaterialPostDto);
-            _context.ProdProcessedMaterials.Add(prodProcessedMaterial);
-            try
+            ProdProcessedMaterial prodProcessedMaterial =
+                _mapper.Map<ProdProcessedMaterial>(prodProcessedMaterialPostDto);
+            if (ProdProcessedMaterialExists(prodProcessedMaterial.Name))
             {
-                await _context.SaveChangesAsync();
+                return Conflict();
             }
-            catch (DbUpdateException)
-            {
-                if (ProdProcessedMaterialExists(prodProcessedMaterial.Id))
-                {
-                    return Conflict();
-                }
 
-                throw;
-            }
+            _context.ProdProcessedMaterials.Add(prodProcessedMaterial);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = prodProcessedMaterial.Id }, prodProcessedMaterial);
         }
 
@@ -67,10 +62,11 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, ProdProcessedMaterial prodProcessedMaterial)
         {
-           if (id != prodProcessedMaterial.Id)
+            if (id != prodProcessedMaterial.Id)
             {
                 return BadRequest();
             }
+
             _context.Entry(prodProcessedMaterial).State = EntityState.Modified;
             try
             {
@@ -78,13 +74,14 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProdProcessedMaterialExists(id))
+                if (!ProdProcessedMaterialExists(prodProcessedMaterial.Name))
                 {
                     return NotFound();
                 }
 
                 throw;
             }
+
             return NoContent();
         }
 
@@ -99,15 +96,15 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             _context.ProdProcessedMaterials.Remove(prodProcessedMaterial);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool ProdProcessedMaterialExists(int id)
+        private bool ProdProcessedMaterialExists(string name)
         {
-            return _context.ProdProcessedMaterials.Any(e => e.Id == id);
+            return (_context.ProdProcessedMaterials?.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim())).GetValueOrDefault();
         }
-
     }
 }

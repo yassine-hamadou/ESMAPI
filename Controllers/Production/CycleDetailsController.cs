@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
@@ -86,7 +87,7 @@ namespace ServiceManagerApi.Controllers.Production
         }
 
         // GET: api/CycleDetails/5
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(CycleDetail), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
@@ -106,7 +107,7 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(IEnumerable<CycleDetailPostDto> cycleDetailPostDtos)
         {
-            var cycleDetails = _mapper.Map<IEnumerable<CycleDetail>>(cycleDetailPostDtos);
+            /*var cycleDetails = _mapper.Map<IEnumerable<CycleDetail>>(cycleDetailPostDtos);
 
             _context.CycleDetails.AddRange(cycleDetails);
             try
@@ -121,10 +122,38 @@ namespace ServiceManagerApi.Controllers.Production
                     throw new DbUpdateException("Error saving cycle details");
                 }
                 // Handle the conflict if necessary
-                throw;
+            }*/
+            
+            try
+            {
+                var cycleDetails = _mapper.Map<IEnumerable<CycleDetail>>(cycleDetailPostDtos);
+
+                // Perform input validation
+                var validationResults = new List<ValidationResult>();
+                foreach (var cycleDetail in cycleDetails)
+                {
+                    var validationContext = new ValidationContext(cycleDetail);
+                    var isValid = Validator.TryValidateObject(cycleDetail, validationContext, validationResults, true);
+                    if (!isValid)
+                    {
+                        return BadRequest(validationResults);
+                    }
+                }
+
+                _context.CycleDetails.AddRange(cycleDetails);
+                await _context.SaveChangesAsync();
+
+                var createdIds = cycleDetails.Select(cd => cd.Id).ToList();
+                return CreatedAtAction(nameof(GetById), new { id = createdIds }, cycleDetails);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log the exception details for troubleshooting
+                // You may also want to include additional error handling logic as needed
+
+                throw new ApplicationException("Error saving cycle details", ex);
             }
 
-            return CreatedAtAction(nameof(GetById), new { id = cycleDetails.Select(cd => cd.Id) }, cycleDetails);
         }
 
         

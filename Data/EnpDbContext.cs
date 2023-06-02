@@ -77,6 +77,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<ProActivityDetail> ProActivityDetails { get; set; }
 
+    public virtual DbSet<ProDrill> ProDrills { get; set; }
+
     public virtual DbSet<ProFuelIntake> ProFuelIntakes { get; set; }
 
     public virtual DbSet<ProdProcessedMaterial> ProdProcessedMaterials { get; set; }
@@ -223,12 +225,8 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.BatchNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.CycleDate)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.CycleTime)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.CycleDate).HasColumnType("datetime");
+            entity.Property(e => e.CycleTime).HasColumnType("datetime");
             entity.Property(e => e.Hauler)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -239,16 +237,13 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("tenantId");
-            entity.Property(e => e.TimeAtLoader)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.TimeAtLoader).HasColumnType("datetime");
 
             entity.HasOne(d => d.Destination).WithMany(p => p.CycleDetails)
                 .HasForeignKey(d => d.DestinationId)
                 .HasConstraintName("CycleDetails_ProductionDestination_id_fk");
 
             entity.HasOne(d => d.HaulerNavigation).WithMany(p => p.CycleDetails)
-                .HasPrincipalKey(p => p.EmpCode)
                 .HasForeignKey(d => d.Hauler)
                 .HasConstraintName("CycleDetails_HaulerOperator_EmpCode_fk");
 
@@ -257,7 +252,6 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("CycleDetails_PROHaulerUnits_id_fk");
 
             entity.HasOne(d => d.LoaderNavigation).WithMany(p => p.CycleDetails)
-                .HasPrincipalKey(p => p.EmpCode)
                 .HasForeignKey(d => d.Loader)
                 .HasConstraintName("CycleDetails_LoaderOperator_EmpCode_fk");
 
@@ -639,11 +633,10 @@ public partial class EnpDbContext : DbContext
 
         modelBuilder.Entity<HaulerOperator>(entity =>
         {
+            entity.HasKey(e => e.EmpCode).HasName("HaulerOperator_pk");
+
             entity.ToTable("HaulerOperator");
 
-            entity.HasIndex(e => e.EmpCode, "HaulerOperator_pk").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.EmpCode)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -736,17 +729,17 @@ public partial class EnpDbContext : DbContext
 
         modelBuilder.Entity<LoaderOperator>(entity =>
         {
+            entity.HasKey(e => e.EmpCode).HasName("LoaderOperator1_pk");
+
             entity.ToTable("LoaderOperator");
 
-            entity.HasIndex(e => e.EmpCode, "LoaderOperator_pk").IsUnique();
-
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.EmpCode)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.EmpName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -890,12 +883,9 @@ public partial class EnpDbContext : DbContext
 
             entity.ToTable("PlannedOutput");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.DestinationId).HasColumnName("DestinationId ");
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("tenantId");
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Activity).WithMany(p => p.PlannedOutputs)
                 .HasForeignKey(d => d.ActivityId)
@@ -903,7 +893,7 @@ public partial class EnpDbContext : DbContext
 
             entity.HasOne(d => d.Destination).WithMany(p => p.PlannedOutputs)
                 .HasForeignKey(d => d.DestinationId)
-                .HasConstraintName("PlannedOutput_ProductionDestination_id_fk");
+                .HasConstraintName("PlannedOutput___fk");
         });
 
         modelBuilder.Entity<ProActivityDetail>(entity =>
@@ -925,6 +915,31 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("ProActivityDetails_ProductionActivity_Id_fk");
         });
 
+        modelBuilder.Entity<ProDrill>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProDrill_pk");
+
+            entity.ToTable("ProDrill");
+
+            entity.Property(e => e.Description)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.EquipmentId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ModelName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.Equipment).WithMany(p => p.ProDrills)
+                .HasPrincipalKey(p => p.EquipmentId)
+                .HasForeignKey(d => d.EquipmentId)
+                .HasConstraintName("ProDrill_Equipment_Equipment_id_fk");
+        });
+
         modelBuilder.Entity<ProFuelIntake>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("ProFuelIntake_pk");
@@ -941,8 +956,7 @@ public partial class EnpDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("equipmentId");
             entity.Property(e => e.IntakeDate)
-                .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasColumnType("datetime")
                 .HasColumnName("intakeDate");
             entity.Property(e => e.PumpId).HasColumnName("pumpId");
             entity.Property(e => e.Quantity).HasColumnName("quantity");

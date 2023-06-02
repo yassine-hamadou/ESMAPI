@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.LoaderOperator;
@@ -9,11 +8,12 @@ namespace ServiceManagerApi.Controllers.Production
     public class LoaderOperatorController : BaeApiController<LoaderOperatorController>
     {
         private readonly EnpDbContext _context;
+
         public LoaderOperatorController(EnpDbContext context)
         {
             _context = context;
         }
-        
+
 
         [HttpGet("tenant/{tenantId}")]
         public Task<List<LoaderOperator>> GetPlannedOutputs(string tenantId)
@@ -27,14 +27,15 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("id")]
         [ProducesResponseType(typeof(LoaderOperator), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<LoaderOperator>> GetById(int id)
         {
             var loaderOperator = await _context.LoaderOperators.FindAsync(id);
             if (loaderOperator == null)
             {
                 return NotFound();
             }
-            return Ok(loaderOperator);
+
+            return loaderOperator;
         }
 
         // post groups
@@ -44,22 +45,14 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(LoaderOperatorPostDto loaderOperatorPostDto)
         {
             LoaderOperator loaderOperator = _mapper.Map<LoaderOperator>(loaderOperatorPostDto);
+            if (LoaderOperatorExists(loaderOperator.EmpCode))
+            {
+                return Conflict();
+            }
+
             _context.LoaderOperators.Add(loaderOperator);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (LoaderOperatorExists(loaderOperator.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetById), new { id = loaderOperator.Id }, loaderOperator);
         }
 
@@ -69,11 +62,11 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Put(int id, LoaderOperator loaderOperator)
         {
-           
             if (id != loaderOperator.Id)
             {
                 return BadRequest();
             }
+
             _context.Entry(loaderOperator).State = EntityState.Modified;
             try
             {
@@ -81,13 +74,14 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LoaderOperatorExists(id))
+                if (!LoaderOperatorExists(loaderOperator.EmpCode))
                 {
                     return NotFound();
                 }
 
                 throw;
             }
+
             return NoContent();
         }
 
@@ -102,15 +96,15 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             _context.LoaderOperators.Remove(loaderOperator);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool LoaderOperatorExists(int id)
+        private bool LoaderOperatorExists(string empCode)
         {
-            return _context.LoaderOperators.Any(e => e.Id == id);
+            return _context.LoaderOperators.Any(e => e.EmpCode.ToLower().Trim() == empCode.ToLower().Trim());
         }
-
     }
 }

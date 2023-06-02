@@ -19,7 +19,7 @@ namespace ServiceManagerApi.Controllers.Production
         {
             var proActivityDetails = _context.ProActivityDetails
                 .Where(leav => leav.TenantId == tenantId)
-                .Select(h => new ProActivityDetail
+                /*.Select(h => new ProActivityDetail
                 {
                     Id = h.Id,
                     Name = h.Name,
@@ -32,7 +32,7 @@ namespace ServiceManagerApi.Controllers.Production
                         Name = h.Activity.Name,
                         Code = h.Activity.Code
                     }
-                })
+                })*/
                 .ToListAsync();
             return proActivityDetails;
         }
@@ -48,6 +48,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             return Ok(proActivityDetail);
         }
 
@@ -89,23 +90,15 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(ProActivityDetailsPostDto proActivityDetailsPostDto)
         {
-
             ProActivityDetail proActivityDetail = _mapper.Map<ProActivityDetail>(proActivityDetailsPostDto);
-                _context.ProActivityDetails.Add(proActivityDetail);
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateException)
-                {
-                    if (ProActivityDetailExists(proActivityDetail.Id))
-                    {
-                        return Conflict();
-                    }
+            if (IsProActivityDetailExistsDto(proActivityDetailsPostDto))
+            {
+                return Conflict();
+            }
 
-                    throw;
-                }
-                return CreatedAtAction(nameof(GetById), new { id = proActivityDetail.Id }, proActivityDetail);
+            _context.ProActivityDetails.Add(proActivityDetail);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetById), new { id = proActivityDetail.Id }, proActivityDetail);
         }
 
         // DELETE: api/ProActivityDetails/5
@@ -119,6 +112,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             _context.ProActivityDetails.Remove(proActivityDetail);
             await _context.SaveChangesAsync();
 
@@ -128,6 +122,16 @@ namespace ServiceManagerApi.Controllers.Production
         private bool ProActivityDetailExists(int id)
         {
             return _context.ProActivityDetails.Any(e => e.Id == id);
+        }
+
+        private bool IsProActivityDetailExistsDto(ProActivityDetailsPostDto detailsPostDto)
+        {
+            return _context.ProActivityDetails.Any(pa =>
+                pa.Name.ToLower().Trim() == detailsPostDto.Name.ToLower().Trim() &&
+                pa.TenantId.ToLower().Trim() == detailsPostDto.TenantId.ToLower().Trim() &&
+                pa.Code.ToLower().Trim() == detailsPostDto.Code.ToLower().Trim() &&
+                pa.ActivityId == detailsPostDto.ActivityId
+            );
         }
     }
 }
