@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServiceManagerApi.Controllers.Esms;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.FuelIntake;
 
@@ -118,6 +119,7 @@ namespace ServiceManagerApi.Controllers.Production
         {
             return (_context.ProFuelIntakes?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
         private bool IsProFuelIssuePostDtoExist(ProFuelIssuePostDto proFuelIssuePostDto)
         {
             // Perform a database query to check if a matching ProductionActivity exists based on the properties in the ProductionActivityPostDto

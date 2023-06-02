@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServiceManagerApi.Controllers.Esms;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.ProductionActivity;
 
@@ -8,12 +9,13 @@ namespace ServiceManagerApi.Controllers.Production
     public class ProductionActivityController : BaeApiController<ProductionActivityController>
     {
         private readonly EnpDbContext _context;
+
         public ProductionActivityController(EnpDbContext context)
         {
             _context = context;
         }
-        
-        
+
+
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProductionActivity>> GetProductionActivities(string tenantId)
         {
@@ -111,7 +113,7 @@ namespace ServiceManagerApi.Controllers.Production
         {
             return _context.ProductionActivities.Any(e => e.Id == id);
         }
-        
+
         // function to check if productionActivity exists based on postDto
         private bool IsProductionActivityPostDtoExist(ProductionActivityPostDto productionActivityPostDto)
         {
@@ -122,6 +124,5 @@ namespace ServiceManagerApi.Controllers.Production
                 pa.ActivityType.ToLower().Trim() == productionActivityPostDto.ActivityType.ToLower().Trim()
             );
         }
-        
     }
 }
