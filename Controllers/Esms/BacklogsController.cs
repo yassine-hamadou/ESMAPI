@@ -12,7 +12,7 @@ namespace ServiceManagerApi.Controllers.Esms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BacklogsController : BaeApiController<BacklogDto>
+public class BacklogsController : BaeApiController<BacklogsController>
 {
   private readonly EnpDbContext _context;
 
@@ -27,9 +27,9 @@ public class BacklogsController : BaeApiController<BacklogDto>
   {
     if (_context.Backlogs == null) return NotFound();
     //get all backlog items for a tenant
-    var backlog = await _context.Backlogs.Where(b => b.TenantId == tenantId).ToListAsync();
-    var backlogDtos = _mapper.Map<List<BacklogDto>>(backlog);
-
+    var backlogDtos = _mapper.Map<List<BacklogDto>>(await _context.Backlogs
+        .Where(backlog => backlog.TenantId == tenantId)
+        .ToListAsync());
     return Ok(backlogDtos);
   }
 

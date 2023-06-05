@@ -87,7 +87,7 @@ public class AutoMappingProfiles : Profile
     CreateMap<ProActivityDetailsPostDto, ProActivityDetail>();
     CreateMap<FleetSchedulePostDto, FleetSchedule>();
     CreateMap<ProDrillPostDto, ProDrill>();
-    CreateMap<BacklogDto, Backlog>();
+    CreateMap<Backlog, BacklogDto>();
     CreateMap<BacklogPostDto, Backlog>();
     CreateMap<BacklogPutDto, Backlog>();
   }

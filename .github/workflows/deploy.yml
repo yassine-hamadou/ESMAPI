@@ -20,59 +20,59 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release -o publish
 
-#       - name: Create publish artifact
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: publish
-#           path: publish
+      - name: Create publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
 
-#       - name: Download artifact from build job
-#         uses: actions/download-artifact@v2
-#         with:
-#           name: publish
-#           path: publish
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
 
       - name: Deploy to IIS
         run: |
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
           Start-Sleep -Seconds 20 
-          xcopy /Y /S /I /F /C publish\* C:\inetpub\wwwroot\ServiceManagerApi\
+          xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\
           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
-          
-
-
-# name: Deploy to IIS
-
-# on:
-#   push:
-#     branches: [ master ]
-
-# jobs:
-#   deploy:
-#     runs-on: self-hosted
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: Setup .NET
-#         uses: actions/setup-dotnet@v1
-#         with:
-#           dotnet-version: '6.0.x'
-
-#       - name: Build with dotnet
-#         run: dotnet build --configuration Release -o publish
-
-#       - name: Create publish artifact
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: publish
-#           path: publish
-
-#   copy:
-#     runs-on: self-hosted
-#     needs: deploy
     
+    
+    
+    # name: Deploy to IIS
+    
+    # on:
+    #   push:
+    #     branches: [ master ]
+    
+    # jobs:
+    #   deploy:
+    #     runs-on: self-hosted
+    
+    #     steps:
+    #       - name: Checkout code
+    #         uses: actions/checkout@v3
+    
+    #       - name: Setup .NET
+    #         uses: actions/setup-dotnet@v1
+    #         with:
+    #           dotnet-version: '6.0.x'
+    
+    #       - name: Build with dotnet
+    #         run: dotnet build --configuration Release -o publish
+    
+    #       - name: Create publish artifact
+    #         uses: actions/upload-artifact@v2
+    #         with:
+    #           name: publish
+    #           path: publish
+    
+    #   copy:
+    #     runs-on: self-hosted
+    #     needs: deploy
+
 #     steps:
 #       #    - name: Checkout code
 #       #      uses: actions/checkout@v3
