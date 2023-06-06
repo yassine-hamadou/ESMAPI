@@ -17,6 +17,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<Agreement> Agreements { get; set; }
 
+    public virtual DbSet<Backlog> Backlogs { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Compartment> Compartments { get; set; }
@@ -145,6 +147,30 @@ public partial class EnpDbContext : DbContext
             entity.HasOne(d => d.Equipment).WithMany(p => p.Agreements)
                 .HasForeignKey(d => d.EquipmentId)
                 .HasConstraintName("Agreement_Equipment_id_fk");
+        });
+
+        modelBuilder.Entity<Backlog>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Backlog_pk");
+
+            entity.ToTable("Backlog");
+
+            entity.Property(e => e.Bdate).HasColumnName("BDate");
+            entity.Property(e => e.Cdate).HasColumnName("CDate");
+            entity.Property(e => e.Comment).IsUnicode(false);
+            entity.Property(e => e.EquipmentId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Item)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Note).IsUnicode(false);
+            entity.Property(e => e.ReferenceId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Category>(entity =>

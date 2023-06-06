@@ -1,10 +1,10 @@
-﻿namespace ServiceManagerApi.Dtos.HoursEntries
+﻿namespace ServiceManagerApi.Dtos.HoursEntries;
+
+public record HoursEntriesPostDto
 {
-    public record HoursEntriesPostDto
-    {
-        public string? FleetId { get; set; }
-        public DateTime? Date { get; set; }
-        public double? PreviousReading { get; set; }
-        public double? CurrentReading { get; set; }
-    }
+  public string? FleetId { get; set; }
+  public DateTime? Date { get; set; }
+  public double? PreviousReading { get; set; }
+  public double? CurrentReading { get; set; }
+  public string TenantId { get; set; } = null!;
 }

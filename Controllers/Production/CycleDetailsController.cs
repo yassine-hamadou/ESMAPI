@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServiceManagerApi.Controllers.Esms;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.CycleDetails;
 
@@ -15,7 +16,7 @@ namespace ServiceManagerApi.Controllers.Production
         {
             _context = context;
         }
-        
+
 
         [HttpGet("tenant/{tenantId}")]
         public Task<List<CycleDetail>> GetCycleDetails(string tenantId)
@@ -100,8 +101,8 @@ namespace ServiceManagerApi.Controllers.Production
 
             return Ok(cycleDetail);
         }
-        
-       
+
+
         [HttpPost]
         [ProducesResponseType(typeof(IEnumerable<CycleDetail>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -156,7 +157,7 @@ namespace ServiceManagerApi.Controllers.Production
 
         }
 
-        
+
         // PUT: api/CycleDetails/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -191,7 +192,7 @@ namespace ServiceManagerApi.Controllers.Production
 
         // POST: api/CycleDetails
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-       
+
 
         // DELETE: api/CycleDetails/5
         [HttpDelete("{id}")]
@@ -211,6 +212,5 @@ namespace ServiceManagerApi.Controllers.Production
         {
             return _context.CycleDetails.Any(e => e.Id == id);
         }
-        
     }
 }

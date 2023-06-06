@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.BacklogDto;
 using ServiceManagerApi.Dtos.Compartments;
 using ServiceManagerApi.Dtos.CycleDetails;
 using ServiceManagerApi.Dtos.Equipments;
 using ServiceManagerApi.Dtos.FaultEntry;
-using ServiceManagerApi.Dtos.FuelIntake;
 using ServiceManagerApi.Dtos.FleetSchedule;
+using ServiceManagerApi.Dtos.FuelIntake;
 using ServiceManagerApi.Dtos.GroundEngagingTools;
 using ServiceManagerApi.Dtos.Groups;
 using ServiceManagerApi.Dtos.HaulerOperator;
@@ -86,5 +87,8 @@ public class AutoMappingProfiles : Profile
     CreateMap<ProActivityDetailsPostDto, ProActivityDetail>();
     CreateMap<FleetSchedulePostDto, FleetSchedule>();
     CreateMap<ProDrillPostDto, ProDrill>();
+    CreateMap<Backlog, BacklogDto>();
+    CreateMap<BacklogPostDto, Backlog>();
+    CreateMap<BacklogPutDto, Backlog>();
   }
 }
