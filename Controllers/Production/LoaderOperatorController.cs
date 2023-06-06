@@ -86,12 +86,10 @@ namespace ServiceManagerApi.Controllers.Production
         }
 
         // delete groups
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{empCode}")]
+        public async Task<IActionResult> Delete(string empCode)
         {
-            var loaderOperator = await _context.LoaderOperators.FindAsync(id);
+            var loaderOperator = await _context.LoaderOperators.FindAsync(empCode);
             if (loaderOperator == null)
             {
                 return NotFound();
