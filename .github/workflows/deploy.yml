@@ -39,16 +39,16 @@ jobs:
 
         #          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop" 
       - name: Deploy to IIS by stop the app pool, stop IIS, copy files, start IIS and start the app pool
-        run: Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -Command ""Stop-WebAppPool -Name 'SmWebApiPool'"""
-
-      - name: Sleep
-        run: Start-Sleep -Seconds 20
-
-      - name: Copy
-        run: xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\
-
-      - name: Restart IIS
-        run: Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -Command ""Restart-WebAppPool -Name 'SmWebApiPool'"""
+        run: Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop; Start-Sleep -Seconds 20; xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\; iisreset /start"
+          
+          #      - name: Sleep
+          #        run: Start-Sleep -Seconds 20
+          #
+          #      - name: Copy
+          #        run: xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\
+          #
+          #      - name: Restart IIS
+          #        run: Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -Command ""Restart-WebAppPool -Name 'SmWebApiPool'"""
           
           
           
@@ -98,7 +98,7 @@ jobs:
           #         run: |
           # recycle app pool
           # stop app pool
-          # stop iis
+        # stop iis
         # copy files
         # start iis
 
