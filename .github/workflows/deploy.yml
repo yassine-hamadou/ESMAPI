@@ -37,7 +37,7 @@ jobs:
           name: build
           path: build
 
-        #          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"
+        #          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop" 
       - name: Deploy to IIS by stop the app pool, stop IIS, copy files, start IIS and start the app pool
         run: Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -Command ""Stop-WebAppPool -Name 'SmWebApiPool'"""
 
@@ -99,7 +99,7 @@ jobs:
           # recycle app pool
           # stop app pool
           # stop iis
-          # copy files
+        # copy files
         # start iis
 
 #           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
