@@ -17,8 +17,8 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release -o publish
+      - name: Build with dotnet with Release configuration and publish to build folder by overwriting existing files
+        run: dotnet publish --configuration Release -o build --force --verbosity normal
 
       - name: Create publish artifact
         uses: actions/upload-artifact@v2
@@ -26,65 +26,82 @@ jobs:
           name: build
           path: build
 
+  deploy2:
+    runs-on: self-hosted
+    needs: deploy
+
+    steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: build
           path: build
 
-      - name: Deploy to IIS
-        run: |
-          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
-          Start-Sleep -Seconds 20 
-          xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\
-          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /start"  
-    
-    
-    
-    # name: Deploy to IIS
-    
-    # on:
-    #   push:
-    #     branches: [ master ]
-    
-    # jobs:
-    #   deploy:
-    #     runs-on: self-hosted
-    
-    #     steps:
-    #       - name: Checkout code
-    #         uses: actions/checkout@v3
-    
-    #       - name: Setup .NET
-    #         uses: actions/setup-dotnet@v1
-    #         with:
-    #           dotnet-version: '6.0.x'
-    
-    #       - name: Build with dotnet
-    #         run: dotnet build --configuration Release -o publish
-    
-    #       - name: Create publish artifact
-    #         uses: actions/upload-artifact@v2
-    #         with:
-    #           name: publish
-    #           path: publish
-    
-    #   copy:
-    #     runs-on: self-hosted
-    #     needs: deploy
+        #          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop" 
+      - name: Deploy to IIS by stop the app pool, stop IIS, copy files, start IIS and start the app pool
+        run: Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop; Start-Sleep -Seconds 20; xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\; iisreset /start"
+          
+          #      - name: Sleep
+          #        run: Start-Sleep -Seconds 20
+          #
+          #      - name: Copy
+          #        run: xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\
+          #
+          #      - name: Restart IIS
+          #        run: Start-Process powershell -Verb RunAs -ArgumentList "-NoProfile -Command ""Restart-WebAppPool -Name 'SmWebApiPool'"""
+          
+          
+          
+          # name: Deploy to IIS
+          
+          # on:
+          #   push:
+          #     branches: [ master ]
+          
+          # jobs:
+          #   deploy:
+          #     runs-on: self-hosted
+          
+          #     steps:
+          #       - name: Checkout code
+          #         uses: actions/checkout@v3
+          
+          #       - name: Setup .NET
+          #         uses: actions/setup-dotnet@v1
+          #         with:
+          #           dotnet-version: '6.0.x'
+          
+          #       - name: Build with dotnet
+          #         run: dotnet build --configuration Release -o publish
+          
+          #       - name: Create publish artifact
+          #         uses: actions/upload-artifact@v2
+          #         with:
+          #           name: publish
+          #           path: publish
+          
+          #   copy:
+          #     runs-on: self-hosted
+          #     needs: deploy
+          
+          #     steps:
+          #       #    - name: Checkout code
+          #       #      uses: actions/checkout@v3
+          
+          #       - name: Download artifact from build job
+          #         uses: actions/download-artifact@v2
+          #         with:
+          #           name: publish
+          #           path: publish
+          
+          #       - name: Deploy to IIS
+          #         run: |
+          # recycle app pool
+          # stop app pool
+        # stop iis
+        # copy files
+        # start iis
 
-#     steps:
-#       #    - name: Checkout code
-#       #      uses: actions/checkout@v3
-
-#       - name: Download artifact from build job
-#         uses: actions/download-artifact@v2
-#         with:
-#           name: publish
-#           path: publish
-
-#       - name: Deploy to IIS
-#         run: |
 #           Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop"  
 #           Start-Sleep -Seconds 10 
 #           xcopy /Y /S /I /F /C publish\* C:\inetpub\wwwroot\ServiceManagerApi\
