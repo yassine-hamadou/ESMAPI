@@ -9,7 +9,7 @@ public record BacklogDto
     string? Note,
     string? Comment,
     string? ReferenceId,
-    int? Status,
+    string? Status,
     DateTime? Cdate
 );
 

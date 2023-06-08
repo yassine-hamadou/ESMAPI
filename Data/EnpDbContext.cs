@@ -191,6 +191,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Source)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
