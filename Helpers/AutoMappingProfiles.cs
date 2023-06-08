@@ -25,6 +25,7 @@ using ServiceManagerApi.Dtos.ProdProcessedMaterial;
 using ServiceManagerApi.Dtos.ProdPump;
 using ServiceManagerApi.Dtos.ProdRawMaterial;
 using ServiceManagerApi.Dtos.ProDrill;
+using ServiceManagerApi.Dtos.proDrillEntry;
 using ServiceManagerApi.Dtos.ProductionActivity;
 using ServiceManagerApi.Dtos.ProductionDestination;
 using ServiceManagerApi.Dtos.ProductionMineArea;
@@ -90,5 +91,6 @@ public class AutoMappingProfiles : Profile
     CreateMap<Backlog, BacklogDto>();
     CreateMap<BacklogPostDto, Backlog>();
     CreateMap<BacklogPutDto, Backlog>();
+    CreateMap<ProDrillEntryPostDto, ProDrillEntry>();
   }
 }

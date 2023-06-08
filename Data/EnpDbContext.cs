@@ -19,6 +19,12 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<Backlog> Backlogs { get; set; }
 
+    public virtual DbSet<Backlogup> Backlogups { get; set; }
+
+    public virtual DbSet<Blup> Blups { get; set; }
+
+    public virtual DbSet<Blupload> Bluploads { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Compartment> Compartments { get; set; }
@@ -30,6 +36,8 @@ public partial class EnpDbContext : DbContext
     public virtual DbSet<CycleDetail> CycleDetails { get; set; }
 
     public virtual DbSet<DefectEntry> DefectEntries { get; set; }
+
+    public virtual DbSet<DownType> DownTypes { get; set; }
 
     public virtual DbSet<Eqdatum> Eqdata { get; set; }
 
@@ -77,11 +85,17 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<PlannedOutput> PlannedOutputs { get; set; }
 
+    public virtual DbSet<PrioritySetup> PrioritySetups { get; set; }
+
     public virtual DbSet<ProActivityDetail> ProActivityDetails { get; set; }
 
     public virtual DbSet<ProDrill> ProDrills { get; set; }
 
+    public virtual DbSet<ProDrillEntry> ProDrillEntries { get; set; }
+
     public virtual DbSet<ProFuelIntake> ProFuelIntakes { get; set; }
+
+    public virtual DbSet<ProactivityView> ProactivityViews { get; set; }
 
     public virtual DbSet<ProdProcessedMaterial> ProdProcessedMaterials { get; set; }
 
@@ -158,6 +172,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Bdate).HasColumnName("BDate");
             entity.Property(e => e.Cdate).HasColumnName("CDate");
             entity.Property(e => e.Comment).IsUnicode(false);
+            entity.Property(e => e.DownType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.EquipmentId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -165,12 +182,200 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Note).IsUnicode(false);
+            entity.Property(e => e.Priority)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.ReferenceId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Source)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<Backlogup>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("backlogup");
+
+            entity.Property(e => e.ActionToBeTaken)
+                .HasMaxLength(255)
+                .HasColumnName("Action to be taken");
+            entity.Property(e => e.Days).HasMaxLength(255);
+            entity.Property(e => e.EnPJobNo)
+                .HasMaxLength(255)
+                .HasColumnName("EnP Job No");
+            entity.Property(e => e.EntryDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Entry Date");
+            entity.Property(e => e.EquipNo)
+                .HasMaxLength(255)
+                .HasColumnName("Equip No");
+            entity.Property(e => e.ExecutionDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Execution Date");
+            entity.Property(e => e.FleetAnalyst)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Analyst");
+            entity.Property(e => e.FleetManager)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Manager");
+            entity.Property(e => e.GeneralComment)
+                .HasMaxLength(255)
+                .HasColumnName("General Comment");
+            entity.Property(e => e.Idno).HasColumnName("IDNo");
+            entity.Property(e => e.Initiator).HasMaxLength(255);
+            entity.Property(e => e.MachineHours).HasColumnName("Machine Hours");
+            entity.Property(e => e.MakeAndModel)
+                .HasMaxLength(255)
+                .HasColumnName("Make and Model");
+            entity.Property(e => e.MantracJobNo)
+                .HasMaxLength(255)
+                .HasColumnName("Mantrac Job No");
+            entity.Property(e => e.Month).HasColumnType("datetime");
+            entity.Property(e => e.OrderNo)
+                .HasMaxLength(255)
+                .HasColumnName("Order No");
+            entity.Property(e => e.PartsArrivalDate)
+                .HasMaxLength(255)
+                .HasColumnName("Parts Arrival Date");
+            entity.Property(e => e.PartsOnHand)
+                .HasMaxLength(255)
+                .HasColumnName("Parts On Hand?");
+            entity.Property(e => e.Priority).HasMaxLength(255);
+            entity.Property(e => e.Priority1).HasMaxLength(255);
+            entity.Property(e => e.Problem).HasMaxLength(255);
+            entity.Property(e => e.Responsibility).HasMaxLength(255);
+            entity.Property(e => e.ScheduledDate)
+                .HasMaxLength(255)
+                .HasColumnName("Scheduled Date");
+            entity.Property(e => e.Sections).HasMaxLength(255);
+            entity.Property(e => e.Source).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(255);
+            entity.Property(e => e.SystemSympton)
+                .HasMaxLength(255)
+                .HasColumnName("System / Sympton");
+        });
+
+        modelBuilder.Entity<Blup>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("blup");
+
+            entity.Property(e => e.ActionToBeTaken)
+                .HasMaxLength(255)
+                .HasColumnName("Action to be taken");
+            entity.Property(e => e.EnPJobNo)
+                .HasMaxLength(255)
+                .HasColumnName("EnP Job No");
+            entity.Property(e => e.EntryDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Entry Date");
+            entity.Property(e => e.EquipNo)
+                .HasMaxLength(255)
+                .HasColumnName("Equip No");
+            entity.Property(e => e.ExecutionDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Execution Date");
+            entity.Property(e => e.FleetAnalyst)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Analyst");
+            entity.Property(e => e.FleetManager)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Manager");
+            entity.Property(e => e.GeneralComment)
+                .HasMaxLength(255)
+                .HasColumnName("General Comment");
+            entity.Property(e => e.Initiator).HasMaxLength(255);
+            entity.Property(e => e.MachineHours).HasColumnName("Machine Hours");
+            entity.Property(e => e.MantracJobNo)
+                .HasMaxLength(255)
+                .HasColumnName("Mantrac Job No");
+            entity.Property(e => e.OrderNo)
+                .HasMaxLength(255)
+                .HasColumnName("Order No");
+            entity.Property(e => e.PartsOnHand)
+                .HasMaxLength(255)
+                .HasColumnName("Parts On Hand?");
+            entity.Property(e => e.Priority).HasMaxLength(255);
+            entity.Property(e => e.Problem).HasMaxLength(255);
+            entity.Property(e => e.Responsibility).HasMaxLength(255);
+            entity.Property(e => e.Sections).HasMaxLength(255);
+            entity.Property(e => e.Source).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(255);
+            entity.Property(e => e.SystemSympton)
+                .HasMaxLength(255)
+                .HasColumnName("System / Sympton");
+        });
+
+        modelBuilder.Entity<Blupload>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("blupload");
+
+            entity.Property(e => e.ActionToBeTaken)
+                .HasMaxLength(255)
+                .HasColumnName("Action to be taken");
+            entity.Property(e => e.Days).HasMaxLength(255);
+            entity.Property(e => e.EnPJobNo)
+                .HasMaxLength(255)
+                .HasColumnName("EnP Job No");
+            entity.Property(e => e.EntryDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Entry Date");
+            entity.Property(e => e.EquipNo)
+                .HasMaxLength(255)
+                .HasColumnName("Equip No");
+            entity.Property(e => e.ExecutionDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Execution Date");
+            entity.Property(e => e.FleetAnalyst)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Analyst");
+            entity.Property(e => e.FleetManager)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Manager");
+            entity.Property(e => e.GeneralComment)
+                .HasMaxLength(255)
+                .HasColumnName("General Comment");
+            entity.Property(e => e.Idno).HasColumnName("IDNo");
+            entity.Property(e => e.Initiator).HasMaxLength(255);
+            entity.Property(e => e.MachineHours).HasColumnName("Machine Hours");
+            entity.Property(e => e.MakeAndModel)
+                .HasMaxLength(255)
+                .HasColumnName("Make and Model");
+            entity.Property(e => e.MantracJobNo)
+                .HasMaxLength(255)
+                .HasColumnName("Mantrac Job No");
+            entity.Property(e => e.Month).HasColumnType("datetime");
+            entity.Property(e => e.OrderNo)
+                .HasMaxLength(255)
+                .HasColumnName("Order No");
+            entity.Property(e => e.PartsArrivalDate)
+                .HasMaxLength(255)
+                .HasColumnName("Parts Arrival Date");
+            entity.Property(e => e.PartsOnHand)
+                .HasMaxLength(255)
+                .HasColumnName("Parts On Hand?");
+            entity.Property(e => e.Priority).HasMaxLength(255);
+            entity.Property(e => e.Priority1).HasMaxLength(255);
+            entity.Property(e => e.Problem).HasMaxLength(255);
+            entity.Property(e => e.Responsibility).HasMaxLength(255);
+            entity.Property(e => e.ScheduledDate)
+                .HasMaxLength(255)
+                .HasColumnName("Scheduled Date");
+            entity.Property(e => e.Sections).HasMaxLength(255);
+            entity.Property(e => e.Source).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(255);
+            entity.Property(e => e.SystemSympton)
+                .HasMaxLength(255)
+                .HasColumnName("System / Sympton");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -331,6 +536,18 @@ public partial class EnpDbContext : DbContext
                 .HasForeignKey(d => d.DefectEquipmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("DefectEntry_Equipment_Equipment_id_fk");
+        });
+
+        modelBuilder.Entity<DownType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("DownType_pk");
+
+            entity.ToTable("DownType");
+
+            entity.Property(e => e.DownType1)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("DownType");
         });
 
         modelBuilder.Entity<Eqdatum>(entity =>
@@ -922,13 +1139,22 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("PlannedOutput___fk");
         });
 
+        modelBuilder.Entity<PrioritySetup>(entity =>
+        {
+            entity.HasKey(e => e.PriorityId).HasName("PrioritySetup_pk");
+
+            entity.ToTable("PrioritySetup");
+
+            entity.Property(e => e.PriorityId).ValueGeneratedNever();
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<ProActivityDetail>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("ProActivityDetails_pk");
 
-            entity.Property(e => e.Code)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -964,6 +1190,33 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.EquipmentId)
                 .HasForeignKey(d => d.EquipmentId)
                 .HasConstraintName("ProDrill_Equipment_Equipment_id_fk");
+        });
+
+        modelBuilder.Entity<ProDrillEntry>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProDrillEntry_pk");
+
+            entity.ToTable("ProDrillEntry");
+
+            entity.Property(e => e.DrillDate).HasColumnType("date");
+            entity.Property(e => e.RigId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.ActivityDetail).WithMany(p => p.ProDrillEntries)
+                .HasForeignKey(d => d.ActivityDetailId)
+                .HasConstraintName("ProDrillEntry_ProActivityDetails_Id_fk");
+
+            entity.HasOne(d => d.Activity).WithMany(p => p.ProDrillEntries)
+                .HasForeignKey(d => d.ActivityId)
+                .HasConstraintName("ProDrillEntry_ProductionActivity_Id_fk");
+
+            entity.HasOne(d => d.Shift).WithMany(p => p.ProDrillEntries)
+                .HasForeignKey(d => d.ShiftId)
+                .HasConstraintName("ProDrillEntry_ProductionShift_Id_fk");
         });
 
         modelBuilder.Entity<ProFuelIntake>(entity =>
@@ -1003,6 +1256,36 @@ public partial class EnpDbContext : DbContext
             entity.HasOne(d => d.Pump).WithMany(p => p.ProFuelIntakes)
                 .HasForeignKey(d => d.PumpId)
                 .HasConstraintName("ProFuelIntake___fk");
+        });
+
+        modelBuilder.Entity<ProactivityView>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("Proactivity_view");
+
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Expr2).HasMaxLength(50);
+            entity.Property(e => e.Expr3)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Expr4)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Expr7)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Expr8)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<ProdProcessedMaterial>(entity =>
