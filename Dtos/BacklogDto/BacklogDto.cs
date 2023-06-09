@@ -21,7 +21,7 @@ public record BacklogPostDto
     string? Note,
     string? Comment,
     string? ReferenceId,
-    int? Status,
+    string? Status,
     DateTime? Cdate,
     string TenantId
 );
@@ -35,6 +35,7 @@ public record BacklogPutDto
     string? Note,
     string? Comment,
     string? ReferenceId,
-    int? Status,
-    DateTime? Cdate
+    string? Status,
+    DateTime? Cdate,
+    string TenantId
 );
