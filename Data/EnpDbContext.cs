@@ -85,6 +85,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<PlannedOutput> PlannedOutputs { get; set; }
 
+    public virtual DbSet<Pmdup> Pmdups { get; set; }
+
     public virtual DbSet<PrioritySetup> PrioritySetups { get; set; }
 
     public virtual DbSet<ProActivityDetail> ProActivityDetails { get; set; }
@@ -126,6 +128,8 @@ public partial class EnpDbContext : DbContext
     public virtual DbSet<ScheduleTransaction> ScheduleTransactions { get; set; }
 
     public virtual DbSet<Section> Sections { get; set; }
+
+    public virtual DbSet<Sequence> Sequences { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
 
@@ -1142,6 +1146,23 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("PlannedOutput___fk");
         });
 
+        modelBuilder.Entity<Pmdup>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("PMDUP");
+
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.FleetId)
+                .HasMaxLength(255)
+                .HasColumnName("FLEET ID");
+            entity.Property(e => e.Model)
+                .HasMaxLength(50)
+                .HasColumnName("model");
+            entity.Property(e => e.Service).HasMaxLength(255);
+            entity.Property(e => e.Smu).HasColumnName("SMU");
+        });
+
         modelBuilder.Entity<PrioritySetup>(entity =>
         {
             entity.HasKey(e => e.PriorityId).HasName("PrioritySetup_pk");
@@ -1547,8 +1568,26 @@ public partial class EnpDbContext : DbContext
                 .HasConstraintName("FK_Section_Services");
         });
 
+        modelBuilder.Entity<Sequence>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("Sequence_pk");
+
+            entity.ToTable("Sequence");
+
+            entity.Property(e => e.EquipModel)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.SequenceName)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Service>(entity =>
         {
+            entity.Property(e => e.IntervalForPm).HasColumnName("IntervalForPM");
             entity.Property(e => e.Model)
                 .HasMaxLength(50)
                 .IsUnicode(false);
