@@ -63,6 +63,10 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<HoursEntryTemp> HoursEntryTemps { get; set; }
 
+    public virtual DbSet<Hrsul> Hrsuls { get; set; }
+
+    public virtual DbSet<Hrsup> Hrsups { get; set; }
+
     public virtual DbSet<Item> Items { get; set; }
 
     public virtual DbSet<ItemValue> ItemValues { get; set; }
@@ -132,6 +136,8 @@ public partial class EnpDbContext : DbContext
     public virtual DbSet<Sequence> Sequences { get; set; }
 
     public virtual DbSet<Service> Services { get; set; }
+
+    public virtual DbSet<Source> Sources { get; set; }
 
     public virtual DbSet<TarkwaModel> TarkwaModels { get; set; }
 
@@ -315,9 +321,7 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Sections).HasMaxLength(255);
             entity.Property(e => e.Source).HasMaxLength(255);
             entity.Property(e => e.Status).HasMaxLength(255);
-            entity.Property(e => e.SystemSympton)
-                .HasMaxLength(255)
-                .HasColumnName("System / Sympton");
+            entity.Property(e => e.SystemSympton).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Blupload>(entity =>
@@ -551,10 +555,12 @@ public partial class EnpDbContext : DbContext
 
             entity.ToTable("DownType");
 
-            entity.Property(e => e.DownType1)
+            entity.Property(e => e.Name)
                 .HasMaxLength(255)
-                .IsUnicode(false)
-                .HasColumnName("DownType");
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Eqdatum>(entity =>
@@ -778,6 +784,7 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.DownStatus).HasMaxLength(50);
             entity.Property(e => e.DownType).HasMaxLength(50);
             entity.Property(e => e.Downtime).HasColumnType("datetime");
+            entity.Property(e => e.FaultDetails).IsUnicode(false);
             entity.Property(e => e.FleetId)
                 .HasMaxLength(50)
                 .HasColumnName("FleetID");
@@ -949,6 +956,35 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.EquipmentId)
                 .HasForeignKey(d => d.FleetId)
                 .HasConstraintName("HoursEntryTemp_Equipment_Equipment_id_fk");
+        });
+
+        modelBuilder.Entity<Hrsul>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("hrsul");
+
+            entity.Property(e => e.FleetId)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet ID");
+            entity.Property(e => e.ReadingDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Reading Date");
+        });
+
+        modelBuilder.Entity<Hrsup>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("HRSUP");
+
+            entity.Property(e => e.Comment).HasMaxLength(255);
+            entity.Property(e => e.FleetId)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet ID");
+            entity.Property(e => e.ReadingDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Reading Date");
         });
 
         modelBuilder.Entity<Item>(entity =>
@@ -1171,6 +1207,9 @@ public partial class EnpDbContext : DbContext
 
             entity.Property(e => e.PriorityId).ValueGeneratedNever();
             entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
         });
@@ -1599,6 +1638,20 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.Code)
                 .HasForeignKey(d => d.Model)
                 .HasConstraintName("Services_Model_Code_fk");
+        });
+
+        modelBuilder.Entity<Source>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Source__3214EC070EF66E3E");
+
+            entity.ToTable("Source");
+
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<TarkwaModel>(entity =>

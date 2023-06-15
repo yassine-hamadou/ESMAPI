@@ -35,4 +35,6 @@ public record FaultEntryPostDto
   public string? TenantId { get; set; }
 
   public string? ReferenceId { get; set; }
+
+  public string? FaultDetails { get; set; }
 }

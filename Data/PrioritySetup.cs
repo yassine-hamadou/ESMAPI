@@ -8,4 +8,6 @@ public partial class PrioritySetup
     public int PriorityId { get; set; }
 
     public string? Name { get; set; }
+
+    public string? TenantId { get; set; }
 }
