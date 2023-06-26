@@ -10,7 +10,11 @@ public record BacklogDto
     string? Comment,
     string? ReferenceId,
     string? Status,
-    DateTime? Cdate
+    DateTime? Cdate,
+    string? Source,
+    string? DownType,
+    string? Priority,
+    string? TenantId
 );
 
 public record BacklogPostDto

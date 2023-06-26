@@ -49,6 +49,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<FaultentryView> FaultentryViews { get; set; }
 
+    public virtual DbSet<Faultsul> Faultsuls { get; set; }
+
     public virtual DbSet<FleetSchedule> FleetSchedules { get; set; }
 
     public virtual DbSet<GroundEngTool> GroundEngTools { get; set; }
@@ -56,6 +58,8 @@ public partial class EnpDbContext : DbContext
     public virtual DbSet<Group> Groups { get; set; }
 
     public virtual DbSet<HaulerOperator> HaulerOperators { get; set; }
+
+    public virtual DbSet<Hourentrybk> Hourentrybks { get; set; }
 
     public virtual DbSet<Hourly> Hourlies { get; set; }
 
@@ -424,6 +428,10 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description).HasMaxLength(1);
             entity.Property(e => e.EquipmentId).HasColumnName("Equipment_id");
+            entity.Property(e => e.PartNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ReasonForChange).IsUnicode(false);
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -795,6 +803,7 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("referenceId");
+            entity.Property(e => e.ReportedDate).HasDefaultValueSql("(getdate())");
             entity.Property(e => e.ResolutionId)
                 .HasMaxLength(50)
                 .HasColumnName("ResolutionID");
@@ -825,6 +834,30 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Year).HasColumnName("year");
         });
 
+        modelBuilder.Entity<Faultsul>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("faultsul");
+
+            entity.Property(e => e.Comment).HasMaxLength(255);
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.DownType).HasMaxLength(255);
+            entity.Property(e => e.Fleet).HasMaxLength(255);
+            entity.Property(e => e.HoursDown)
+                .HasColumnType("money")
+                .HasColumnName("Hours Down ");
+            entity.Property(e => e.Location).HasMaxLength(255);
+            entity.Property(e => e.Machine).HasMaxLength(255);
+            entity.Property(e => e.Model).HasMaxLength(255);
+            entity.Property(e => e.ReportedTo).HasMaxLength(255);
+            entity.Property(e => e.Responsibility).HasMaxLength(255);
+            entity.Property(e => e.TimeDown).HasColumnType("datetime");
+            entity.Property(e => e.TimeEnd).HasColumnType("datetime");
+            entity.Property(e => e.TimeStart).HasColumnType("datetime");
+            entity.Property(e => e.TimeUp).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<FleetSchedule>(entity =>
         {
             entity.HasKey(e => e.EntryId);
@@ -843,6 +876,9 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Responsible).HasMaxLength(50);
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -865,6 +901,9 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("equipmentID");
+            entity.Property(e => e.ItemType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.Reason).HasMaxLength(250);
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
@@ -906,6 +945,22 @@ public partial class EnpDbContext : DbContext
                 .HasColumnName("tenantId");
         });
 
+        modelBuilder.Entity<Hourentrybk>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("hourentrybk");
+
+            entity.Property(e => e.FleetId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("FleetID");
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Hourly>(entity =>
         {
             entity.HasKey(e => e.EntryId);
@@ -926,6 +981,7 @@ public partial class EnpDbContext : DbContext
         {
             entity.ToTable("HoursEntry");
 
+            entity.Property(e => e.Comment).IsUnicode(false);
             entity.Property(e => e.FleetId)
                 .HasMaxLength(50)
                 .IsUnicode(false)

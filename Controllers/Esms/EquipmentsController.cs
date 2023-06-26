@@ -63,6 +63,8 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
 
     return equipments;
   }
+  
+  
 
   // GET: api/Equipments/5
   [HttpGet("{id}")]

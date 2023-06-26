@@ -32,15 +32,12 @@ builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(typeof(ActivityLog));
-});
+builder.Services.AddControllers(options => { options.Filters.Add(typeof(ActivityLog)); });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(AutoMappingProfiles).Assembly);
- 
+
 builder.Services.AddCors();
 
 
@@ -52,7 +49,9 @@ app.UseCors(
     {
       var frontendUrl = "http://localhost:3000";
       var serverUrl = "http://208.117.44.15/";
-      options.WithOrigins(frontendUrl, serverUrl)
+      var sipserver = "https://app.sipconsult.net/";
+      var sipserver2 = "http://app.sipconsult.net";
+      options.WithOrigins(frontendUrl, serverUrl, sipserver, sipserver2)
           .AllowAnyHeader()
           .AllowAnyMethod();
     });

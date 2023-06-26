@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.FleetSchedule;
@@ -16,13 +17,13 @@ public class FleetSchedulesApiController : BaeApiController<FleetSchedulesApiCon
     _context = context;
   }
 
-  // GET: api/FleetSchedulesApi/tenant/tarkwa
+  // GET: api/FleetSchedulesApi/tenant/tarkwa returns all completed schedules for tarkwa
   [HttpGet("tenant/{tenantId}")]
   public async Task<ActionResult<IEnumerable<FleetSchedule>>> GetFleetSchedules(string tenantId)
   {
     return await _context
         .FleetSchedules
-        .Where(fleetSchedule => fleetSchedule.TenantId == tenantId)
+        .Where(fleetSchedule => fleetSchedule.TenantId == tenantId && fleetSchedule.Status == "Completed")
         .Select(fleetSchedule => new FleetSchedule()
         {
             EntryId = fleetSchedule.EntryId,
@@ -37,6 +38,7 @@ public class FleetSchedulesApiController : BaeApiController<FleetSchedulesApiCon
             Responsible = fleetSchedule.Responsible,
             ReferenceId = fleetSchedule.ReferenceId,
             TenantId = fleetSchedule.TenantId,
+            Status = fleetSchedule.Status,
             ServiceType = new Service()
             {
                 Id = fleetSchedule.ServiceType.Id,
@@ -47,7 +49,40 @@ public class FleetSchedulesApiController : BaeApiController<FleetSchedulesApiCon
         .ToListAsync();
   }
 
-  // GET: api/FleetSchedulesApi/5
+  //GET: api/FleetSchedulesApi/pending/tenant/tarkwa returns all pending schedules for tarkwa
+  [HttpGet("pending/tenant/{tenantId}")]
+  public async Task<ActionResult<IEnumerable<FleetSchedule>>> GetPendingFleetSchedules(string tenantId)
+  {
+    return await _context
+        .FleetSchedules
+        .Where(fleetSchedule => fleetSchedule.TenantId == tenantId && fleetSchedule.Status != "Completed")
+        .Select(fleetSchedule => new FleetSchedule()
+        {
+            EntryId = fleetSchedule.EntryId,
+            FleetId = fleetSchedule.FleetId,
+            VmModel = fleetSchedule.VmModel,
+            VmClass = fleetSchedule.VmClass,
+            ServiceTypeId = fleetSchedule.ServiceTypeId,
+            LocationId = fleetSchedule.LocationId,
+            Description = fleetSchedule.Description,
+            TimeStart = fleetSchedule.TimeStart,
+            TimeEnd = fleetSchedule.TimeEnd,
+            Responsible = fleetSchedule.Responsible,
+            ReferenceId = fleetSchedule.ReferenceId,
+            TenantId = fleetSchedule.TenantId,
+            Status = fleetSchedule.Status,
+            ServiceType = new Service()
+            {
+                Id = fleetSchedule.ServiceType.Id,
+                Name = fleetSchedule.ServiceType.Name,
+                Model = fleetSchedule.ServiceType.Model
+            }
+        })
+        .ToListAsync();
+  }
+
+
+  // GET: api/FleetSchedulesApi/5 returns a single schedule
   [HttpGet("{id}")]
   public async Task<ActionResult<FleetSchedule>> GetFleetSchedule(long id)
   {
@@ -80,6 +115,28 @@ public class FleetSchedulesApiController : BaeApiController<FleetSchedulesApiCon
       else
         throw;
     }
+
+    return NoContent();
+  }
+
+  //PATCH: api/FleetSchedulesApi/5
+  [HttpPatch("{id}")]
+  [ProducesResponseType(StatusCodes.Status204NoContent)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  public async Task<IActionResult> PatchFleetSchedule(long id, JsonPatchDocument<FleetSchedule> patchDoc)
+  {
+    if (patchDoc == null) return BadRequest();
+
+    var fleetSchedule = await _context.FleetSchedules.FindAsync(id);
+
+    if (fleetSchedule == null) return NotFound();
+
+    patchDoc.ApplyTo(fleetSchedule, ModelState);
+
+    if (!TryValidateModel(fleetSchedule)) return BadRequest(ModelState);
+
+    await _context.SaveChangesAsync();
 
     return NoContent();
   }

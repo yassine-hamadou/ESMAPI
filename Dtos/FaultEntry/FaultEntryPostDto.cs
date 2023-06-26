@@ -37,4 +37,6 @@ public record FaultEntryPostDto
   public string? ReferenceId { get; set; }
 
   public string? FaultDetails { get; set; }
+
+  public DateTime? ReportedDate { get; set; }
 }
