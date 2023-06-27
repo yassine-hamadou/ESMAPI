@@ -65,7 +65,8 @@ if (app.Environment.IsDevelopment())
 else
 {
   app.UseSwagger();
-  app.UseSwaggerUI(c => { c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "ESMS API V1"); });
+  // app.UseSwaggerUI(c => { c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "ESMS API V1"); });
+  app.UseSwaggerUI();
 }
 
 

@@ -1,0 +1,19 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  servicemanagerapi:
+    build:
+      context: "C:\\Users\\ADMIN\\RiderProjects\\enpAPI\\ServiceManagerApi"
+      dockerfile: "Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net6.0/ServiceManagerApi.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net6.0/ServiceManagerApi.staticwebassets.runtime.CT.json"
+    image: "servicemanagerapi:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\ADMIN\\RiderProjects\\enpAPI\\ServiceManagerApi:/app:rw"
+    working_dir: "/app"
