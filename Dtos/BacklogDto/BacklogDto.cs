@@ -27,7 +27,10 @@ public record BacklogPostDto
     string? ReferenceId,
     string? Status,
     DateTime? Cdate,
-    string TenantId
+    string TenantId,
+    string? Source,
+    string? DownType,
+    string? Priority
 );
 
 public record BacklogPutDto

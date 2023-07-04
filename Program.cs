@@ -40,7 +40,6 @@ builder.Services.AddAutoMapper(typeof(AutoMappingProfiles).Assembly);
 
 builder.Services.AddCors();
 
-
 var app = builder.Build();
 
 //cors configuration for 

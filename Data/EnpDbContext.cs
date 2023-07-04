@@ -427,7 +427,10 @@ public partial class EnpDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description).HasMaxLength(1);
-            entity.Property(e => e.EquipmentId).HasColumnName("Equipment_id");
+            entity.Property(e => e.EquipmentId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("Equipment_id");
             entity.Property(e => e.PartNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -440,8 +443,9 @@ public partial class EnpDbContext : DbContext
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Equipment).WithMany(p => p.Components)
+                .HasPrincipalKey(p => p.EquipmentId)
                 .HasForeignKey(d => d.EquipmentId)
-                .HasConstraintName("Equipement_id_fk");
+                .HasConstraintName("Component_EquipmentId_Fk");
         });
 
         modelBuilder.Entity<Custodian>(entity =>

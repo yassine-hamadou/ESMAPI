@@ -7,7 +7,7 @@ public partial class Component
 {
     public int Id { get; set; }
 
-    public int? EquipmentId { get; set; }
+    public string? EquipmentId { get; set; }
 
     public string? Description { get; set; }
 
