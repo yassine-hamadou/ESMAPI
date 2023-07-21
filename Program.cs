@@ -7,11 +7,11 @@ using ServiceManagerApi.Helpers;
 using ServiceManagerApi.Models;
 using ServiceManagerApi.UserModels;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-
+// builder.WebHost.ConfigureKestrel(options => { });
 var SMconnectionString = builder.Configuration.GetConnectionString("ServiceManagerConnection");
 builder.Services.AddDbContext<ServiceManagerContext>(options =>
     options.UseSqlServer(SMconnectionString));
@@ -50,25 +50,29 @@ app.UseCors(
       var serverUrl = "http://208.117.44.15/";
       var sipserver = "https://app.sipconsult.net/";
       var sipserver2 = "http://app.sipconsult.net";
-      options.WithOrigins(frontendUrl, serverUrl, sipserver, sipserver2)
+      // options.WithOrigins(frontendUrl, serverUrl, sipserver, sipserver2)
+      //     .AllowAnyHeader()
+      //     .AllowAnyMethod();
+      options.AllowAnyOrigin()
           .AllowAnyHeader()
           .AllowAnyMethod();
     });
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
-}
-else
-{
-  app.UseSwagger();
-  app.UseSwaggerUI(c => { c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "ESMS API V1"); });
-}
+// if (app.Environment.IsDevelopment())
+// {
+// }
+
+app.UseSwagger();
+app.UseSwaggerUI();
+// else
+// {
+//   app.UseSwagger();
+//   app.UseSwaggerUI(c => { c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "ESMS API V1"); });
+// }
 
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

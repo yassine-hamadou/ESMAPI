@@ -39,26 +39,29 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
             UniversalCode = e.UniversalCode,
             MeterType = e.MeterType,
             Components = e.Components,
-            Model = new Model
-            {
-                ModelId = e.Model.ModelId,
-                ManufacturerId = e.Model.ManufacturerId,
-                ModelClassId = e.Model.ModelClassId,
-                Name = e.Model.Name,
-                Code = e.Model.Code,
-                PictureLink = e.Model.PictureLink,
-                Manufacturer = new Manufacturer
+            Category = e.Category,
+            Model = e.Model != null
+                ? new Model
                 {
-                    ManufacturerId = e.Model.Manufacturer.ManufacturerId,
-                    Name = e.Model.Manufacturer.Name
-                },
-                ModelClass = new ModelClass
-                {
-                    ModelClassId = e.Model.ModelClass.ModelClassId,
-                    Name = e.Model.ModelClass.Name,
-                    Code = e.Model.ModelClass.Code
+                    ModelId = e.Model.ModelId,
+                    ManufacturerId = e.Model.ManufacturerId,
+                    ModelClassId = e.Model.ModelClassId,
+                    Name = e.Model.Name,
+                    Code = e.Model.Code,
+                    PictureLink = e.Model.PictureLink,
+                    Manufacturer = new Manufacturer
+                    {
+                        ManufacturerId = e.Model.Manufacturer.ManufacturerId,
+                        Name = e.Model.Manufacturer.Name
+                    },
+                    ModelClass = new ModelClass
+                    {
+                        ModelClassId = e.Model.ModelClass.ModelClassId,
+                        Name = e.Model.ModelClass.Name,
+                        Code = e.Model.ModelClass.Code
+                    }
                 }
-            }
+                : null
         })
         .ToListAsync();
 

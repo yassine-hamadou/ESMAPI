@@ -18,12 +18,13 @@ public class ModelsController : BaeApiController<ModelsController>
     this.webHostEnvironment = webHostEnvironment;
   }
 
-  // GET: api/Models
-  [HttpGet]
-  public async Task<ActionResult<IEnumerable<Model>>> GetModels()
+  // GET: api/Models/tenant/{tenantId}
+  [HttpGet("tenant/{tenantId}")]
+  public async Task<ActionResult<IEnumerable<Model>>> GetModels(string tenantId)
   {
     if (_context.Models == null) return NotFound();
     return await _context.Models
+        .Where(model => model.TenantId == tenantId)
         .Select(m => new Model
         {
             ModelId = m.ModelId,
@@ -32,16 +33,20 @@ public class ModelsController : BaeApiController<ModelsController>
             Name = m.Name,
             Code = m.Code,
             PictureLink = m.PictureLink,
-            Manufacturer = new Manufacturer()
-            {
-                ManufacturerId = m.Manufacturer.ManufacturerId,
-                Name = m.Manufacturer.Name
-            },
-            ModelClass = new ModelClass()
-            {
-                ModelClassId = m.ModelClass.ModelClassId,
-                Name = m.ModelClass.Name
-            },
+            Manufacturer = m.Manufacturer != null
+                ? new Manufacturer()
+                {
+                    ManufacturerId = m.Manufacturer.ManufacturerId,
+                    Name = m.Manufacturer.Name
+                }
+                : null,
+            ModelClass = m.ModelClass != null
+                ? new ModelClass()
+                {
+                    ModelClassId = m.ModelClass.ModelClassId,
+                    Name = m.ModelClass.Name
+                }
+                : null,
             Services = m.Services
         })
         .ToListAsync();

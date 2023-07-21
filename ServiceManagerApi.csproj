@@ -31,7 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -45,6 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".github\workflows\deploy.yml" />
+    <Content Remove="3\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="3\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="3\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="3\**" />
   </ItemGroup>
 
 <!--  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>-->
