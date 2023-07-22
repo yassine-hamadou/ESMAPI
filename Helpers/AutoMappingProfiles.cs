@@ -19,6 +19,7 @@ using ServiceManagerApi.Dtos.LubeBrands;
 using ServiceManagerApi.Dtos.LubeConfigs;
 using ServiceManagerApi.Dtos.LubeEntry;
 using ServiceManagerApi.Dtos.LubeGrades;
+using ServiceManagerApi.Dtos.Manufacturers;
 using ServiceManagerApi.Dtos.Model;
 using ServiceManagerApi.Dtos.PlannedOutput;
 using ServiceManagerApi.Dtos.ProdProcessedMaterial;
@@ -94,5 +95,6 @@ public class AutoMappingProfiles : Profile
     CreateMap<BacklogPutDto, Backlog>();
     CreateMap<ProDrillEntryPostDto, ProDrillEntry>();
     CreateMap<SequencePostDto, Sequence>();
+    CreateMap<ManufacturerPostDto, Manufacturer>();
   }
 }
