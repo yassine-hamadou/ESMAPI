@@ -1,0 +1,12 @@
+﻿version: '3.7'
+
+services:
+  servicemanagerapi:
+    image: servicemanagerapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80" 
+      
+      
