@@ -1,18 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.Manufacturers;
 
 namespace ServiceManagerApi.Controllers.Esms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ManufacturersController : ControllerBase
+public class ManufacturersController : BaeApiController<ManufacturersController>
 {
   private readonly EnpDbContext _context;
+  private readonly ILogger<ManufacturersController> _logger;
 
-  public ManufacturersController(EnpDbContext context)
+
+  public ManufacturersController(EnpDbContext context, ILogger<ManufacturersController> logger)
   {
     _context = context;
+    _logger = logger;
   }
 
   // GET: api/ManufacturersController/tenant/{tenantId}
@@ -64,8 +68,10 @@ public class ManufacturersController : ControllerBase
   // POST: api/ManufacturersController
   // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
   [HttpPost]
-  public async Task<ActionResult<Manufacturer>> PostManufacturer(Manufacturer manufacturer)
+  public async Task<ActionResult<Manufacturer>> PostManufacturer(ManufacturerPostDto manufacturerDto)
   {
+    var manufacturer = _mapper.Map<Manufacturer>(manufacturerDto);
+
     if (_context.Manufacturers == null) return Problem("Entity set 'EnpDBContext.Manufacturers'  is null.");
     _context.Manufacturers.Add(manufacturer);
     await _context.SaveChangesAsync();
@@ -75,7 +81,7 @@ public class ManufacturersController : ControllerBase
 
   // DELETE: api/ManufacturersController/5
   [HttpDelete("{id}")]
-  public async Task<IActionResult> DeleteManufacturer(int id)
+  public async Task<IActionResult> DeleteManufacturer([FromRoute] int id)
   {
     if (_context.Manufacturers == null) return NotFound();
     var manufacturer = await _context.Manufacturers.FindAsync(id);

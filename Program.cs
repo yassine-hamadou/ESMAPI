@@ -38,31 +38,42 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(AutoMappingProfiles).Assembly);
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+    {
+      options.AddDefaultPolicy(builderIn =>
+          {
+            builderIn.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+          }
+      );
+    }
+);
 
 var app = builder.Build();
 
 //cors configuration for 
-app.UseCors(
-    options =>
-    {
-      var frontendUrl = "http://localhost:3000";
-      var serverUrl = "http://208.117.44.15/";
-      var sipserver = "https://app.sipconsult.net/";
-      var sipserver2 = "http://app.sipconsult.net";
-      // options.WithOrigins(frontendUrl, serverUrl, sipserver, sipserver2)
-      //     .AllowAnyHeader()
-      //     .AllowAnyMethod();
-      options.AllowAnyOrigin()
-          .AllowAnyHeader()
-          .AllowAnyMethod();
-    });
+// app.UseCors(
+//     options =>
+//     {
+//       const string server = "https://app.sipconsult.net/";
+//       const string server2 = "http://app.sipconsult.net";
+//       const string frontendUrl = "http://localhost:3000";
+//       const string serverUrl = "http://208.117.44.15/";
+//       const string serverUrl2 = "https://208.117.44.15/";
+//       const string url = "http//localhost:100";
+//       const string url2 = "http//208.117.44.15:100/";
+//       const string url3 = "https//208.117.44.15:100";
+//       options.WithOrigins(frontendUrl, serverUrl, serverUrl2, server, server2, url, url2, url3)
+//           .AllowAnyHeader()
+//           .AllowAnyMethod();
+//     });
 
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
 // {
 // }
-
+app.UseCors();
 app.UseSwagger();
 app.UseSwaggerUI();
 // else
