@@ -38,6 +38,7 @@ using ServiceManagerApi.Dtos.Resolution;
 using ServiceManagerApi.Dtos.ResolutionTypes;
 using ServiceManagerApi.Dtos.ScheduleTransactionsDto;
 using ServiceManagerApi.Dtos.Sections;
+using ServiceManagerApi.Dtos.Sequences;
 using ServiceManagerApi.Dtos.Services;
 
 namespace ServiceManagerApi.Helpers;
@@ -92,5 +93,6 @@ public class AutoMappingProfiles : Profile
     CreateMap<BacklogPostDto, Backlog>();
     CreateMap<BacklogPutDto, Backlog>();
     CreateMap<ProDrillEntryPostDto, ProDrillEntry>();
+    CreateMap<SequencePostDto, Sequence>();
   }
 }

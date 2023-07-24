@@ -23,13 +23,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore" Version="6.0.13" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -43,6 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".github\workflows\deploy.yml" />
+    <Content Remove="3\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="3\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="3\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="3\**" />
   </ItemGroup>
 
 <!--  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>-->

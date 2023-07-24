@@ -38,31 +38,36 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
             WarrantyEndDate = e.WarrantyEndDate,
             UniversalCode = e.UniversalCode,
             MeterType = e.MeterType,
-            Model = new Model
-            {
-                ModelId = e.Model.ModelId,
-                ManufacturerId = e.Model.ManufacturerId,
-                ModelClassId = e.Model.ModelClassId,
-                Name = e.Model.Name,
-                Code = e.Model.Code,
-                PictureLink = e.Model.PictureLink,
-                Manufacturer = new Manufacturer
+            Components = e.Components,
+            Category = e.Category,
+            Model = e.Model != null
+                ? new Model
                 {
-                    ManufacturerId = e.Model.Manufacturer.ManufacturerId,
-                    Name = e.Model.Manufacturer.Name
-                },
-                ModelClass = new ModelClass
-                {
-                    ModelClassId = e.Model.ModelClass.ModelClassId,
-                    Name = e.Model.ModelClass.Name,
-                    Code = e.Model.ModelClass.Code
+                    ModelId = e.Model.ModelId,
+                    ManufacturerId = e.Model.ManufacturerId,
+                    ModelClassId = e.Model.ModelClassId,
+                    Name = e.Model.Name,
+                    Code = e.Model.Code,
+                    PictureLink = e.Model.PictureLink,
+                    Manufacturer = new Manufacturer
+                    {
+                        ManufacturerId = e.Model.Manufacturer.ManufacturerId,
+                        Name = e.Model.Manufacturer.Name
+                    },
+                    ModelClass = new ModelClass
+                    {
+                        ModelClassId = e.Model.ModelClass.ModelClassId,
+                        Name = e.Model.ModelClass.Name,
+                        Code = e.Model.ModelClass.Code
+                    }
                 }
-            }
+                : null
         })
         .ToListAsync();
 
     return equipments;
   }
+
 
   // GET: api/Equipments/5
   [HttpGet("{id}")]
@@ -75,6 +80,7 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
 
     return equipment;
   }
+
 
   // PUT: api/Equipments/5
   // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -105,7 +111,7 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
   [HttpPost]
   public async Task<ActionResult<Equipment>> PostEquipment(EquipmentPostDto equipmentPostDto)
   {
-    Equipment equipment = _mapper.Map<Equipment>(equipmentPostDto);
+    var equipment = _mapper.Map<Equipment>(equipmentPostDto);
 
     if (_context.Equipment == null) return Problem("Entity set 'EnpDBContext.Equipment'  is null.");
     _context.Equipment.Add(equipment);

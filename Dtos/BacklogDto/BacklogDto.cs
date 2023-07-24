@@ -9,8 +9,12 @@ public record BacklogDto
     string? Note,
     string? Comment,
     string? ReferenceId,
-    int? Status,
-    DateTime? Cdate
+    string? Status,
+    DateTime? Cdate,
+    string? Source,
+    string? DownType,
+    string? Priority,
+    string? TenantId
 );
 
 public record BacklogPostDto
@@ -21,9 +25,12 @@ public record BacklogPostDto
     string? Note,
     string? Comment,
     string? ReferenceId,
-    int? Status,
+    string? Status,
     DateTime? Cdate,
-    string TenantId
+    string TenantId,
+    string? Source,
+    string? DownType,
+    string? Priority
 );
 
 public record BacklogPutDto
@@ -35,6 +42,7 @@ public record BacklogPutDto
     string? Note,
     string? Comment,
     string? ReferenceId,
-    int? Status,
-    DateTime? Cdate
+    string? Status,
+    DateTime? Cdate,
+    string TenantId
 );
