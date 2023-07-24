@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServiceManagerApi.Controllers.Esms;
 using ServiceManagerApi.Data;
+using ServiceManagerApi.Dtos.ProDrill;
 
 namespace ServiceManagerApi.Controllers.Production
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DrillEntryController : ControllerBase
+    public class DrillEntryController : BaeApiController<DrillEntryController>
     {
         private readonly EnpDbContext _context;
 
@@ -21,37 +19,32 @@ namespace ServiceManagerApi.Controllers.Production
         }
 
         // GET: api/DrillEntry
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DrillEntry>>> GetDrillEntries()
+        [HttpGet("tenant/{tenantId}")]
+        public Task<List<DrillEntry>> GetDrillEntries(string tenantId)
         {
-          if (_context.DrillEntries == null)
-          {
-              return NotFound();
-          }
-            return await _context.DrillEntries.ToListAsync();
+            var drillEntries = _context.DrillEntries.Where(leav => leav.TenantId == tenantId)
+                .ToListAsync();
+            return drillEntries;
         }
 
         // GET: api/DrillEntry/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DrillEntry>> GetDrillEntry(int id)
         {
-          if (_context.DrillEntries == null)
-          {
-              return NotFound();
-          }
             var drillEntry = await _context.DrillEntries.FindAsync(id);
-
             if (drillEntry == null)
             {
                 return NotFound();
             }
 
-            return drillEntry;
+            return Ok(drillEntry);
         }
 
         // PUT: api/DrillEntry/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutDrillEntry(int id, DrillEntry drillEntry)
         {
             if (id != drillEntry.Id)
@@ -83,16 +76,37 @@ namespace ServiceManagerApi.Controllers.Production
         // POST: api/DrillEntry
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DrillEntry>> PostDrillEntry(DrillEntry drillEntry)
+        [ProducesResponseType(typeof(IEnumerable<DrillEntry>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult>  PostDrillEntry(IEnumerable<DrillEntryDto> drillEntryDtos)
         {
-          if (_context.DrillEntries == null)
-          {
-              return Problem("Entity set 'EnpDbContext.DrillEntries'  is null.");
-          }
-            _context.DrillEntries.Add(drillEntry);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var drillEntries = _mapper.Map<IEnumerable<DrillEntry>>(drillEntryDtos);
 
-            return CreatedAtAction("GetDrillEntry", new { id = drillEntry.Id }, drillEntry);
+                var validationResults = new List<ValidationResult>();
+                foreach (var drillEntry in drillEntries)
+                {
+                    var isValid = Validator.TryValidateObject(drillEntry, new ValidationContext(drillEntry), validationResults, true);
+                    if (!isValid)
+                    {
+                        return BadRequest(validationResults);
+                    }
+                }
+                
+                _context.DrillEntries.AddRange(drillEntries);
+                await _context.SaveChangesAsync();
+                
+                var createIds = drillEntries.Select(x => x.Id).ToList();
+                return CreatedAtAction(nameof(GetDrillEntries), new {ids = createIds}, drillEntries);
+            } 
+            catch (DbUpdateException ex)
+            {
+                // Log the exception details for troubleshooting
+                // You may also want to include additional error handling logic as needed
+
+                throw new ApplicationException("Error saving cycle details", ex);
+            }
         }
 
         // DELETE: api/DrillEntry/5
@@ -103,6 +117,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             var drillEntry = await _context.DrillEntries.FindAsync(id);
             if (drillEntry == null)
             {

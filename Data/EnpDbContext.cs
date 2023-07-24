@@ -745,6 +745,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.StandByHours)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("standByHours");
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.TotalMeters)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("totalMeters");

@@ -41,6 +41,8 @@ public partial class DrillEntry
 
     public decimal? UtilizationEffectiveHours { get; set; }
 
+    public string? TenantId { get; set; }
+
     public virtual Equipment? Equipment { get; set; }
 
     public virtual ProductionShift? Shift { get; set; }
