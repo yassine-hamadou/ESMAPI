@@ -19,7 +19,7 @@ public partial class Backlog
 
     public string? ReferenceId { get; set; }
 
-    public int? Status { get; set; }
+    public string? Status { get; set; }
 
     public DateTime? Cdate { get; set; }
 

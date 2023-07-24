@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace ServiceManagerApi.Data;
 
-public partial class PrioritySetup
+public partial class DownStatus
 {
-    public int PriorityId { get; set; }
+    public int Id { get; set; }
 
     public string? Name { get; set; }
 
-    public string? TenantId { get; set; }
+    public string TenantId { get; set; } = null!;
 }

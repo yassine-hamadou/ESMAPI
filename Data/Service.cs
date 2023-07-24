@@ -11,7 +11,9 @@ public partial class Service
 
     public string? Model { get; set; }
 
-    public string? TenantId { get; set; }
+    public string TenantId { get; set; } = null!;
+
+    public int? IntervalForPm { get; set; }
 
     public virtual ICollection<FleetSchedule> FleetSchedules { get; set; } = new List<FleetSchedule>();
 

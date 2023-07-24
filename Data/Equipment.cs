@@ -35,11 +35,17 @@ public partial class Equipment
 
     public string? TenantId { get; set; }
 
+    public int? Category { get; set; }
+
     public virtual ICollection<Agreement> Agreements { get; set; } = new List<Agreement>();
+
+    public virtual Category? CategoryNavigation { get; set; }
 
     public virtual ICollection<Component> Components { get; set; } = new List<Component>();
 
     public virtual ICollection<DefectEntry> DefectEntries { get; set; } = new List<DefectEntry>();
+
+    public virtual ICollection<DrillEntry> DrillEntries { get; set; } = new List<DrillEntry>();
 
     public virtual ICollection<GroundEngTool> GroundEngTools { get; set; } = new List<GroundEngTool>();
 

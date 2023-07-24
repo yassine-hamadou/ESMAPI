@@ -29,5 +29,7 @@ public partial class FleetSchedule
 
     public string? TenantId { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual Service? ServiceType { get; set; }
 }

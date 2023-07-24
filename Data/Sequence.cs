@@ -3,11 +3,15 @@ using System.Collections.Generic;
 
 namespace ServiceManagerApi.Data;
 
-public partial class DownType
+public partial class Sequence
 {
-    public string? Name { get; set; }
-
     public int Id { get; set; }
+
+    public string? SequenceName { get; set; }
+
+    public string? EquipModel { get; set; }
+
+    public int? Interval { get; set; }
 
     public string? TenantId { get; set; }
 }

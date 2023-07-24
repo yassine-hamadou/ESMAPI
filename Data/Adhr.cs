@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ServiceManagerApi.Data;
 
-public partial class HoursEntry
+public partial class Adhr
 {
     public int Id { get; set; }
 
@@ -22,6 +22,4 @@ public partial class HoursEntry
     public string? Comment { get; set; }
 
     public DateTime? PreviousReadingDate { get; set; }
-
-    public virtual Equipment? Fleet { get; set; }
 }
