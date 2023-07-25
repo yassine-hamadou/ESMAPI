@@ -43,6 +43,8 @@ public partial class DrillEntry
 
     public string? TenantId { get; set; }
 
+    public string? BatchNumber { get; set; }
+
     public virtual Equipment? Equipment { get; set; }
 
     public virtual ProductionShift? Shift { get; set; }

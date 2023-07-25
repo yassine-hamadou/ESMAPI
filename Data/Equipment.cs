@@ -45,9 +45,7 @@ public partial class Equipment
 
     public virtual ICollection<DefectEntry> DefectEntries { get; set; } = new List<DefectEntry>();
 
-
     public virtual ICollection<DrillEntry> DrillEntries { get; set; } = new List<DrillEntry>();
-
 
     public virtual ICollection<GroundEngTool> GroundEngTools { get; set; } = new List<GroundEngTool>();
 

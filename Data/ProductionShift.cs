@@ -15,7 +15,6 @@ public partial class ProductionShift
 
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 
-
     public virtual ICollection<DrillEntry> DrillEntries { get; set; } = new List<DrillEntry>();
 
     public virtual ICollection<ProDrillEntry> ProDrillEntries { get; set; } = new List<ProDrillEntry>();

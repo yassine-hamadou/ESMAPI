@@ -37,4 +37,6 @@ public class DrillEntryDto
     public decimal? UtilizationEffectiveHours { get; set; }
     
     public string? TenantId { get; set; }
+    
+    public string? BatchNumber { get; set; }
 }

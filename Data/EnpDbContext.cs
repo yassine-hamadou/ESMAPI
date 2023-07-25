@@ -48,7 +48,7 @@ public partial class EnpDbContext : DbContext
     public virtual DbSet<DownStatus> DownStatuses { get; set; }
 
     public virtual DbSet<DownType> DownTypes { get; set; }
-    
+
     public virtual DbSet<DrillEntry> DrillEntries { get; set; }
 
     public virtual DbSet<Eqall> Eqalls { get; set; }
@@ -695,6 +695,80 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<DrillEntry>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("DrillEntry_pk");
+
+            entity.ToTable("DrillEntry");
+
+            entity.Property(e => e.Availability)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("availability");
+            entity.Property(e => e.BatchNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.BlastNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("blastNumber");
+            entity.Property(e => e.DownHours)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("downHours");
+            entity.Property(e => e.EffectiveDrillingHours)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("effectiveDrillingHours");
+            entity.Property(e => e.EquipmentId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("equipmentId");
+            entity.Property(e => e.OperatingHours)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("operatingHours");
+            entity.Property(e => e.OperatorName)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("operatorName");
+            entity.Property(e => e.PenRateEffHrs)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("penRateEffHrs");
+            entity.Property(e => e.PenRateOpHrs)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("penRateOpHrs");
+            entity.Property(e => e.PitLocation)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("pitLocation");
+            entity.Property(e => e.RedrillMeters)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("redrillMeters");
+            entity.Property(e => e.ShiftId).HasColumnName("shiftId");
+            entity.Property(e => e.SmuHours).HasColumnName("smuHours");
+            entity.Property(e => e.StandByHours)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("standByHours");
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TotalMeters)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("totalMeters");
+            entity.Property(e => e.Uoa)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("uoa");
+            entity.Property(e => e.UtilizationEffectiveHours)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("utilizationEffectiveHours");
+
+            entity.HasOne(d => d.Equipment).WithMany(p => p.DrillEntries)
+                .HasPrincipalKey(p => p.EquipmentId)
+                .HasForeignKey(d => d.EquipmentId)
+                .HasConstraintName("DrillEntry_Equipment_Equipment_id_fk");
+
+            entity.HasOne(d => d.Shift).WithMany(p => p.DrillEntries)
+                .HasForeignKey(d => d.ShiftId)
+                .HasConstraintName("DrillEntry_ProductionShift_Id_fk");
         });
 
         modelBuilder.Entity<Eqall>(entity =>
