@@ -45,6 +45,8 @@ public partial class DrillEntry
 
     public string? BatchNumber { get; set; }
 
+    public DateTime? DrillDate { get; set; }
+
     public virtual Equipment? Equipment { get; set; }
 
     public virtual ProductionShift? Shift { get; set; }

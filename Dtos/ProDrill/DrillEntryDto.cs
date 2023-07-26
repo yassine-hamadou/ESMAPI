@@ -39,4 +39,6 @@ public class DrillEntryDto
     public string? TenantId { get; set; }
 
     public string? BatchNumber { get; set; }
+    
+    public DateTime? DrillDate { get; set; }
 }
