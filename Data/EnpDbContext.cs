@@ -720,6 +720,9 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.DownHours)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("downHours");
+            entity.Property(e => e.DrillDate)
+                .HasColumnType("date")
+                .HasColumnName("drillDate");
             entity.Property(e => e.EffectiveDrillingHours)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("effectiveDrillingHours");

@@ -81,7 +81,7 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpPost]
         [ProducesResponseType(typeof(IEnumerable<DrillEntry>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> PostDrillEntry(IEnumerable<DrillEntryDto> drillEntryDto)
+        public async Task<IActionResult> PostDrillEntry(IEnumerable<DrillEntryDto> drillEntryDto)
         {
             try
             {
