@@ -21,7 +21,7 @@ public partial class DrillEntry
 
     public decimal? RedrillMeters { get; set; }
 
-    public int? SmuHours { get; set; }
+    public decimal? SmuHours { get; set; }
 
     public decimal? DownHours { get; set; }
 

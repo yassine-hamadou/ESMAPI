@@ -751,7 +751,9 @@ public partial class EnpDbContext : DbContext
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("redrillMeters");
             entity.Property(e => e.ShiftId).HasColumnName("shiftId");
-            entity.Property(e => e.SmuHours).HasColumnName("smuHours");
+            entity.Property(e => e.SmuHours)
+                .HasColumnType("decimal(18, 0)")
+                .HasColumnName("smuHours");
             entity.Property(e => e.StandByHours)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("standByHours");
