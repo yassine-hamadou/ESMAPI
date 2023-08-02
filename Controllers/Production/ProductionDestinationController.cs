@@ -18,7 +18,8 @@ namespace ServiceManagerApi.Controllers.Production
         [HttpGet("tenant/{tenantId}")]
         public Task<List<ProductionDestination>> GetProductionDestinations(string tenantId)
         {
-            var productionDestinations = _context.ProductionDestinations.Where(leav => leav.TenantId == tenantId).ToListAsync();
+            var productionDestinations =
+                _context.ProductionDestinations.Where(leav => leav.TenantId == tenantId).ToListAsync();
 
             return productionDestinations;
         }
@@ -34,6 +35,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             return Ok(productionDestination);
         }
 
@@ -42,14 +44,16 @@ namespace ServiceManagerApi.Controllers.Production
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create(ProductionDestinationPostDto productionDestinationPostDto)
         {
-            ProductionDestination productionDestination = _mapper.Map<ProductionDestination>(productionDestinationPostDto);
-                if (ProductionDestinationExists(productionDestination.Name))
-                {
-                    return Conflict();
-                }
+            ProductionDestination productionDestination =
+                _mapper.Map<ProductionDestination>(productionDestinationPostDto);
+            if (ProductionDestinationExists(productionDestination.Name, productionDestination.TenantId))
+            {
+                return Conflict();
+            }
+
             _context.ProductionDestinations.Add(productionDestination);
             await _context.SaveChangesAsync();
-           
+
             return CreatedAtAction("GetById", new { id = productionDestination.Id }, productionDestination);
         }
 
@@ -62,6 +66,7 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return BadRequest();
             }
+
             _context.Entry(productionDestination).State = EntityState.Modified;
             try
             {
@@ -69,7 +74,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductionDestinationExists(productionDestination.Name))
+                if (!ProductionDestinationExists(productionDestination.Name, productionDestination.TenantId))
                 {
                     return NotFound();
                 }
@@ -78,6 +83,7 @@ namespace ServiceManagerApi.Controllers.Production
                     throw;
                 }
             }
+
             return NoContent();
         }
 
@@ -92,14 +98,18 @@ namespace ServiceManagerApi.Controllers.Production
             {
                 return NotFound();
             }
+
             _context.ProductionDestinations.Remove(productionDestination);
             await _context.SaveChangesAsync();
             return NoContent();
         }
 
-        private bool ProductionDestinationExists(string name)
+        private bool ProductionDestinationExists(string name, string tenantId)
         {
-            return _context.ProductionDestinations.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
+            return _context.ProductionDestinations.Any(e =>
+                e.Name.ToLower().Trim() == name.ToLower().Trim() &&
+                e.TenantId.ToLower().Trim() == tenantId.ToLower().Trim()
+            );
         }
     }
 }

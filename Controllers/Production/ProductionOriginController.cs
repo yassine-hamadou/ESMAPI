@@ -46,7 +46,7 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(ProductionOriginPostDto productionOriginPostDto)
         {
             ProductionOrigin productionOrigin = _mapper.Map<ProductionOrigin>(productionOriginPostDto);
-            if (ProductionOriginExists(productionOrigin.Name))
+            if (ProductionOriginExists(productionOrigin.Name, productionOrigin.TenantId))
             {
                 return Conflict();
             }
@@ -75,7 +75,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductionOriginExists(productionOrigin.Name))
+                if (!ProductionOriginExists(productionOrigin.Name, productionOrigin.TenantId))
                 {
                     return NotFound();
                 }
@@ -103,9 +103,12 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProductionOriginExists(string name)
+        private bool ProductionOriginExists(string name, string tenantId)
         {
-            return _context.ProductionOrigins.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
+            return _context.ProductionOrigins.Any(e =>
+                e.Name.ToLower().Trim() == name.ToLower().Trim() &&
+                e.TenantId.ToLower().Trim() == tenantId.ToLower().Trim()
+            );
         }
     }
 }

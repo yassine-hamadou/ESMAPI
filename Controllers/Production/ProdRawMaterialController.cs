@@ -45,7 +45,7 @@ namespace ServiceManagerApi.Controllers.Production
         public async Task<IActionResult> Create(ProdRawMaterialPostDto prodRawMaterialPostDto)
         {
             ProdRawMaterial prodRawMaterial = _mapper.Map<ProdRawMaterial>(prodRawMaterialPostDto);
-            if (ProdRawMaterialExists(prodRawMaterial.Name))
+            if (ProdRawMaterialExists(prodRawMaterial.Name, prodRawMaterial.TenantId))
             {
                 return Conflict();
             }
@@ -74,7 +74,7 @@ namespace ServiceManagerApi.Controllers.Production
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProdRawMaterialExists(prodRawMaterial.Name))
+                if (!ProdRawMaterialExists(prodRawMaterial.Name, prodRawMaterial.TenantId))
                 {
                     return NotFound();
                 }
@@ -101,9 +101,12 @@ namespace ServiceManagerApi.Controllers.Production
             return NoContent();
         }
 
-        private bool ProdRawMaterialExists(string name)
+        private bool ProdRawMaterialExists(string name, string tenantId)
         {
-            return _context.ProdRawMaterials.Any(e => e.Name.ToLower().Trim() == name.ToLower().Trim());
+            return _context.ProdRawMaterials.Any(e =>
+                e.Name.ToLower().Trim() == name.ToLower().Trim() &&
+                e.TenantId.ToLower().Trim() == tenantId.ToLower().Trim()
+            );
         }
     }
 }
