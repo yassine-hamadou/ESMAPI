@@ -23,13 +23,25 @@ public class BacklogsController : BaeApiController<BacklogsController>
 
   // GET: api/Backlog/tenant/{tenantId}
   [HttpGet("tenant/{tenantId}")]
-  public async Task<ActionResult<IEnumerable<BacklogDto>>> GetBacklog(string tenantId)
+  public async Task<ActionResult<IEnumerable<BacklogDto>>> GetBacklog(
+      string tenantId,
+      [FromQuery] int? pageNumber,
+      [FromQuery] int? pageSize
+  )
   {
     if (_cache.TryGetValue($"backlogs", out List<BacklogDto> backlogDtos))
     {
       _logger.LogInformation(
           $"BacklogController.GetBacklog: {backlogDtos.Count} backlog items found for all tenants from cache");
-      var backlogDtosForSingleTenant = backlogDtos.FindAll(backlog => backlog.TenantId == tenantId);
+      var backlogDtosForSingleTenant =
+          backlogDtos.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status != "Completed");
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosForSingleTenant = backlogDtosForSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
       return Ok(backlogDtosForSingleTenant);
     }
     else
@@ -42,15 +54,73 @@ public class BacklogsController : BaeApiController<BacklogsController>
       //cache the backlog items for all tenants
       var cacheEntryOptions = new MemoryCacheEntryOptions()
           .SetSlidingExpiration(TimeSpan.FromDays(2))
-          .SetAbsoluteExpiration(TimeSpan.FromMinutes(5))
+          .SetPriority(CacheItemPriority.Normal);
+      _cache.Set($"backlogs", backlogDtosFromDb, cacheEntryOptions);
+      _logger.LogInformation(
+          $"BacklogController.GetBacklog: {backlogDtosFromDb.Count} backlog items found from DB");
+
+      var backlogDtosFromDbSingleTenant =
+          backlogDtosFromDb.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status != "Completed");
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosFromDbSingleTenant = backlogDtosFromDbSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
+      return Ok(backlogDtosFromDbSingleTenant);
+    }
+  }
+
+  // GET: api/Backlog/tenant/{tenantId}/status/{status}
+  [HttpGet("tenant/{tenantId}/status/{status}")]
+  public async Task<ActionResult<IEnumerable<BacklogDto>>> GetBacklog(string tenantId, string status,
+      [FromQuery] int? pageNumber,
+      [FromQuery] int? pageSize)
+  {
+    if (_cache.TryGetValue($"backlogsCompleted", out List<BacklogDto> backlogDtos))
+    {
+      _logger.LogInformation(
+          $"BacklogController.GetBacklog: {backlogDtos.Count} backlog items found for all tenants from cache");
+      var backlogDtosForSingleTenant =
+          backlogDtos.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status == status);
+
+      //totalItem 
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosForSingleTenant = backlogDtosForSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
+      return Ok(backlogDtosForSingleTenant);
+    }
+    else
+    {
+      if (_context.Backlogs == null) return NotFound();
+      //get all backlog items for all tenants
+      var backlogDtosFromDb = _mapper.Map<List<BacklogDto>>(await _context.Backlogs
+          .ToListAsync());
+
+      //cache the backlog items for all tenants
+      var cacheEntryOptions = new MemoryCacheEntryOptions()
+          .SetSlidingExpiration(TimeSpan.FromDays(2))
           .SetPriority(CacheItemPriority.Normal);
 
-      _cache.Set($"backlogs", backlogDtosFromDb, cacheEntryOptions);
+      _cache.Set($"backlogsCompleted", backlogDtosFromDb, cacheEntryOptions);
 
       _logger.LogInformation(
           $"BacklogController.GetBacklog: {backlogDtosFromDb.Count} backlog items found from DB");
 
-      var backlogDtosFromDbSingleTenant = backlogDtosFromDb.FindAll(backlog => backlog.TenantId == tenantId);
+      var backlogDtosFromDbSingleTenant =
+          backlogDtosFromDb.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status == status);
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosFromDbSingleTenant = backlogDtosFromDbSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
       return Ok(backlogDtosFromDbSingleTenant);
     }
   }

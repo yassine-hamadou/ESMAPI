@@ -21,6 +21,8 @@ public partial class Model
 
     public virtual ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
 
+    public virtual ICollection<LubeConfig> LubeConfigs { get; set; } = new List<LubeConfig>();
+
     public virtual Manufacturer? Manufacturer { get; set; }
 
     public virtual ModelClass? ModelClass { get; set; }

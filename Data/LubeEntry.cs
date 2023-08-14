@@ -7,7 +7,7 @@ public partial class LubeEntry
 {
     public int Id { get; set; }
 
-    public string? FleetId { get; set; }
+    public string FleetId { get; set; } = null!;
 
     public int? CompartmentId { get; set; }
 
@@ -29,9 +29,13 @@ public partial class LubeEntry
 
     public int? BrandId { get; set; }
 
+    public string TenantId { get; set; } = null!;
+
     public virtual LubeBrand? Brand { get; set; }
 
     public virtual Compartment? Compartment { get; set; }
+
+    public virtual Equipment Fleet { get; set; } = null!;
 
     public virtual LubeGrade? Grade { get; set; }
 

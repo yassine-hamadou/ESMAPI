@@ -33,6 +33,7 @@ public class ModelsController : BaeApiController<ModelsController>
             Name = m.Name,
             Code = m.Code,
             PictureLink = m.PictureLink,
+            LubeConfigs = m.LubeConfigs,
             Manufacturer = m.Manufacturer != null
                 ? new Manufacturer()
                 {

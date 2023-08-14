@@ -16,11 +16,14 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
     _context = context;
   }
 
+  // GET: api/Equipments/tenant/{tenantId}  with paging 
   [HttpGet("tenant/{tenantId}")]
-  public Task<List<Equipment>> GetEquipments(string tenantId)
+  public Task<List<Equipment>> GetEquipments(string tenantId,
+      [FromQuery] int? pageNumber,
+      [FromQuery] int? pageSize)
   {
     var equipments = _context.Equipment
-        .Where(leav => leav.TenantId == tenantId)
+        .Where(equipment => equipment.TenantId == tenantId && equipment.Status == "Active")
         .Include(e => e.Model)
         .Select(e => new Equipment
         {
@@ -39,6 +42,12 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
             UniversalCode = e.UniversalCode,
             MeterType = e.MeterType,
             Components = e.Components,
+            InitialReading = e.InitialReading,
+            HoursEntries = e.HoursEntries
+                .Where(entry => entry.TenantId == tenantId && entry.FleetId == e.EquipmentId)
+                .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
+                .Take(1) // Take the first (latest) entry
+                .ToList(),
             Category = e.Category,
             Model = e.Model != null
                 ? new Model
@@ -48,7 +57,9 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
                     ModelClassId = e.Model.ModelClassId,
                     Name = e.Model.Name,
                     Code = e.Model.Code,
+                    LubeConfigs = e.Model.LubeConfigs,
                     PictureLink = e.Model.PictureLink,
+                    Services = e.Model.Services,
                     Manufacturer = new Manufacturer
                     {
                         ManufacturerId = e.Model.Manufacturer.ManufacturerId,
@@ -62,10 +73,14 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
                     }
                 }
                 : null
-        })
-        .ToListAsync();
+        });
 
-    return equipments;
+    if (pageNumber.HasValue && pageSize.HasValue)
+      equipments = equipments
+          .Skip((pageNumber.Value - 1) * pageSize.Value)
+          .Take(pageSize.Value);
+
+    return equipments.ToListAsync();
   }
 
 
@@ -78,7 +93,7 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
 
     if (equipment == null) return NotFound();
 
-    return equipment;
+    return Ok(equipment);
   }
 
 

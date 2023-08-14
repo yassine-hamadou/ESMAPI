@@ -33,6 +33,14 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<Component> Components { get; set; }
 
+    public virtual DbSet<Compref> Comprefs { get; set; }
+
+    public virtual DbSet<Comprefup> Comprefups { get; set; }
+
+    public virtual DbSet<Compul> Compuls { get; set; }
+
+    public virtual DbSet<Compup> Compups { get; set; }
+
     public virtual DbSet<Custodian> Custodians { get; set; }
 
     public virtual DbSet<CycleDetail> CycleDetails { get; set; }
@@ -475,10 +483,17 @@ public partial class EnpDbContext : DbContext
             entity.ToTable("Component");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ComponentPrice).HasColumnType("money");
+            entity.Property(e => e.ComponentStatus)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.EquipmentId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("Equipment_id");
+            entity.Property(e => e.NewSerialNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.PartNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -495,6 +510,130 @@ public partial class EnpDbContext : DbContext
                 .HasForeignKey(d => d.EquipmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Component_Equipment_Equipment_id_fk");
+        });
+
+        modelBuilder.Entity<Compref>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("compref");
+
+            entity.Property(e => e.Brand)
+                .HasMaxLength(255)
+                .HasColumnName("BRAND");
+            entity.Property(e => e.Capacity).HasColumnName("CAPACITY");
+            entity.Property(e => e.Compartment)
+                .HasMaxLength(255)
+                .HasColumnName("COMPARTMENT");
+            entity.Property(e => e.F10).HasMaxLength(255);
+            entity.Property(e => e.F11).HasMaxLength(255);
+            entity.Property(e => e.F12).HasMaxLength(255);
+            entity.Property(e => e.F13).HasMaxLength(255);
+            entity.Property(e => e.F14).HasMaxLength(255);
+            entity.Property(e => e.F7).HasMaxLength(255);
+            entity.Property(e => e.F8).HasMaxLength(255);
+            entity.Property(e => e.F9).HasMaxLength(255);
+            entity.Property(e => e.Interval).HasColumnName("INTERVAL");
+            entity.Property(e => e.Model)
+                .HasMaxLength(255)
+                .HasColumnName("MODEL");
+            entity.Property(e => e.Oilgrade)
+                .HasMaxLength(255)
+                .HasColumnName("OILGRADE");
+        });
+
+        modelBuilder.Entity<Comprefup>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("comprefup");
+
+            entity.Property(e => e.Brand)
+                .HasMaxLength(255)
+                .HasColumnName("BRAND");
+            entity.Property(e => e.Capacity).HasColumnName("CAPACITY");
+            entity.Property(e => e.Compartment)
+                .HasMaxLength(255)
+                .HasColumnName("COMPARTMENT");
+            entity.Property(e => e.F10).HasMaxLength(255);
+            entity.Property(e => e.F11).HasMaxLength(255);
+            entity.Property(e => e.F12).HasMaxLength(255);
+            entity.Property(e => e.F13).HasMaxLength(255);
+            entity.Property(e => e.F14).HasMaxLength(255);
+            entity.Property(e => e.F7).HasMaxLength(255);
+            entity.Property(e => e.F8).HasMaxLength(255);
+            entity.Property(e => e.F9).HasMaxLength(255);
+            entity.Property(e => e.Interval).HasColumnName("INTERVAL");
+            entity.Property(e => e.Model)
+                .HasMaxLength(255)
+                .HasColumnName("MODEL");
+            entity.Property(e => e.Oilgrade)
+                .HasMaxLength(255)
+                .HasColumnName("OILGRADE");
+        });
+
+        modelBuilder.Entity<Compul>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("'compul'");
+
+            entity.Property(e => e.Comment).HasMaxLength(255);
+            entity.Property(e => e.ComponentPrice).HasColumnName("Component Price");
+            entity.Property(e => e.DateFitted)
+                .HasMaxLength(255)
+                .HasColumnName("Date Fitted");
+            entity.Property(e => e.DateRemoved)
+                .HasColumnType("datetime")
+                .HasColumnName("Date Removed");
+            entity.Property(e => e.FleetComponent)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Component");
+            entity.Property(e => e.HrsFitted).HasColumnName("Hrs Fitted");
+            entity.Property(e => e.HrsRemoved).HasColumnName("Hrs Removed");
+            entity.Property(e => e.ReasonForRemoval)
+                .HasMaxLength(255)
+                .HasColumnName("Reason for removal");
+            entity.Property(e => e.SerialNoNew)
+                .HasMaxLength(255)
+                .HasColumnName("Serial No - New");
+            entity.Property(e => e.SerialNoOld)
+                .HasMaxLength(255)
+                .HasColumnName("Serial No - Old");
+            entity.Property(e => e.Status).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<Compup>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("'Compup'");
+
+            entity.Property(e => e.Comment).HasMaxLength(255);
+            entity.Property(e => e.ComponentPrice)
+                .HasColumnType("money")
+                .HasColumnName("Component Price");
+            entity.Property(e => e.DateFitted)
+                .HasMaxLength(255)
+                .HasColumnName("Date Fitted");
+            entity.Property(e => e.DateRemoved)
+                .HasColumnType("datetime")
+                .HasColumnName("Date Removed");
+            entity.Property(e => e.FleetComponent)
+                .HasMaxLength(255)
+                .HasColumnName("Fleet Component");
+            entity.Property(e => e.HrsFitted).HasColumnName("Hrs Fitted");
+            entity.Property(e => e.HrsRemoved).HasColumnName("Hrs Removed");
+            entity.Property(e => e.ReasonForRemoval)
+                .HasMaxLength(255)
+                .HasColumnName("Reason for removal");
+            entity.Property(e => e.SerialNoNew)
+                .HasMaxLength(255)
+                .HasColumnName("Serial No - New");
+            entity.Property(e => e.SerialNoOld)
+                .HasMaxLength(255)
+                .HasColumnName("Serial No - Old");
+            entity.Property(e => e.Status).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Custodian>(entity =>
@@ -1052,6 +1191,10 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('Active')");
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -1564,13 +1707,18 @@ public partial class EnpDbContext : DbContext
         {
             entity.ToTable("LubeConfig");
 
-            entity.Property(e => e.Model)
-                .HasMaxLength(10)
-                .IsFixedLength();
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Compartment).WithMany(p => p.LubeConfigs)
                 .HasForeignKey(d => d.CompartmentId)
                 .HasConstraintName("FK_LubeConfig_Compartment");
+
+            entity.HasOne(d => d.ModelNavigation).WithMany(p => p.LubeConfigs)
+                .HasForeignKey(d => d.Model)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("LubeConfig_Model_Model_id_fk");
         });
 
         modelBuilder.Entity<LubeEntry>(entity =>
@@ -1578,8 +1726,11 @@ public partial class EnpDbContext : DbContext
             entity.ToTable("LubeEntry");
 
             entity.Property(e => e.FleetId)
-                .HasMaxLength(10)
-                .IsFixedLength();
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Brand).WithMany(p => p.LubeEntries)
                 .HasForeignKey(d => d.BrandId)
@@ -1588,6 +1739,12 @@ public partial class EnpDbContext : DbContext
             entity.HasOne(d => d.Compartment).WithMany(p => p.LubeEntries)
                 .HasForeignKey(d => d.CompartmentId)
                 .HasConstraintName("FK_LubeEntry_Compartment");
+
+            entity.HasOne(d => d.Fleet).WithMany(p => p.LubeEntries)
+                .HasPrincipalKey(p => p.EquipmentId)
+                .HasForeignKey(d => d.FleetId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("LubeEntry_Equipment_Equipment_id_fk");
 
             entity.HasOne(d => d.Grade).WithMany(p => p.LubeEntries)
                 .HasForeignKey(d => d.GradeId)
@@ -2264,6 +2421,12 @@ public partial class EnpDbContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.PurchaseDate).HasColumnType("datetime");
             entity.Property(e => e.SerialNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.WarrantyEndDate).HasColumnType("datetime");
