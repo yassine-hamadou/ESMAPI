@@ -9,13 +9,7 @@ public partial class PlannedOutput
 
     public string? TenantId { get; set; }
 
-    public int? DestinationId { get; set; }
+    public int? Volume { get; set; }
 
-    public int? ActivityId { get; set; }
-
-    public int? Quantity { get; set; }
-
-    public virtual ProductionActivity? Activity { get; set; }
-
-    public virtual ProductionDestination? Destination { get; set; }
+    public DateTime? PlannedDate { get; set; }
 }

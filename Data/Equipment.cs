@@ -37,6 +37,10 @@ public partial class Equipment
 
     public int? Category { get; set; }
 
+    public string Status { get; set; } = null!;
+
+    public int InitialReading { get; set; }
+
     public virtual ICollection<Agreement> Agreements { get; set; } = new List<Agreement>();
 
     public virtual Category? CategoryNavigation { get; set; }
@@ -52,6 +56,8 @@ public partial class Equipment
     public virtual ICollection<HoursEntry> HoursEntries { get; set; } = new List<HoursEntry>();
 
     public virtual ICollection<HoursEntryTemp> HoursEntryTemps { get; set; } = new List<HoursEntryTemp>();
+
+    public virtual ICollection<LubeEntry> LubeEntries { get; set; } = new List<LubeEntry>();
 
     public virtual Model? Model { get; set; }
 

@@ -21,7 +21,7 @@ public partial class DrillEntry
 
     public decimal? RedrillMeters { get; set; }
 
-    public int? SmuHours { get; set; }
+    public decimal? SmuHours { get; set; }
 
     public decimal? DownHours { get; set; }
 
@@ -44,6 +44,8 @@ public partial class DrillEntry
     public string? TenantId { get; set; }
 
     public string? BatchNumber { get; set; }
+
+    public DateTime? DrillDate { get; set; }
 
     public virtual Equipment? Equipment { get; set; }
 
