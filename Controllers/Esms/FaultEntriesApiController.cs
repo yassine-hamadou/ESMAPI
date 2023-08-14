@@ -21,7 +21,8 @@ public class FaultEntriesApiController : BaeApiController<FaultEntryPostDto>
   [HttpGet("tenant/{tenantId}")]
   public async Task<ActionResult<IEnumerable<FaultEntry>>> GetFaultEntries(string tenantId)
   {
-    return await _context.FaultEntries.Where(fault => fault.TenantId == tenantId).ToListAsync();
+    return await _context.FaultEntries.Where(fault => fault.TenantId == tenantId && fault.DownStatus != "Resolved")
+        .ToListAsync();
   }
 
   // GET: api/FaultEntriesApi/5

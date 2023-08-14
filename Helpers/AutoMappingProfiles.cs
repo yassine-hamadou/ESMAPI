@@ -96,5 +96,6 @@ public class AutoMappingProfiles : Profile
     CreateMap<ProDrillEntryPostDto, ProDrillEntry>();
     CreateMap<SequencePostDto, Sequence>();
     CreateMap<ManufacturerPostDto, Manufacturer>();
+    CreateMap<DrillEntryDto, DrillEntry>();
   }
 }
