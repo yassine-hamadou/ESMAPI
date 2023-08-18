@@ -139,6 +139,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<ProActivityDetail> ProActivityDetails { get; set; }
 
+    public virtual DbSet<ProBlast> ProBlasts { get; set; }
+
     public virtual DbSet<ProDrill> ProDrills { get; set; }
 
     public virtual DbSet<ProDrillEntry> ProDrillEntries { get; set; }
@@ -1923,6 +1925,39 @@ public partial class EnpDbContext : DbContext
             entity.HasOne(d => d.Activity).WithMany(p => p.ProActivityDetails)
                 .HasForeignKey(d => d.ActivityId)
                 .HasConstraintName("ProActivityDetails_ProductionActivity_Id_fk");
+        });
+
+        modelBuilder.Entity<ProBlast>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProBlast_pk");
+
+            entity.ToTable("ProBlast");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Area).HasColumnName("area");
+            entity.Property(e => e.BenchLevel).HasColumnName("benchLevel");
+            entity.Property(e => e.BlastDate).HasColumnType("datetime");
+            entity.Property(e => e.CummulativeBlastVol).HasColumnName("cummulativeBlastVol");
+            entity.Property(e => e.Depth).HasColumnName("depth");
+            entity.Property(e => e.ExpansionFactor).HasColumnName("expansionFactor");
+            entity.Property(e => e.LostRodGet)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("lostRodGet");
+            entity.Property(e => e.NumberOfHoles).HasColumnName("numberOfHoles");
+            entity.Property(e => e.PatternSize)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("patternSize");
+            entity.Property(e => e.PitLocation)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.SurveyProductionHoles).HasColumnName("surveyProductionHoles");
+            entity.Property(e => e.SurveyVol).HasColumnName("surveyVol");
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("tenantId");
         });
 
         modelBuilder.Entity<ProDrill>(entity =>

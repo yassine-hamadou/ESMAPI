@@ -28,6 +28,7 @@ using ServiceManagerApi.Dtos.ProdRawMaterial;
 using ServiceManagerApi.Dtos.ProDrill;
 using ServiceManagerApi.Dtos.proDrillEntry;
 using ServiceManagerApi.Dtos.ProductionActivity;
+using ServiceManagerApi.Dtos.ProductionBlast;
 using ServiceManagerApi.Dtos.ProductionDestination;
 using ServiceManagerApi.Dtos.ProductionMineArea;
 using ServiceManagerApi.Dtos.ProductionOrigin;
@@ -97,5 +98,6 @@ public class AutoMappingProfiles : Profile
     CreateMap<SequencePostDto, Sequence>();
     CreateMap<ManufacturerPostDto, Manufacturer>();
     CreateMap<DrillEntryDto, DrillEntry>();
+    CreateMap<ProductionBlastDto, ProBlast>();
   }
 }
