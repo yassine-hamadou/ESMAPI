@@ -65,7 +65,7 @@ namespace ServiceManagerApi.ActivityLog
                     Url = url,
                     RequestTime = DateTime.Now,
                 };
-
+    
 
                 _context.UserActivities.Add(userActivity);
                 _context.SaveChanges();

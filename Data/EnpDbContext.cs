@@ -1933,7 +1933,6 @@ public partial class EnpDbContext : DbContext
 
             entity.ToTable("ProBlast");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Area).HasColumnName("area");
             entity.Property(e => e.BenchLevel).HasColumnName("benchLevel");
             entity.Property(e => e.BlastDate).HasColumnType("datetime");

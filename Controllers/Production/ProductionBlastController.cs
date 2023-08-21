@@ -14,11 +14,11 @@ namespace ServiceManagerApi.Controllers.Production
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductionBlast : BaeApiController<ProductionBlast>
+    public class ProductionBlastController : BaeApiController<ProductionBlastController>
     {
         private readonly EnpDbContext _context;
 
-        public ProductionBlast(EnpDbContext context)
+        public ProductionBlastController(EnpDbContext context)
         {
             _context = context;
         }
@@ -34,7 +34,10 @@ namespace ServiceManagerApi.Controllers.Production
 
         // GET: api/ProductionBlast/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProBlast>> GetProBlast(int id)
+        [ProducesResponseType(typeof(ProBlast), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public async Task<ActionResult<ProBlast>> GetById(int id)
         {
           var proBlast = await _context.ProBlasts.FindAsync(id);
     
@@ -43,7 +46,7 @@ namespace ServiceManagerApi.Controllers.Production
                     return NotFound();
                 }
     
-                return proBlast;
+                return Ok(proBlast);
         }
 
         // PUT: api/ProductionBlast/5
@@ -104,7 +107,7 @@ namespace ServiceManagerApi.Controllers.Production
                 await _context.SaveChangesAsync();
                 
                 var createIds = proBlasts.Select(x => x.Id).ToList();
-                return CreatedAtAction(nameof(GetProBlasts), new {ids =  createIds}, proBlasts);
+                return CreatedAtAction(nameof(GetById), new {ids =  createIds}, proBlasts);
             }
             catch (DbUpdateException e)
             {

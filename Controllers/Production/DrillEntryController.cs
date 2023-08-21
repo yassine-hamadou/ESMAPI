@@ -105,7 +105,7 @@ namespace ServiceManagerApi.Controllers.Production
                 // Log the exception details for troubleshooting
                 // You may also want to include additional error handling logic as needed
 
-                throw new ApplicationException("Error saving cycle details", ex);
+                throw new ApplicationException("Error saving drill entries", ex);
             }
         }
 
