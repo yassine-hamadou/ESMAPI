@@ -31,5 +31,9 @@ public partial class FleetSchedule
 
     public string? Status { get; set; }
 
+    public DateTime? CompletedDate { get; set; }
+
+    public string? Comment { get; set; }
+
     public virtual Service? ServiceType { get; set; }
 }

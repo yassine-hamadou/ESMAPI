@@ -69,18 +69,13 @@ var app = builder.Build();
 //           .AllowAnyMethod();
 //     });
 
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-// }
 app.UseCors();
-app.UseSwagger();
-app.UseSwaggerUI();
-// else
-// {
-//   app.UseSwagger();
-//   app.UseSwaggerUI(c => { c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "ESMS API V1"); });
-// }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+  app.UseSwagger();
+  app.UseSwaggerUI();       
+}
 
 
 app.UseHttpsRedirection();
