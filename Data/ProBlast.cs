@@ -9,7 +9,7 @@ public partial class ProBlast
 
     public DateTime? BlastDate { get; set; }
 
-    public string? PitLocation { get; set; }
+    public int? PitLocationId { get; set; }
 
     public int? BenchLevel { get; set; }
 
@@ -32,4 +32,6 @@ public partial class ProBlast
     public string? LostRodGet { get; set; }
 
     public string? TenantId { get; set; }
+
+    public virtual ProductionOrigin? PitLocation { get; set; }
 }

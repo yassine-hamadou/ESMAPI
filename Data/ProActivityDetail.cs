@@ -14,6 +14,4 @@ public partial class ProActivityDetail
     public string? TenantId { get; set; }
 
     public virtual ProductionActivity? Activity { get; set; }
-
-    public virtual ICollection<ProDrillEntry> ProDrillEntries { get; set; } = new List<ProDrillEntry>();
 }

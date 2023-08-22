@@ -46,15 +46,21 @@
   <ItemGroup>
     <Content Include=".github\workflows\deploy.yml" />
     <Content Remove="3\**" />
+    <Content Remove="Dtos\proDrillEntry\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="3\**" />
+    <Compile Remove="Controllers\Production\ProDrillEntryController.cs" />
+    <Compile Remove="Dtos\proDrillEntry\**" />
+    <Compile Remove="Data\ProDrillEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="3\**" />
+    <EmbeddedResource Remove="Dtos\proDrillEntry\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="3\**" />
+    <None Remove="Dtos\proDrillEntry\**" />
   </ItemGroup>
 
 <!--  <ProjectExtensions><VisualStudio><UserProperties appsettings_1development_1json__JsonSchema="https://geojson.org/schema/GeoJSON.json" /></VisualStudio></ProjectExtensions>-->

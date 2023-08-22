@@ -14,4 +14,6 @@ public partial class ProductionOrigin
     public string? TenantId { get; set; }
 
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
+
+    public virtual ICollection<ProBlast> ProBlasts { get; set; } = new List<ProBlast>();
 }

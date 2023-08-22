@@ -143,8 +143,6 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<ProDrill> ProDrills { get; set; }
 
-    public virtual DbSet<ProDrillEntry> ProDrillEntries { get; set; }
-
     public virtual DbSet<ProFuelIntake> ProFuelIntakes { get; set; }
 
     public virtual DbSet<ProactivityView> ProactivityViews { get; set; }
@@ -1558,6 +1556,10 @@ public partial class EnpDbContext : DbContext
             entity.ToTable("HoursEntry");
 
             entity.Property(e => e.Comment).IsUnicode(false);
+            entity.Property(e => e.EntrySource)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasDefaultValueSql("('Normal Reading')");
             entity.Property(e => e.FleetId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -1948,15 +1950,16 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("patternSize");
-            entity.Property(e => e.PitLocation)
-                .HasMaxLength(50)
-                .IsUnicode(false);
             entity.Property(e => e.SurveyProductionHoles).HasColumnName("surveyProductionHoles");
             entity.Property(e => e.SurveyVol).HasColumnName("surveyVol");
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("tenantId");
+
+            entity.HasOne(d => d.PitLocation).WithMany(p => p.ProBlasts)
+                .HasForeignKey(d => d.PitLocationId)
+                .HasConstraintName("ProBlast_ProductionOrigin_id_fk");
         });
 
         modelBuilder.Entity<ProDrill>(entity =>
@@ -1982,33 +1985,6 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.EquipmentId)
                 .HasForeignKey(d => d.EquipmentId)
                 .HasConstraintName("ProDrill_Equipment_Equipment_id_fk");
-        });
-
-        modelBuilder.Entity<ProDrillEntry>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("ProDrillEntry_pk");
-
-            entity.ToTable("ProDrillEntry");
-
-            entity.Property(e => e.DrillDate).HasColumnType("date");
-            entity.Property(e => e.RigId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.TenantId)
-                .HasMaxLength(50)
-                .IsUnicode(false);
-
-            entity.HasOne(d => d.ActivityDetail).WithMany(p => p.ProDrillEntries)
-                .HasForeignKey(d => d.ActivityDetailId)
-                .HasConstraintName("ProDrillEntry_ProActivityDetails_Id_fk");
-
-            entity.HasOne(d => d.Activity).WithMany(p => p.ProDrillEntries)
-                .HasForeignKey(d => d.ActivityId)
-                .HasConstraintName("ProDrillEntry_ProductionActivity_Id_fk");
-
-            entity.HasOne(d => d.Shift).WithMany(p => p.ProDrillEntries)
-                .HasForeignKey(d => d.ShiftId)
-                .HasConstraintName("ProDrillEntry_ProductionShift_Id_fk");
         });
 
         modelBuilder.Entity<ProFuelIntake>(entity =>

@@ -23,5 +23,7 @@ public partial class HoursEntry
 
     public DateTime? PreviousReadingDate { get; set; }
 
+    public string EntrySource { get; set; } = null!;
+
     public virtual Equipment? Fleet { get; set; }
 }

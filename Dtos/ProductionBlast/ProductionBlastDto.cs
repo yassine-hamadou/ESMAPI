@@ -4,7 +4,7 @@ public class ProductionBlastDto
 {
     public DateTime? BlastDate { get; set; }
 
-    public string? PitLocation { get; set; }
+    public int? PitLocationId { get; set; }
 
     public int? BenchLevel { get; set; }
 
