@@ -1875,10 +1875,15 @@ public partial class EnpDbContext : DbContext
 
             entity.ToTable("PlannedOutput");
 
+            entity.Property(e => e.LocationId).HasColumnName("locationId");
             entity.Property(e => e.PlannedDate).HasColumnType("datetime");
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Location).WithMany(p => p.PlannedOutputs)
+                .HasForeignKey(d => d.LocationId)
+                .HasConstraintName("PlannedOutput_ProductionOrigin_id_fk");
         });
 
         modelBuilder.Entity<Pmdup>(entity =>

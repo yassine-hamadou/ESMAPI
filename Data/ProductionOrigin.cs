@@ -15,5 +15,7 @@ public partial class ProductionOrigin
 
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 
+    public virtual ICollection<PlannedOutput> PlannedOutputs { get; set; } = new List<PlannedOutput>();
+
     public virtual ICollection<ProBlast> ProBlasts { get; set; } = new List<ProBlast>();
 }

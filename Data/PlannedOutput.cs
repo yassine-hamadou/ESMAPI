@@ -12,4 +12,8 @@ public partial class PlannedOutput
     public int? Volume { get; set; }
 
     public DateTime? PlannedDate { get; set; }
+
+    public int? LocationId { get; set; }
+
+    public virtual ProductionOrigin? Location { get; set; }
 }

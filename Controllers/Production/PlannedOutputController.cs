@@ -115,7 +115,9 @@ namespace ServiceManagerApi.Controllers.Production
         {
             return _context.PlannedOutputs.Any(e =>
                 e.PlannedDate == plannedOutput.PlannedDate &&
-                e.Volume == plannedOutput.Volume
+                e.Volume == plannedOutput.Volume &&
+                e.TenantId == plannedOutput.TenantId &&
+                e.LocationId == plannedOutput.LocationId 
             );
         }
     }

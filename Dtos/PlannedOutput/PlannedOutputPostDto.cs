@@ -8,5 +8,6 @@
 
         public DateTime? PlannedDate { get; set; }
 
+        public int? LocationId { get; set; }
     }
 }
