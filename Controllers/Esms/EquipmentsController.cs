@@ -44,7 +44,8 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
             Components = e.Components,
             InitialReading = e.InitialReading,
             HoursEntries = e.HoursEntries
-                .Where(entry => entry.TenantId == tenantId && entry.FleetId == e.EquipmentId)
+                .Where(entry => entry.TenantId == tenantId && entry.FleetId == e.EquipmentId &&
+                                entry.EntrySource == "Normal Reading")
                 .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
                 .Take(1) // Take the first (latest) entry
                 .ToList(),
