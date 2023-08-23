@@ -33,5 +33,7 @@ public partial class ProBlast
 
     public string? TenantId { get; set; }
 
+    public string? BlastNumber { get; set; }
+
     public virtual ProductionOrigin? PitLocation { get; set; }
 }

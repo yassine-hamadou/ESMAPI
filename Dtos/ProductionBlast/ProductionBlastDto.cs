@@ -27,4 +27,6 @@ public class ProductionBlastDto
     public string? LostRodGet { get; set; }
 
     public string? TenantId { get; set; }
+    
+    public string? BlastNumber { get; set; }
 }

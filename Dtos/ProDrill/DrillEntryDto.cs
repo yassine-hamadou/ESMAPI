@@ -6,7 +6,7 @@ public class DrillEntryDto
 
     public string? EquipmentId { get; set; }
 
-    public string? OperatorName { get; set; }
+    public int? OperatorId { get; set; }
 
     public string? PitLocation { get; set; }
 

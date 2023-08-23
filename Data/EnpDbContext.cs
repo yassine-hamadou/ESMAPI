@@ -143,6 +143,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<ProDrill> ProDrills { get; set; }
 
+    public virtual DbSet<ProDrillOperator> ProDrillOperators { get; set; }
+
     public virtual DbSet<ProFuelIntake> ProFuelIntakes { get; set; }
 
     public virtual DbSet<ProactivityView> ProactivityViews { get; set; }
@@ -872,10 +874,7 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.OperatingHours)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("operatingHours");
-            entity.Property(e => e.OperatorName)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("operatorName");
+            entity.Property(e => e.OperatorId).HasColumnName("operatorId");
             entity.Property(e => e.PenRateEffHrs)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("penRateEffHrs");
@@ -913,6 +912,10 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.EquipmentId)
                 .HasForeignKey(d => d.EquipmentId)
                 .HasConstraintName("DrillEntry_Equipment_Equipment_id_fk");
+
+            entity.HasOne(d => d.Operator).WithMany(p => p.DrillEntries)
+                .HasForeignKey(d => d.OperatorId)
+                .HasConstraintName("DrillEntry_ProDrillOperator_Id_fk");
 
             entity.HasOne(d => d.Shift).WithMany(p => p.DrillEntries)
                 .HasForeignKey(d => d.ShiftId)
@@ -1943,6 +1946,10 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.Area).HasColumnName("area");
             entity.Property(e => e.BenchLevel).HasColumnName("benchLevel");
             entity.Property(e => e.BlastDate).HasColumnType("datetime");
+            entity.Property(e => e.BlastNumber)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("blastNumber");
             entity.Property(e => e.CummulativeBlastVol).HasColumnName("cummulativeBlastVol");
             entity.Property(e => e.Depth).HasColumnName("depth");
             entity.Property(e => e.ExpansionFactor).HasColumnName("expansionFactor");
@@ -1990,6 +1997,23 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.EquipmentId)
                 .HasForeignKey(d => d.EquipmentId)
                 .HasConstraintName("ProDrill_Equipment_Equipment_id_fk");
+        });
+
+        modelBuilder.Entity<ProDrillOperator>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProDrillOperator_pk");
+
+            entity.ToTable("ProDrillOperator");
+
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<ProFuelIntake>(entity =>
@@ -2117,6 +2141,10 @@ public partial class EnpDbContext : DbContext
             entity.ToTable("ProductionDestination");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("code");
             entity.Property(e => e.Description)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -2133,6 +2161,10 @@ public partial class EnpDbContext : DbContext
         {
             entity.ToTable("ProductionMineArea");
 
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("code");
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
@@ -2147,6 +2179,10 @@ public partial class EnpDbContext : DbContext
             entity.ToTable("ProductionOrigin");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .HasColumnName("code");
             entity.Property(e => e.Description)
                 .HasMaxLength(50)
                 .IsUnicode(false);
@@ -2166,6 +2202,10 @@ public partial class EnpDbContext : DbContext
             entity.ToTable("ProductionPump");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Code)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("code");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false)

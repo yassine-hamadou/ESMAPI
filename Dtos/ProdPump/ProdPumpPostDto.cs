@@ -6,4 +6,6 @@ public class ProdPumpPostDto
 
     public string? TenantId { get; set; }
 
+    public string? Code { get; set; }
+
 }
