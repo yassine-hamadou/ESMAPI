@@ -111,9 +111,8 @@ namespace ServiceManagerApi.Controllers.Production
         private bool ProDrillOperatorExists(ProDrillOperator proDrillOperator)
         {
             return (_context.ProDrillOperators?.Any(e => 
-                    e.Code.ToLower().Trim() == proDrillOperator.Code.ToLower().Trim() &&
-                    e.TenantId.ToLower().Trim() == proDrillOperator.TenantId.ToLower().Trim() &&
-                    e.Name.ToLower().Trim() == proDrillOperator.Name.ToLower().Trim()
+                    e.OperatorCode.ToLower().Trim() == proDrillOperator.OperatorCode.ToLower().Trim() &&
+                    e.TenantId.ToLower().Trim() == proDrillOperator.TenantId.ToLower().Trim()
                 ))
                 .GetValueOrDefault();
         }

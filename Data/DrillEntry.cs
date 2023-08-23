@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ServiceManagerApi.Data;
+﻿namespace ServiceManagerApi.Data;
 
 public partial class DrillEntry
 {
@@ -11,7 +8,7 @@ public partial class DrillEntry
 
     public string? EquipmentId { get; set; }
 
-    public int? OperatorId { get; set; }
+    public string? OperatorCode { get; set; }
 
     public string? PitLocation { get; set; }
 
@@ -49,7 +46,7 @@ public partial class DrillEntry
 
     public virtual Equipment? Equipment { get; set; }
 
-    public virtual ProDrillOperator? Operator { get; set; }
+    public virtual ProDrillOperator? OperatorCodeNavigation { get; set; }
 
     public virtual ProductionShift? Shift { get; set; }
 }

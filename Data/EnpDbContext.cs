@@ -874,7 +874,10 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.OperatingHours)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("operatingHours");
-            entity.Property(e => e.OperatorId).HasColumnName("operatorId");
+            entity.Property(e => e.OperatorCode)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("operatorCode");
             entity.Property(e => e.PenRateEffHrs)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("penRateEffHrs");
@@ -913,9 +916,10 @@ public partial class EnpDbContext : DbContext
                 .HasForeignKey(d => d.EquipmentId)
                 .HasConstraintName("DrillEntry_Equipment_Equipment_id_fk");
 
-            entity.HasOne(d => d.Operator).WithMany(p => p.DrillEntries)
-                .HasForeignKey(d => d.OperatorId)
-                .HasConstraintName("DrillEntry_ProDrillOperator_Id_fk");
+            entity.HasOne(d => d.OperatorCodeNavigation).WithMany(p => p.DrillEntries)
+                .HasPrincipalKey(p => p.OperatorCode)
+                .HasForeignKey(d => d.OperatorCode)
+                .HasConstraintName("DrillEntry_ProDrillOperator_operatorCode_fk");
 
             entity.HasOne(d => d.Shift).WithMany(p => p.DrillEntries)
                 .HasForeignKey(d => d.ShiftId)
@@ -2001,16 +2005,19 @@ public partial class EnpDbContext : DbContext
 
         modelBuilder.Entity<ProDrillOperator>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("ProDrillOperator_pk");
+            entity.HasKey(e => e.Id).HasName("ProDrillOperator_pk2");
 
             entity.ToTable("ProDrillOperator");
 
-            entity.Property(e => e.Code)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.HasIndex(e => e.OperatorCode, "ProDrillOperator_pk").IsUnique();
+
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.OperatorCode)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("operatorCode");
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);

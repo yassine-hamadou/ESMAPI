@@ -2,7 +2,7 @@
 
 public class ProDrillOperatorDto
 {
-    public string? Code { get; set; }
+    public string OperatorCode { get; set; } = null!;
 
     public string? Name { get; set; }
 
