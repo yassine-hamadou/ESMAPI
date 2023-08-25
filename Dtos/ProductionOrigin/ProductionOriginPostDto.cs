@@ -9,5 +9,7 @@
         public string? TenantId { get; set; }
 
         public string? Code { get; set; }
+        
+        public string? OriginDetail { get; set; }
     }
 }

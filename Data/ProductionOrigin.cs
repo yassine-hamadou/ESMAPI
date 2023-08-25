@@ -15,6 +15,8 @@ public partial class ProductionOrigin
 
     public string? Code { get; set; }
 
+    public string? OriginDetail { get; set; }
+
     public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 
     public virtual ICollection<PlannedOutput> PlannedOutputs { get; set; } = new List<PlannedOutput>();
