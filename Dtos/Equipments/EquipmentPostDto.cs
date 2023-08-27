@@ -1,12 +1,13 @@
-﻿namespace ServiceManagerApi.Dtos.Equipments;
+﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+
+namespace ServiceManagerApi.Dtos.Equipments;
 
 public record EquipmentPostDto
 {
-  public int Id { get; set; }
+  [Required] public int ModelId { get; set; }
 
-  public int? ModelId { get; set; }
-
-  public string EquipmentId { get; set; } = null!;
+  [Required] public string EquipmentId { get; set; } = null!;
 
   public string? Description { get; set; }
 
@@ -28,7 +29,9 @@ public record EquipmentPostDto
 
   public string? UniversalCode { get; set; }
 
-  public string? MeterType { get; set; }
+  [Required] public int InitialReading { get; set; }
 
-  public string? TenantId { get; set; }
+  [Required] public string MeterType { get; set; } = null!;
+
+  [Required] public string TenantId { get; set; } = null!;
 }

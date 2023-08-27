@@ -12,4 +12,6 @@ public partial class Category
     public string? Name { get; set; }
 
     public string? TenantId { get; set; }
+
+    public virtual ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
 }

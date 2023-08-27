@@ -13,7 +13,7 @@ public partial class ProductionDestination
 
     public string? TenantId { get; set; }
 
-    public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
+    public string? Code { get; set; }
 
-    public virtual ICollection<PlannedOutput> PlannedOutputs { get; set; } = new List<PlannedOutput>();
+    public virtual ICollection<CycleDetail> CycleDetails { get; set; } = new List<CycleDetail>();
 }

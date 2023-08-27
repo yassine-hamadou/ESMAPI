@@ -7,11 +7,11 @@ using ServiceManagerApi.Helpers;
 using ServiceManagerApi.Models;
 using ServiceManagerApi.UserModels;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-
+// builder.WebHost.ConfigureKestrel(options => { });
 var SMconnectionString = builder.Configuration.GetConnectionString("ServiceManagerConnection");
 builder.Services.AddDbContext<ServiceManagerContext>(options =>
     options.UseSqlServer(SMconnectionString));
@@ -32,41 +32,49 @@ builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(typeof(ActivityLog));
-});
+builder.Services.AddControllers(options => { options.Filters.Add(typeof(ActivityLog)); });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(AutoMappingProfiles).Assembly);
- 
-builder.Services.AddCors();
 
+builder.Services.AddCors(options =>
+    {
+      options.AddDefaultPolicy(builderIn =>
+          {
+            builderIn.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+          }
+      );
+    }
+);
 
 var app = builder.Build();
 
 //cors configuration for 
-app.UseCors(
-    options =>
-    {
-      var frontendUrl = "http://localhost:3000";
-      var serverUrl = "http://208.117.44.15/";
-      options.WithOrigins(frontendUrl, serverUrl)
-          .AllowAnyHeader()
-          .AllowAnyMethod();
-    });
+// app.UseCors(
+//     options =>
+//     {
+//       const string server = "https://app.sipconsult.net/";
+//       const string server2 = "http://app.sipconsult.net";
+//       const string frontendUrl = "http://localhost:3000";
+//       const string serverUrl = "http://208.117.44.15/";
+//       const string serverUrl2 = "https://208.117.44.15/";
+//       const string url = "http//localhost:100";
+//       const string url2 = "http//208.117.44.15:100/";
+//       const string url3 = "https//208.117.44.15:100";
+//       options.WithOrigins(frontendUrl, serverUrl, serverUrl2, server, server2, url, url2, url3)
+//           .AllowAnyHeader()
+//           .AllowAnyMethod();
+//     });
 
+app.UseCors();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();
-  app.UseSwaggerUI();
-}
-else
-{
-  app.UseSwagger();
-  app.UseSwaggerUI(c => { c.SwaggerEndpoint("/SmWebApi/swagger/v1/swagger.json", "ESMS API V1"); });
+  app.UseSwaggerUI();       
 }
 
 

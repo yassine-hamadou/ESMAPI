@@ -28,4 +28,8 @@ public partial class ViewEquip
     public DateTime? WarrantyStartDate { get; set; }
 
     public DateTime? WarrantyEndDate { get; set; }
+
+    public string? TenantId { get; set; }
+
+    public string Status { get; set; } = null!;
 }

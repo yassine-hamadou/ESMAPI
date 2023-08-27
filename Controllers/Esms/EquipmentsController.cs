@@ -16,11 +16,14 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
     _context = context;
   }
 
+  // GET: api/Equipments/tenant/{tenantId}  with paging 
   [HttpGet("tenant/{tenantId}")]
-  public Task<List<Equipment>> GetEquipments(string tenantId)
+  public Task<List<Equipment>> GetEquipments(string tenantId,
+      [FromQuery] int? pageNumber,
+      [FromQuery] int? pageSize)
   {
     var equipments = _context.Equipment
-        .Where(leav => leav.TenantId == tenantId)
+        .Where(equipment => equipment.TenantId == tenantId && equipment.Status == "Active")
         .Include(e => e.Model)
         .Select(e => new Equipment
         {
@@ -38,31 +41,49 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
             WarrantyEndDate = e.WarrantyEndDate,
             UniversalCode = e.UniversalCode,
             MeterType = e.MeterType,
-            Model = new Model
-            {
-                ModelId = e.Model.ModelId,
-                ManufacturerId = e.Model.ManufacturerId,
-                ModelClassId = e.Model.ModelClassId,
-                Name = e.Model.Name,
-                Code = e.Model.Code,
-                PictureLink = e.Model.PictureLink,
-                Manufacturer = new Manufacturer
+            Components = e.Components,
+            InitialReading = e.InitialReading,
+            HoursEntries = e.HoursEntries
+                .Where(entry => entry.TenantId == tenantId && entry.FleetId == e.EquipmentId &&
+                                entry.EntrySource == "Normal Reading")
+                .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
+                .Take(1) // Take the first (latest) entry
+                .ToList(),
+            Category = e.Category,
+            Model = e.Model != null
+                ? new Model
                 {
-                    ManufacturerId = e.Model.Manufacturer.ManufacturerId,
-                    Name = e.Model.Manufacturer.Name
-                },
-                ModelClass = new ModelClass
-                {
-                    ModelClassId = e.Model.ModelClass.ModelClassId,
-                    Name = e.Model.ModelClass.Name,
-                    Code = e.Model.ModelClass.Code
+                    ModelId = e.Model.ModelId,
+                    ManufacturerId = e.Model.ManufacturerId,
+                    ModelClassId = e.Model.ModelClassId,
+                    Name = e.Model.Name,
+                    Code = e.Model.Code,
+                    LubeConfigs = e.Model.LubeConfigs,
+                    PictureLink = e.Model.PictureLink,
+                    Services = e.Model.Services,
+                    Manufacturer = new Manufacturer
+                    {
+                        ManufacturerId = e.Model.Manufacturer.ManufacturerId,
+                        Name = e.Model.Manufacturer.Name
+                    },
+                    ModelClass = new ModelClass
+                    {
+                        ModelClassId = e.Model.ModelClass.ModelClassId,
+                        Name = e.Model.ModelClass.Name,
+                        Code = e.Model.ModelClass.Code
+                    }
                 }
-            }
-        })
-        .ToListAsync();
+                : null
+        });
 
-    return equipments;
+    if (pageNumber.HasValue && pageSize.HasValue)
+      equipments = equipments
+          .Skip((pageNumber.Value - 1) * pageSize.Value)
+          .Take(pageSize.Value);
+
+    return equipments.ToListAsync();
   }
+
 
   // GET: api/Equipments/5
   [HttpGet("{id}")]
@@ -73,8 +94,9 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
 
     if (equipment == null) return NotFound();
 
-    return equipment;
+    return Ok(equipment);
   }
+
 
   // PUT: api/Equipments/5
   // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -105,7 +127,7 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
   [HttpPost]
   public async Task<ActionResult<Equipment>> PostEquipment(EquipmentPostDto equipmentPostDto)
   {
-    Equipment equipment = _mapper.Map<Equipment>(equipmentPostDto);
+    var equipment = _mapper.Map<Equipment>(equipmentPostDto);
 
     if (_context.Equipment == null) return Problem("Entity set 'EnpDBContext.Equipment'  is null.");
     _context.Equipment.Add(equipment);

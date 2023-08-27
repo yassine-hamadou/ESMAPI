@@ -19,13 +19,16 @@ using ServiceManagerApi.Dtos.LubeBrands;
 using ServiceManagerApi.Dtos.LubeConfigs;
 using ServiceManagerApi.Dtos.LubeEntry;
 using ServiceManagerApi.Dtos.LubeGrades;
+using ServiceManagerApi.Dtos.Manufacturers;
 using ServiceManagerApi.Dtos.Model;
 using ServiceManagerApi.Dtos.PlannedOutput;
+using ServiceManagerApi.Dtos.ProDailyOverview;
 using ServiceManagerApi.Dtos.ProdProcessedMaterial;
 using ServiceManagerApi.Dtos.ProdPump;
 using ServiceManagerApi.Dtos.ProdRawMaterial;
 using ServiceManagerApi.Dtos.ProDrill;
 using ServiceManagerApi.Dtos.ProductionActivity;
+using ServiceManagerApi.Dtos.ProductionBlast;
 using ServiceManagerApi.Dtos.ProductionDestination;
 using ServiceManagerApi.Dtos.ProductionMineArea;
 using ServiceManagerApi.Dtos.ProductionOrigin;
@@ -37,6 +40,7 @@ using ServiceManagerApi.Dtos.Resolution;
 using ServiceManagerApi.Dtos.ResolutionTypes;
 using ServiceManagerApi.Dtos.ScheduleTransactionsDto;
 using ServiceManagerApi.Dtos.Sections;
+using ServiceManagerApi.Dtos.Sequences;
 using ServiceManagerApi.Dtos.Services;
 
 namespace ServiceManagerApi.Helpers;
@@ -90,5 +94,11 @@ public class AutoMappingProfiles : Profile
     CreateMap<Backlog, BacklogDto>();
     CreateMap<BacklogPostDto, Backlog>();
     CreateMap<BacklogPutDto, Backlog>();
+    CreateMap<SequencePostDto, Sequence>();
+    CreateMap<ManufacturerPostDto, Manufacturer>();
+    CreateMap<DrillEntryDto, DrillEntry>();
+    CreateMap<ProductionBlastDto, ProBlast>();
+    CreateMap<ProDrillOperatorDto, ProDrillOperator>();
+    CreateMap<ProDailyOverviewDto, ProDailyOverview>();
   }
 }

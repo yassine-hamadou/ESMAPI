@@ -17,5 +17,13 @@ public partial class HoursEntry
 
     public string? TenantId { get; set; }
 
+    public int? Adjustment { get; set; }
+
+    public string? Comment { get; set; }
+
+    public DateTime? PreviousReadingDate { get; set; }
+
+    public string EntrySource { get; set; } = null!;
+
     public virtual Equipment? Fleet { get; set; }
 }

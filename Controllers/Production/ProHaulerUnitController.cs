@@ -69,7 +69,7 @@ public class ProHaulerUnitController : BaeApiController<ProHaulerUnitController>
         ProhaulerUnit prohaulerUnit = _mapper.Map<ProhaulerUnit>(proHaulerUnitPostDto);
 
         _context.ProhaulerUnits.Add(prohaulerUnit);
-        if (ProhaulerUnitExists(prohaulerUnit.EquipmentId))
+        if (ProhaulerUnitExists(prohaulerUnit.EquipmentId, prohaulerUnit.TenantId))
         {
             return Conflict();
         }
@@ -90,7 +90,7 @@ public class ProHaulerUnitController : BaeApiController<ProHaulerUnitController>
             return BadRequest();
         }
 
-        if (ProhaulerUnitExists(prohaulerUnit.EquipmentId))
+        if (ProhaulerUnitExists(prohaulerUnit.EquipmentId, prohaulerUnit.TenantId))
         {
             return Problem("Entity already exist");
         }
@@ -130,9 +130,12 @@ public class ProHaulerUnitController : BaeApiController<ProHaulerUnitController>
         return NoContent();
     }
 
-    private bool ProhaulerUnitExists(string equipmentId)
+    private bool ProhaulerUnitExists(string equipmentId, string tenantId)
     {
-        return _context.ProhaulerUnits.Any(e => e.EquipmentId.ToLower().Trim() == equipmentId.ToLower().Trim());
+        return _context.ProhaulerUnits.Any(e =>
+            e.EquipmentId.ToLower().Trim() == equipmentId.ToLower().Trim() &&
+            e.TenantId.ToLower().Trim() == tenantId.ToLower().Trim()
+        );
     }
 
     private bool ProhaulerUnitExistsById(int id)

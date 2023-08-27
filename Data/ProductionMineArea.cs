@@ -10,4 +10,6 @@ public partial class ProductionMineArea
     public string? Name { get; set; }
 
     public string? TenantId { get; set; }
+
+    public string? Code { get; set; }
 }

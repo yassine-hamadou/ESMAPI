@@ -21,5 +21,7 @@ public partial class GroundEngTool
 
     public string? TenantId { get; set; }
 
+    public string? ItemType { get; set; }
+
     public virtual Equipment Equipment { get; set; } = null!;
 }

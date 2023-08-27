@@ -9,8 +9,6 @@ public partial class ProActivityDetail
 
     public int? ActivityId { get; set; }
 
-    public string? Code { get; set; }
-
     public string? Name { get; set; }
 
     public string? TenantId { get; set; }

@@ -130,7 +130,6 @@ namespace ServiceManagerApi.Controllers.Production
             return _context.ProActivityDetails.Any(pa =>
                 pa.Name.ToLower().Trim() == detailsPostDto.Name.ToLower().Trim() &&
                 pa.TenantId.ToLower().Trim() == detailsPostDto.TenantId.ToLower().Trim() &&
-                pa.Code.ToLower().Trim() == detailsPostDto.Code.ToLower().Trim() &&
                 pa.ActivityId == detailsPostDto.ActivityId
             );
         }

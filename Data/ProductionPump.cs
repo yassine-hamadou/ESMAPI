@@ -11,5 +11,7 @@ public partial class ProductionPump
 
     public string? TenantId { get; set; }
 
+    public string? Code { get; set; }
+
     public virtual ICollection<ProFuelIntake> ProFuelIntakes { get; set; } = new List<ProFuelIntake>();
 }

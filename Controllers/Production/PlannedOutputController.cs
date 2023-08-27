@@ -21,23 +21,6 @@ namespace ServiceManagerApi.Controllers.Production
         {
             var plannedOutput = _context.PlannedOutputs
                 .Where(leav => leav.TenantId == tenantId)
-                .Select(p => new PlannedOutput
-                {
-                    Id = p.Id,
-                    Quantity = p.Quantity,
-                    TenantId = p.TenantId,
-                    DestinationId = p.DestinationId,
-                    ActivityId = p.ActivityId,
-                    Activity = new ProductionActivity
-                    {
-                        Name = p.Activity.Name,
-                    },
-                    Destination = new ProductionDestination
-                    {
-                        Name = p.Destination.Name,
-                        Description = p.Destination.Description
-                    }
-                })
                 .ToListAsync();
 
             return plannedOutput;
@@ -131,8 +114,10 @@ namespace ServiceManagerApi.Controllers.Production
         private bool PlannedOutputExists(PlannedOutput plannedOutput)
         {
             return _context.PlannedOutputs.Any(e =>
-                e.ActivityId == plannedOutput.ActivityId &&
-                e.DestinationId == plannedOutput.DestinationId
+                e.PlannedDate == plannedOutput.PlannedDate &&
+                e.Volume == plannedOutput.Volume &&
+                e.TenantId == plannedOutput.TenantId &&
+                e.LocationId == plannedOutput.LocationId 
             );
         }
     }

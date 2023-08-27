@@ -19,9 +19,15 @@ public partial class Backlog
 
     public string? ReferenceId { get; set; }
 
-    public int? Status { get; set; }
+    public string? Status { get; set; }
 
     public DateTime? Cdate { get; set; }
 
     public string? TenantId { get; set; }
+
+    public string? Priority { get; set; }
+
+    public string? Source { get; set; }
+
+    public string? DownType { get; set; }
 }

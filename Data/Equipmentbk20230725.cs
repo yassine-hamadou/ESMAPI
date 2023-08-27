@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ServiceManagerApi.Data;
 
-public partial class Equipment1
+public partial class Equipmentbk20230725
 {
     public int Id { get; set; }
 
@@ -35,5 +35,5 @@ public partial class Equipment1
 
     public string? TenantId { get; set; }
 
-    public virtual Model? Model { get; set; }
+    public int? Category { get; set; }
 }

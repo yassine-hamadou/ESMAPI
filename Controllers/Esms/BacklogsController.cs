@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using ServiceManagerApi.Data;
 using ServiceManagerApi.Dtos.BacklogDto;
 
@@ -14,23 +10,119 @@ namespace ServiceManagerApi.Controllers.Esms;
 [ApiController]
 public class BacklogsController : BaeApiController<BacklogsController>
 {
+  private readonly IMemoryCache _cache;
   private readonly EnpDbContext _context;
+  private readonly ILogger<BacklogsController> _logger;
 
-  public BacklogsController(EnpDbContext context)
+  public BacklogsController(EnpDbContext context, ILogger<BacklogsController> logger, IMemoryCache cache)
   {
     _context = context;
+    _logger = logger;
+    _cache = cache;
   }
 
   // GET: api/Backlog/tenant/{tenantId}
   [HttpGet("tenant/{tenantId}")]
-  public async Task<ActionResult<IEnumerable<BacklogDto>>> GetBacklog(string tenantId)
+  public async Task<ActionResult<IEnumerable<BacklogDto>>> GetBacklog(
+      string tenantId,
+      [FromQuery] int? pageNumber,
+      [FromQuery] int? pageSize
+  )
   {
-    if (_context.Backlogs == null) return NotFound();
-    //get all backlog items for a tenant
-    var backlogDtos = _mapper.Map<List<BacklogDto>>(await _context.Backlogs
-        .Where(backlog => backlog.TenantId == tenantId)
-        .ToListAsync());
-    return Ok(backlogDtos);
+    if (_cache.TryGetValue($"backlogs", out List<BacklogDto> backlogDtos))
+    {
+      _logger.LogInformation(
+          $"BacklogController.GetBacklog: {backlogDtos.Count} backlog items found for all tenants from cache");
+      var backlogDtosForSingleTenant =
+          backlogDtos.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status != "Completed");
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosForSingleTenant = backlogDtosForSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
+      return Ok(backlogDtosForSingleTenant);
+    }
+    else
+    {
+      if (_context.Backlogs == null) return NotFound();
+      //get all backlog items for all tenants
+      var backlogDtosFromDb = _mapper.Map<List<BacklogDto>>(await _context.Backlogs
+          .ToListAsync());
+
+      //cache the backlog items for all tenants
+      var cacheEntryOptions = new MemoryCacheEntryOptions()
+          .SetSlidingExpiration(TimeSpan.FromDays(2))
+          .SetPriority(CacheItemPriority.Normal);
+      _cache.Set($"backlogs", backlogDtosFromDb, cacheEntryOptions);
+      _logger.LogInformation(
+          $"BacklogController.GetBacklog: {backlogDtosFromDb.Count} backlog items found from DB");
+
+      var backlogDtosFromDbSingleTenant =
+          backlogDtosFromDb.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status != "Completed");
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosFromDbSingleTenant = backlogDtosFromDbSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
+      return Ok(backlogDtosFromDbSingleTenant);
+    }
+  }
+
+  // GET: api/Backlog/tenant/{tenantId}/status/{status}
+  [HttpGet("tenant/{tenantId}/status/{status}")]
+  public async Task<ActionResult<IEnumerable<BacklogDto>>> GetBacklog(string tenantId, string status,
+      [FromQuery] int? pageNumber,
+      [FromQuery] int? pageSize)
+  {
+    if (_cache.TryGetValue($"backlogsCompleted", out List<BacklogDto> backlogDtos))
+    {
+      _logger.LogInformation(
+          $"BacklogController.GetBacklog: {backlogDtos.Count} backlog items found for all tenants from cache");
+      var backlogDtosForSingleTenant =
+          backlogDtos.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status == status);
+
+      //totalItem 
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosForSingleTenant = backlogDtosForSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
+      return Ok(backlogDtosForSingleTenant);
+    }
+    else
+    {
+      if (_context.Backlogs == null) return NotFound();
+      //get all backlog items for all tenants
+      var backlogDtosFromDb = _mapper.Map<List<BacklogDto>>(await _context.Backlogs
+          .ToListAsync());
+
+      //cache the backlog items for all tenants
+      var cacheEntryOptions = new MemoryCacheEntryOptions()
+          .SetSlidingExpiration(TimeSpan.FromDays(2))
+          .SetPriority(CacheItemPriority.Normal);
+
+      _cache.Set($"backlogsCompleted", backlogDtosFromDb, cacheEntryOptions);
+
+      _logger.LogInformation(
+          $"BacklogController.GetBacklog: {backlogDtosFromDb.Count} backlog items found from DB");
+
+      var backlogDtosFromDbSingleTenant =
+          backlogDtosFromDb.FindAll(backlog => backlog.TenantId == tenantId && backlog.Status == status);
+
+      if (pageNumber.HasValue && pageSize.HasValue)
+        backlogDtosFromDbSingleTenant = backlogDtosFromDbSingleTenant
+            .Skip((pageNumber.Value - 1) * pageSize.Value)
+            .Take(pageSize.Value)
+            .ToList();
+
+      return Ok(backlogDtosFromDbSingleTenant);
+    }
   }
 
   // GET: api/Backlog/5
@@ -58,6 +150,7 @@ public class BacklogsController : BaeApiController<BacklogsController>
     try
     {
       await _context.SaveChangesAsync();
+      _cache.Remove($"backlogs");
     }
     catch (DbUpdateConcurrencyException)
     {
@@ -80,6 +173,10 @@ public class BacklogsController : BaeApiController<BacklogsController>
     var backlog = _mapper.Map<Backlog>(backlogPostDto);
     _context.Backlogs.Add(backlog);
     await _context.SaveChangesAsync();
+
+    //clear the cache
+    _logger.LogInformation($"BacklogController.PostBacklog: Clearing cache for 'backlogs'");
+    _cache.Remove($"backlogs");
 
     return CreatedAtAction("GetBacklog", new { id = backlog.Id }, backlog);
   }
