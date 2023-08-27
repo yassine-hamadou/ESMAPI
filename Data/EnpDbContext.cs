@@ -141,6 +141,8 @@ public partial class EnpDbContext : DbContext
 
     public virtual DbSet<ProBlast> ProBlasts { get; set; }
 
+    public virtual DbSet<ProDailyOverview> ProDailyOverviews { get; set; }
+
     public virtual DbSet<ProDrill> ProDrills { get; set; }
 
     public virtual DbSet<ProDrillOperator> ProDrillOperators { get; set; }
@@ -884,10 +886,7 @@ public partial class EnpDbContext : DbContext
             entity.Property(e => e.PenRateOpHrs)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("penRateOpHrs");
-            entity.Property(e => e.PitLocation)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("pitLocation");
+            entity.Property(e => e.PitLocationId).HasColumnName("pitLocationId");
             entity.Property(e => e.RedrillMeters)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("redrillMeters");
@@ -920,6 +919,10 @@ public partial class EnpDbContext : DbContext
                 .HasPrincipalKey(p => p.OperatorCode)
                 .HasForeignKey(d => d.OperatorCode)
                 .HasConstraintName("DrillEntry_ProDrillOperator_operatorCode_fk");
+
+            entity.HasOne(d => d.PitLocation).WithMany(p => p.DrillEntries)
+                .HasForeignKey(d => d.PitLocationId)
+                .HasConstraintName("DrillEntry_ProductionOrigin_id_fk");
 
             entity.HasOne(d => d.Shift).WithMany(p => p.DrillEntries)
                 .HasForeignKey(d => d.ShiftId)
@@ -1976,6 +1979,19 @@ public partial class EnpDbContext : DbContext
             entity.HasOne(d => d.PitLocation).WithMany(p => p.ProBlasts)
                 .HasForeignKey(d => d.PitLocationId)
                 .HasConstraintName("ProBlast_ProductionOrigin_id_fk");
+        });
+
+        modelBuilder.Entity<ProDailyOverview>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ProDailyOverview_pk");
+
+            entity.ToTable("ProDailyOverview");
+
+            entity.Property(e => e.NumberOfIncidents).HasColumnName("numberOfIncidents");
+            entity.Property(e => e.OverviewDate).HasColumnType("datetime");
+            entity.Property(e => e.TenantId)
+                .HasMaxLength(50)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<ProDrill>(entity =>

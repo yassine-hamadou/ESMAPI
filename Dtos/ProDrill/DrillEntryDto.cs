@@ -8,7 +8,7 @@ public class DrillEntryDto
 
     public string? OperatorCode { get; set; }
 
-    public string? PitLocation { get; set; }
+    public int? PitLocationId { get; set; }
 
     public string? BlastNumber { get; set; }
 

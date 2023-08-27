@@ -22,6 +22,7 @@ using ServiceManagerApi.Dtos.LubeGrades;
 using ServiceManagerApi.Dtos.Manufacturers;
 using ServiceManagerApi.Dtos.Model;
 using ServiceManagerApi.Dtos.PlannedOutput;
+using ServiceManagerApi.Dtos.ProDailyOverview;
 using ServiceManagerApi.Dtos.ProdProcessedMaterial;
 using ServiceManagerApi.Dtos.ProdPump;
 using ServiceManagerApi.Dtos.ProdRawMaterial;
@@ -98,5 +99,6 @@ public class AutoMappingProfiles : Profile
     CreateMap<DrillEntryDto, DrillEntry>();
     CreateMap<ProductionBlastDto, ProBlast>();
     CreateMap<ProDrillOperatorDto, ProDrillOperator>();
+    CreateMap<ProDailyOverviewDto, ProDailyOverview>();
   }
 }

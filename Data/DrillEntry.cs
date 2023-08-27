@@ -13,7 +13,7 @@ public partial class DrillEntry
 
     public string? OperatorCode { get; set; }
 
-    public string? PitLocation { get; set; }
+    public int? PitLocationId { get; set; }
 
     public string? BlastNumber { get; set; }
 
@@ -50,6 +50,8 @@ public partial class DrillEntry
     public virtual Equipment? Equipment { get; set; }
 
     public virtual ProDrillOperator? OperatorCodeNavigation { get; set; }
+
+    public virtual ProductionOrigin? PitLocation { get; set; }
 
     public virtual ProductionShift? Shift { get; set; }
 }
