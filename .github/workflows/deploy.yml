@@ -39,7 +39,7 @@ jobs:
 
         #          Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop" 
       - name: Deploy to IIS by stop the app pool, stop IIS, copy files, start IIS and start the app pool
-        run: Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop; Start-Sleep -Seconds 20; xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\ServiceManagerApi\; iisreset /start"
+        run: Start-Process powershell -Verb RunAs -ArgumentList "iisreset /stop; Start-Sleep -Seconds 20; xcopy /Y /S /I /F build\* C:\inetpub\wwwroot\esmsApi\; iisreset /start"
           
           #      - name: Sleep
           #        run: Start-Sleep -Seconds 20
@@ -97,7 +97,7 @@ jobs:
           #       - name: Deploy to IIS
           #         run: |
           # recycle app pool
-          # stop app pool
+        # stop app pool
         # stop iis
         # copy files
         # start iis
