@@ -48,6 +48,21 @@ public class HoursEntryController : BaeApiController<HoursEntryController>
     return Ok(hoursEntries);
   }
 
+  //get all pm hours entries
+  [HttpGet("tenant/{tenantId}/allpmreadings")]
+  [ProducesResponseType(typeof(HoursEntry), StatusCodes.Status200OK)]
+  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  public Task<List<HoursEntry>> GetHoursAllPmEntries(string tenantId)
+  {
+    var hoursEntries = _context.HoursEntries
+        .Where(hoursEntry => hoursEntry.TenantId == tenantId && hoursEntry.EntrySource == "PM Reading")
+        .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
+        .Take(1) // Take the first (latest) entry
+        .ToListAsync();
+    return hoursEntries;
+  }
+
+
   // post hourEntry
   [HttpPost]
   [ProducesResponseType(typeof(HoursEntry), StatusCodes.Status201Created)]
@@ -60,6 +75,7 @@ public class HoursEntryController : BaeApiController<HoursEntryController>
     try
     {
       await _context.SaveChangesAsync();
+      return Ok(hourEntry);
     }
     catch (DbUpdateException)
     {

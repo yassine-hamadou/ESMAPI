@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceManagerApi.Data;
@@ -43,6 +44,7 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
             MeterType = e.MeterType,
             Components = e.Components,
             InitialReading = e.InitialReading,
+            Adjustment = e.Adjustment,
             HoursEntries = e.HoursEntries
                 .Where(entry => entry.TenantId == tenantId && entry.FleetId == e.EquipmentId &&
                                 entry.EntrySource == "Normal Reading")
@@ -121,6 +123,23 @@ public class EquipmentsController : BaeApiController<EquipmentPostDto>
 
     return NoContent();
   }
+
+  //PATCH equipment: api/Equipments/5
+  [HttpPatch("{id}")]
+  public async Task<IActionResult> PatchEquipment(int id,
+      [FromBody] JsonPatchDocument<Equipment> patchEquipment)
+  {
+    var equipment = await _context.Equipment.FindAsync(id);
+
+    if (equipment == null) return BadRequest();
+
+    patchEquipment.ApplyTo(equipment, ModelState);
+
+    await _context.SaveChangesAsync();
+
+    return Ok(equipment);
+  }
+
 
   // POST: api/Equipments
   // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

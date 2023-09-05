@@ -41,6 +41,8 @@ public partial class Equipment
 
     public int InitialReading { get; set; }
 
+    public int Adjustment { get; set; }
+
     public virtual ICollection<Agreement> Agreements { get; set; } = new List<Agreement>();
 
     public virtual Category? CategoryNavigation { get; set; }
