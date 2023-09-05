@@ -117,7 +117,8 @@ namespace ServiceManagerApi.Controllers.Production
                 e.PlannedDate == plannedOutput.PlannedDate &&
                 e.Volume == plannedOutput.Volume &&
                 e.TenantId == plannedOutput.TenantId &&
-                e.LocationId == plannedOutput.LocationId 
+                e.LocationId == plannedOutput.LocationId &&
+                e.PlannedOutputType == plannedOutput.PlannedOutputType
             );
         }
     }

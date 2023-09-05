@@ -1196,7 +1196,7 @@ public partial class EnpDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.ModelId).HasColumnName("Model_id");
-            entity.Property(e => e.Note).HasMaxLength(1);
+            entity.Property(e => e.Note).IsUnicode(false);
             entity.Property(e => e.PurchaseDate).HasColumnType("datetime");
             entity.Property(e => e.SerialNumber)
                 .HasMaxLength(50)
@@ -1887,6 +1887,9 @@ public partial class EnpDbContext : DbContext
 
             entity.Property(e => e.LocationId).HasColumnName("locationId");
             entity.Property(e => e.PlannedDate).HasColumnType("datetime");
+            entity.Property(e => e.PlannedOutputType)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.TenantId)
                 .HasMaxLength(50)
                 .IsUnicode(false);

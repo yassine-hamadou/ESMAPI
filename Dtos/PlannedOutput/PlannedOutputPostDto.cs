@@ -9,5 +9,7 @@
         public DateTime? PlannedDate { get; set; }
 
         public int? LocationId { get; set; }
+        
+        public string? PlannedOutputType { get; set; }
     }
 }

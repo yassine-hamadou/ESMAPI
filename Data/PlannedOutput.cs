@@ -15,5 +15,7 @@ public partial class PlannedOutput
 
     public int? LocationId { get; set; }
 
+    public string? PlannedOutputType { get; set; }
+
     public virtual ProductionOrigin? Location { get; set; }
 }
