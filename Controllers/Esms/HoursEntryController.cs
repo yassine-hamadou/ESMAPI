@@ -24,9 +24,14 @@ public class HoursEntryController : BaeApiController<HoursEntryController>
   public Task<List<HoursEntry>> GetHoursEntries(string tenantId)
   {
     var hoursEntries = _context.HoursEntries
-        .Where(hoursEntry => hoursEntry.TenantId == tenantId && hoursEntry.EntrySource == "Normal Reading")
-        .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
-        .Take(1) // Take the first (latest) entry
+        // .Where(hoursEntry => hoursEntry.TenantId == tenantId && hoursEntry.EntrySource == "Normal Reading")
+        // .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
+        // .Take(1) // Take the first (latest) entry
+        // .ToListAsync();
+        .Where(leav => leav.TenantId == tenantId && leav.EntrySource == "Normal Reading")
+        .GroupBy(entry => entry.FleetId)
+        .Select(group => group.OrderByDescending(entry => entry.Date)
+            .ThenByDescending(i => i.Id).First())
         .ToListAsync();
     return hoursEntries;
   }
@@ -55,9 +60,14 @@ public class HoursEntryController : BaeApiController<HoursEntryController>
   public Task<List<HoursEntry>> GetHoursAllPmEntries(string tenantId)
   {
     var hoursEntries = _context.HoursEntries
-        .Where(hoursEntry => hoursEntry.TenantId == tenantId && hoursEntry.EntrySource == "PM Reading")
-        .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
-        .Take(1) // Take the first (latest) entry
+        // .Where(hoursEntry => hoursEntry.TenantId == tenantId && hoursEntry.EntrySource == "PM Reading")
+        // .OrderByDescending(entry => entry.Date) // Order by the Date property in descending order
+        // .Take(1) // Take the first (latest) entry
+        // .ToListAsync();
+        .Where(leav => leav.TenantId == tenantId && leav.EntrySource == "PM Reading")
+        .GroupBy(entry => entry.FleetId)
+        .Select(group => group.OrderByDescending(entry => entry.Date)
+            .ThenByDescending(i => i.Id).First())
         .ToListAsync();
     return hoursEntries;
   }
