@@ -52,23 +52,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-//cors configuration for 
-// app.UseCors(
-//     options =>
-//     {
-//       const string server = "https://app.sipconsult.net/";
-//       const string server2 = "http://app.sipconsult.net";
-//       const string frontendUrl = "http://localhost:3000";
-//       const string serverUrl = "http://208.117.44.15/";
-//       const string serverUrl2 = "https://208.117.44.15/";
-//       const string url = "http//localhost:100";
-//       const string url2 = "http//208.117.44.15:100/";
-//       const string url3 = "https//208.117.44.15:100";
-//       options.WithOrigins(frontendUrl, serverUrl, serverUrl2, server, server2, url, url2, url3)
-//           .AllowAnyHeader()
-//           .AllowAnyMethod();
-//     });
-
 app.UseCors();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
